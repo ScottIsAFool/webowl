@@ -1,0 +1,11 @@
+version: '3'
+services:
+    postgres:
+        image: postgres
+        restart: always
+        ports:
+            - '5434:5432'
+        environment:
+            POSTGRES_DB: webowl
+            POSTGRES_USER: webowl_admin
+            POSTGRES_PASSWORD: webowlAdminPassword
