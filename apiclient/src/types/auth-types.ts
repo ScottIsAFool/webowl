@@ -1,3 +1,7 @@
+type WithEmail = {
+    emailAddress: string
+}
+
 export type User = {
     id: number
     emailAddress: string
@@ -8,8 +12,7 @@ export type User = {
     isMicrosoftAuth?: boolean
 }
 
-export type LoginRequest = {
-    emailAddress: string
+export type LoginRequest = WithEmail & {
     password: string
 }
 
@@ -20,9 +23,23 @@ export type RegisterRequest = {
     password: string
 }
 
-export type VerifyRequest = {
-    emailAddress: string
+export type VerifyRequest = WithEmail & {
     verificationCode: string
 }
 
-export type AuthEndpoints = 'verify-email' | 'register' | 'login'
+export type ResendVerificationRequest = WithEmail
+
+export type ChangePasswordRequest = {
+    oldPassword: string
+    newPassword: string
+}
+
+export type PasswordResetRequest = WithEmail
+
+export type AuthEndpoints =
+    | 'verify-email'
+    | 'register'
+    | 'login'
+    | 'resend-verification'
+    | 'change-password'
+    | 'password-reset'

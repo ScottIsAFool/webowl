@@ -1,5 +1,14 @@
 import axios from 'axios'
-import type { AuthEndpoints, LoginRequest, RegisterRequest, User, VerifyRequest } from '.'
+import type {
+    AuthEndpoints,
+    ChangePasswordRequest,
+    LoginRequest,
+    PasswordResetRequest,
+    RegisterRequest,
+    ResendVerificationRequest,
+    User,
+    VerifyRequest,
+} from '.'
 
 export class ApiException extends Error {
     constructor(readonly status: number, readonly messageText: string) {
@@ -32,6 +41,18 @@ export class ApiClient {
 
     verifyEmail(request: VerifyRequest): Promise<void> {
         return this.post<void>({ endPoint: this.endpoint('auth', 'verify-email'), request })
+    }
+
+    resendVerification(request: ResendVerificationRequest): Promise<void> {
+        return this.post<void>({ endPoint: this.endpoint('auth', 'resend-verification'), request })
+    }
+
+    changePassword(request: ChangePasswordRequest): Promise<void> {
+        return this.post<void>({ endPoint: this.endpoint('auth', 'change-password'), request })
+    }
+
+    passwordReset(request: PasswordResetRequest): Promise<void> {
+        return this.post<void>({ endPoint: this.endpoint('auth', 'password-reset'), request })
     }
 
     private endpoint(base: BasePoints, request: RequestType): string {
