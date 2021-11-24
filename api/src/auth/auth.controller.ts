@@ -3,11 +3,13 @@ import {
     Body,
     ConflictException,
     Controller,
+    ForbiddenException,
+    NotFoundException,
     Post,
     Request,
     UseGuards,
 } from '@nestjs/common'
-import type { RegisterRequest, User } from '@webowl/apiclient'
+import { AuthEndpoints, RegisterRequest, User, VerifyRequest } from '@webowl/apiclient'
 import { validate } from 'class-validator'
 import { EmailVerification, User as UserEntity } from '../entities'
 import { LocalAuthGuard } from '../guards'
@@ -15,7 +17,7 @@ import { EmailVerificationRepository, UserRepository } from '../repositories'
 import { isValidPassword } from './auth.utils'
 import type { AuthRequest } from './types'
 
-@Controller('auth')
+@Controller('auth/')
 export class AuthController {
     constructor(
         private readonly userRepo: UserRepository,
@@ -23,12 +25,12 @@ export class AuthController {
     ) {}
 
     @UseGuards(LocalAuthGuard)
-    @Post('/login')
+    @Post(AuthEndpoints.login)
     login(@Request() req: AuthRequest): Promise<User> {
         return Promise.resolve(req.user.toDto())
     }
 
-    @Post('/register')
+    @Post(AuthEndpoints.register)
     async register(@Body() request: RegisterRequest): Promise<void> {
         const user = UserEntity.create(request)
 
@@ -62,5 +64,31 @@ export class AuthController {
         } catch (e: unknown) {
             throw new BadRequestException(e)
         }
+    }
+
+    @Post(AuthEndpoints.verify)
+    async verifyEmail(@Body() request: VerifyRequest): Promise<void> {
+        const { emailAddress, verificationCode } = request
+        if (!emailAddress || !verificationCode) {
+            throw new BadRequestException('Email address and code required')
+        }
+
+        const emailVerification = await this.verificationRepo.get(emailAddress)
+        if (!emailVerification) {
+            throw new BadRequestException('No verification code for this email address')
+        }
+
+        if (emailVerification.verificationCode !== verificationCode) {
+            throw new ForbiddenException('Verification code does not match')
+        }
+
+        const user = await this.userRepo.getUser({ type: 'email', emailAddress })
+        if (!user) {
+            throw new NotFoundException('User not found for this email address')
+        }
+
+        user.isVerified = true
+        await this.userRepo.save(user)
+        await this.verificationRepo.remove(emailVerification)
     }
 }

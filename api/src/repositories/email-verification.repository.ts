@@ -6,6 +6,6 @@ import { EmailVerification } from '../entities'
 @EntityRepository(EmailVerification)
 export class EmailVerificationRepository extends Repository<EmailVerification> {
     get(emailAddress: string): Promise<EmailVerification | undefined> {
-        return this.findOne({ where: emailAddress })
+        return this.findOne({ where: { emailAddress } })
     }
 }

@@ -18,7 +18,6 @@ import { LocalStrategy } from './local.stategy'
         PassportModule,
     ],
     controllers: [AuthController],
-    providers: [AuthService, LocalStrategy, UserRepository, EmailVerificationRepository],
-    exports: [UserRepository, EmailVerificationRepository, AuthService],
+    providers: [AuthService, LocalStrategy],
 })
 export class AuthModule {}

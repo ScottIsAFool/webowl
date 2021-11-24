@@ -14,3 +14,14 @@ export type RegisterRequest = {
     lastName: string
     password: string
 }
+
+export type VerifyRequest = {
+    emailAddress: string
+    verificationCode: string
+}
+
+export enum AuthEndpoints {
+    verify = 'verify-email',
+    register = 'register',
+    login = 'login',
+}
