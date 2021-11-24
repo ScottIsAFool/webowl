@@ -8,6 +8,11 @@ export type User = {
     isMicrosoftAuth?: boolean
 }
 
+export type LoginRequest = {
+    emailAddress: string
+    password: string
+}
+
 export type RegisterRequest = {
     emailAddress: string
     firstName: string
@@ -20,8 +25,4 @@ export type VerifyRequest = {
     verificationCode: string
 }
 
-export enum AuthEndpoints {
-    verify = 'verify-email',
-    register = 'register',
-    login = 'login',
-}
+export type AuthEndpoints = 'verify-email' | 'register' | 'login'

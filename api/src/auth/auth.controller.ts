@@ -9,11 +9,12 @@ import {
     Request,
     UseGuards,
 } from '@nestjs/common'
-import { AuthEndpoints, RegisterRequest, User, VerifyRequest } from '@webowl/apiclient'
+import type { RegisterRequest, User, VerifyRequest } from '@webowl/apiclient'
 import { validate } from 'class-validator'
 import { EmailVerification, User as UserEntity } from '../entities'
 import { LocalAuthGuard } from '../guards'
 import { EmailVerificationRepository, UserRepository } from '../repositories'
+import { endpoint } from '../utils/endpoint-utils'
 import { isValidPassword } from './auth.utils'
 import type { AuthRequest } from './types'
 
@@ -25,12 +26,12 @@ export class AuthController {
     ) {}
 
     @UseGuards(LocalAuthGuard)
-    @Post(AuthEndpoints.login)
+    @Post(endpoint('login'))
     login(@Request() req: AuthRequest): Promise<User> {
         return Promise.resolve(req.user.toDto())
     }
 
-    @Post(AuthEndpoints.register)
+    @Post(endpoint('register'))
     async register(@Body() request: RegisterRequest): Promise<void> {
         const user = UserEntity.create(request)
 
@@ -66,7 +67,7 @@ export class AuthController {
         }
     }
 
-    @Post(AuthEndpoints.verify)
+    @Post(endpoint('verify-email'))
     async verifyEmail(@Body() request: VerifyRequest): Promise<void> {
         const { emailAddress, verificationCode } = request
         if (!emailAddress || !verificationCode) {
