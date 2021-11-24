@@ -7,3 +7,10 @@ export type User = {
     isGoogleAuth?: boolean
     isMicrosoftAuth?: boolean
 }
+
+export type RegisterRequest = {
+    emailAddress: string
+    firstName: string
+    lastName: string
+    password: string
+}

@@ -75,6 +75,21 @@ export class User {
         return compareSync(unencryptedPassword, this.password)
     }
 
+    static create(o: {
+        firstName: string
+        lastName: string
+        emailAddress: string
+        password: string
+    }): User {
+        const user = new User()
+        user.firstName = o.firstName
+        user.lastName = o.lastName
+        user.emailAddress = o.emailAddress
+        user.password = o.password
+
+        return user
+    }
+
     toDto(): UserDto {
         return {
             id: this.id,
