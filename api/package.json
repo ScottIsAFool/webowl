@@ -1,62 +1,46 @@
 {
-  "name": "api",
-  "version": "0.0.1",
-  "description": "",
-  "author": "",
-  "private": true,
-  "license": "UNLICENSED",
-  "scripts": {
-    "clean": "rimraf dist",
-    "full-clean": "npm run clean && rimraf node_modules",
-    "prebuild": "rimraf dist",
-    "build": "nest build -p tsconfig.build.json",
-    "format-check": "prettier --check \"./**/*.{html,js,jsx,ts,tsx,json,css,less,yml,yaml,md}\"",
-    "format-fix": "npx prettier --write \"./**/*.{html,js,jsx,ts,tsx,json,css,less,yml,yaml,md}\"",
-    "start": "nest start",
-    "start:dev": "env-cmd --silent -f .env.development.local nest start --watch",
-    "start:debug": "env-cmd --silent -f .env.development.local nest start --debug --watch",
-    "start:prod": "node dist/main",
-    "lint-fix": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
-    "lint-check": "eslint \"{src,apps,libs,test}/**/*.ts\"",
-    "ts-compile-check": "tsc --noEmit",
-    "test": "cross-env TZ=UTC jest --passWithNoTests",
-    "test:watch": "jest --watch",
-    "test:cov": "jest --coverage",
-    "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "audit": "npm audit --audit-level=moderate",
-    "integrity-check": "npm-run-all clean format-check lint-check ts-compile-check audit test",
-    "typeorm": "node --require ts-node/register ./node_modules/typeorm/cli.js",
-    "database:run": "docker-compose -f docker-compose.db.yml up -d"
-  },
-  "dependencies": {
-    "@nestjs/common": "^8.0.0",
-    "@nestjs/core": "^8.0.0",
-    "@nestjs/platform-express": "^8.0.0",
-    "reflect-metadata": "^0.1.13",
-    "rimraf": "^3.0.2",
-    "rxjs": "^7.2.0"
-  },
-  "devDependencies": {
-    "@nestjs/cli": "^8.0.0",
-    "@nestjs/schematics": "^8.0.0",
-    "@nestjs/testing": "^8.0.0",
-    "source-map-support": "^0.5.20"
-  },
-  "jest": {
-    "moduleFileExtensions": [
-      "js",
-      "json",
-      "ts"
-    ],
-    "rootDir": "src",
-    "testRegex": ".*\\.spec\\.ts$",
-    "transform": {
-      "^.+\\.(t|j)s$": "ts-jest"
+    "name": "api",
+    "version": "0.0.1",
+    "description": "",
+    "author": "",
+    "private": true,
+    "license": "UNLICENSED",
+    "scripts": {
+        "clean": "rimraf dist",
+        "full-clean": "npm run clean && rimraf node_modules",
+        "prebuild": "rimraf dist",
+        "build": "nest build -p tsconfig.build.json",
+        "format-check": "prettier --check \"./**/*.{html,js,jsx,ts,tsx,json,css,less,yml,yaml,md}\"",
+        "format-fix": "npx prettier --write \"./**/*.{html,js,jsx,ts,tsx,json,css,less,yml,yaml,md}\"",
+        "start": "nest start",
+        "start:dev": "env-cmd --silent -f .env.development.local nest start --watch",
+        "start:debug": "env-cmd --silent -f .env.development.local nest start --debug --watch",
+        "start:prod": "node dist/main",
+        "lint-fix": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
+        "lint-check": "eslint \"{src,apps,libs,test}/**/*.ts\"",
+        "ts-compile-check": "tsc --noEmit",
+        "test": "cross-env TZ=UTC jest --passWithNoTests",
+        "test:watch": "jest --watch",
+        "test:cov": "jest --coverage",
+        "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
+        "audit": "npm audit --audit-level=moderate",
+        "integrity-check": "npm-run-all clean format-check lint-check ts-compile-check audit test",
+        "typeorm": "node --require ts-node/register ./node_modules/typeorm/cli.js",
+        "database:run": "docker-compose -f docker-compose.db.yml up -d"
     },
-    "collectCoverageFrom": [
-      "**/*.(t|j)s"
-    ],
-    "coverageDirectory": "../coverage",
-    "testEnvironment": "node"
-  }
+    "dependencies": {
+        "@nestjs/common": "^8.0.0",
+        "@nestjs/core": "^8.0.0",
+        "@nestjs/platform-express": "^8.0.0",
+        "@sentry/node": "^6.15.0",
+        "reflect-metadata": "^0.1.13",
+        "rimraf": "^3.0.2",
+        "rxjs": "^7.2.0"
+    },
+    "devDependencies": {
+        "@nestjs/cli": "^8.0.0",
+        "@nestjs/schematics": "^8.0.0",
+        "@nestjs/testing": "^8.0.0",
+        "source-map-support": "^0.5.20"
+    }
 }
