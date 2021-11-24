@@ -12,15 +12,15 @@ RUN npm install rimraf -g && \
     npm run bootstrap-server:ci && \
     npm run build-common && \
     npm run build-server && \
-    rimraf ['node_modules', 'apiclient/node_modules', 'cinema-api/node_modules']
+    rimraf ['node_modules', 'apiclient/node_modules', 'api/node_modules']
 
 # Install dependencies for production
 RUN cd apiclient && \ 
     npm ci --only=production && \
     npm link && \
-    cd ../cinema-api && \
+    cd ../api && \
     npm ci --only=production && \
-    npm link @cinemaplanner/api-client
+    npm link @webowl/apiclient
 
 FROM node:15-alpine AS RUNTIME
 RUN apk add --no-cache curl
@@ -28,9 +28,9 @@ RUN apk add --no-cache curl
 WORKDIR /usr/src/app
 
 COPY --from=BUILD_IMAGE /usr/src/app/apiclient ./apiclient
-COPY --from=BUILD_IMAGE /usr/src/app/cinema-api ./cinema-api
+COPY --from=BUILD_IMAGE /usr/src/app/api ./api
 
 EXPOSE 3000
 
-WORKDIR /usr/src/app/cinema-api
+WORKDIR /usr/src/app/api
 CMD ["npm", "run", "start:prod"]
