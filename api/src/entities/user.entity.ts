@@ -8,6 +8,7 @@ import {
     UpdateDateColumn,
 } from 'typeorm'
 import { hashSync, compareSync } from 'bcryptjs'
+import type { User as UserDto } from '@webowl/apiclient'
 
 @Entity()
 @Unique(['emailAddress'])
@@ -72,5 +73,17 @@ export class User {
 
     checkIfPasswordIsValid(unencryptedPassword: string): boolean {
         return compareSync(unencryptedPassword, this.password)
+    }
+
+    toDto(): UserDto {
+        return {
+            id: this.id,
+            emailAddress: this.emailAddress,
+            firstName: this.firstName,
+            lastName: this.lastName,
+            isFacebookAuth: this.isFacebookAuth,
+            isGoogleAuth: this.isGoogleAuth,
+            isMicrosoftAuth: this.isMicrosoftAuth,
+        }
     }
 }

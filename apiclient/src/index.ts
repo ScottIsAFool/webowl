@@ -1,3 +1,1 @@
-export function test(): string {
-    return 'hello'
-}
+export * from './types'
