@@ -7,6 +7,7 @@ import {
     NotFoundException,
     Post,
     Request,
+    UnauthorizedException,
     UseGuards,
 } from '@nestjs/common'
 import type {
@@ -15,6 +16,8 @@ import type {
     RegisterRequest,
     VerifyRequest,
     PasswordResetRequest,
+    ChangePasswordRequest,
+    ResendVerificationRequest,
 } from '@webowl/apiclient'
 import { validate } from 'class-validator'
 import { EmailVerification, PasswordReset, User as UserEntity } from '../entities'
@@ -150,5 +153,48 @@ export class AuthController {
         user.hashPassword()
 
         await this.userRepo.save(user)
+    }
+
+    // @UseGuards(JwtGuard)
+    @Post(endpoint('change-password'))
+    async changePassword(
+        @Request() req: AuthRequest,
+        @Body() request: ChangePasswordRequest,
+    ): Promise<void> {
+        const { user } = req
+        const { oldPassword, newPassword } = request
+
+        if (!oldPassword?.trim() || !newPassword?.trim()) {
+            throw new BadRequestException('Old and new passwords must be provided')
+        }
+
+        if (!user.checkIfPasswordIsValid(oldPassword)) {
+            throw new UnauthorizedException('Old password does not match')
+        }
+
+        if (!isValidPassword(newPassword)) {
+            throw new BadRequestException('New password not strong enough')
+        }
+
+        user.password = newPassword
+        user.hashPassword()
+        await this.userRepo.save(user)
+    }
+
+    @Post(endpoint('resend-verification'))
+    async resendVerification(@Body() request: ResendVerificationRequest): Promise<void> {
+        const { emailAddress } = request
+
+        const code = await this.verificationRepo.get(emailAddress)
+        if (!code) {
+            return
+        }
+
+        const user = await this.userRepo.getByEmail(emailAddress)
+        if (!user) {
+            return
+        }
+
+        // Send email
     }
 }
