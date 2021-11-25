@@ -4,7 +4,10 @@ import { User } from '../entities'
 
 type UserOptions = Record<string, never>
 
-type GetUserBy = ({ type: 'userId'; userId: number } | { type: 'email'; emailAddress: string }) & {
+export type GetUserBy = (
+    | { type: 'userId'; userId: number }
+    | { type: 'email'; emailAddress: string }
+) & {
     options?: UserOptions
 }
 
@@ -19,7 +22,11 @@ export class UserRepository extends Repository<User> {
         })
     }
 
-    getUser(by: GetUserBy): Promise<User | undefined> {
+    getByEmail(emailAddress: string, options?: UserOptions): Promise<User | undefined> {
+        return this.get({ type: 'email', emailAddress, options })
+    }
+
+    get(by: GetUserBy): Promise<User | undefined> {
         const userOptions: FindOneOptions<User> =
             by.type === 'email'
                 ? {

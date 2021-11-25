@@ -3,11 +3,12 @@ import type {
     AuthEndpoints,
     ChangePasswordRequest,
     LoginRequest,
-    PasswordResetRequest,
+    LoginResponse,
+    SendPasswordResetRequest,
     RegisterRequest,
     ResendVerificationRequest,
-    User,
     VerifyRequest,
+    PasswordResetRequest,
 } from '.'
 
 export class ApiException extends Error {
@@ -31,8 +32,8 @@ type RequestType = AuthEndpoints
 export class ApiClient {
     constructor(private readonly baseUrl: string, private readonly accessToken?: string) {}
 
-    login(request: LoginRequest): Promise<User> {
-        return this.post<User>({ endPoint: this.endpoint('auth', 'login'), request })
+    login(request: LoginRequest): Promise<LoginResponse> {
+        return this.post<LoginResponse>({ endPoint: this.endpoint('auth', 'login'), request })
     }
 
     register(request: RegisterRequest): Promise<void> {
@@ -49,6 +50,10 @@ export class ApiClient {
 
     changePassword(request: ChangePasswordRequest): Promise<void> {
         return this.post<void>({ endPoint: this.endpoint('auth', 'change-password'), request })
+    }
+
+    sendPasswordReset(request: SendPasswordResetRequest): Promise<void> {
+        return this.post<void>({ endPoint: this.endpoint('auth', 'send-password-reset'), request })
     }
 
     passwordReset(request: PasswordResetRequest): Promise<void> {

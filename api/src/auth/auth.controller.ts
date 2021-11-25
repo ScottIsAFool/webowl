@@ -9,11 +9,21 @@ import {
     Request,
     UseGuards,
 } from '@nestjs/common'
-import type { RegisterRequest, User, VerifyRequest } from '@webowl/apiclient'
+import type {
+    LoginResponse,
+    SendPasswordResetRequest,
+    RegisterRequest,
+    VerifyRequest,
+    PasswordResetRequest,
+} from '@webowl/apiclient'
 import { validate } from 'class-validator'
-import { EmailVerification, User as UserEntity } from '../entities'
+import { EmailVerification, PasswordReset, User as UserEntity } from '../entities'
 import { LocalAuthGuard } from '../guards'
-import { EmailVerificationRepository, UserRepository } from '../repositories'
+import {
+    EmailVerificationRepository,
+    PasswordResetRepository,
+    UserRepository,
+} from '../repositories'
 import { endpoint } from '../utils/endpoint-utils'
 import { isValidPassword } from './auth.utils'
 import type { AuthRequest } from './types'
@@ -23,22 +33,22 @@ export class AuthController {
     constructor(
         private readonly userRepo: UserRepository,
         private readonly verificationRepo: EmailVerificationRepository,
+        private readonly passwordRepo: PasswordResetRepository,
     ) {}
 
     @UseGuards(LocalAuthGuard)
     @Post(endpoint('login'))
-    login(@Request() req: AuthRequest): Promise<User> {
-        return Promise.resolve(req.user.toDto())
+    login(@Request() req: AuthRequest): Promise<LoginResponse> {
+        return Promise.resolve({
+            user: req.user.toDto(),
+        })
     }
 
     @Post(endpoint('register'))
     async register(@Body() request: RegisterRequest): Promise<void> {
         const user = UserEntity.create(request)
 
-        const existingUser = await this.userRepo.getUser({
-            type: 'email',
-            emailAddress: user.emailAddress,
-        })
+        const existingUser = await this.userRepo.getByEmail(user.emailAddress)
         if (existingUser) {
             throw new ConflictException('Account already exists with that email address')
         }
@@ -83,7 +93,7 @@ export class AuthController {
             throw new ForbiddenException('Verification code does not match')
         }
 
-        const user = await this.userRepo.getUser({ type: 'email', emailAddress })
+        const user = await this.userRepo.getByEmail(emailAddress)
         if (!user) {
             throw new NotFoundException('User not found for this email address')
         }
@@ -91,5 +101,54 @@ export class AuthController {
         user.isVerified = true
         await this.userRepo.save(user)
         await this.verificationRepo.remove(emailVerification)
+    }
+
+    @Post(endpoint('send-password-reset'))
+    async sendPasswordReset(@Body() request: SendPasswordResetRequest): Promise<void> {
+        const { emailAddress } = request
+        if (!emailAddress?.trim()) {
+            throw new BadRequestException('Email address is required')
+        }
+
+        const user = await this.userRepo.getByEmail(emailAddress)
+        if (user) {
+            let passwordReset = await this.passwordRepo.get(emailAddress)
+            if (!passwordReset) {
+                passwordReset = PasswordReset.create(emailAddress)
+            }
+
+            // Send email
+        }
+    }
+
+    @Post(endpoint('password-reset'))
+    async passwordReset(@Body() request: PasswordResetRequest): Promise<void> {
+        const { emailAddress, code, password } = request
+        if (!emailAddress?.trim() || !code?.trim()) {
+            throw new BadRequestException('Email address and code required')
+        }
+
+        const resetPassword = await this.passwordRepo.get(emailAddress)
+        if (!resetPassword) {
+            throw new NotFoundException('No password request found')
+        }
+
+        if (code !== resetPassword.resetCode) {
+            throw new BadRequestException('Codes do not match')
+        }
+
+        if (!isValidPassword(password)) {
+            throw new BadRequestException('Password not strong enough')
+        }
+
+        const user = await this.userRepo.getByEmail(emailAddress)
+        if (!user) {
+            throw new NotFoundException('User not found')
+        }
+
+        user.password = password
+        user.hashPassword()
+
+        await this.userRepo.save(user)
     }
 }
