@@ -9,6 +9,8 @@ import type {
     ResendVerificationRequest,
     VerifyRequest,
     PasswordResetRequest,
+    RefreshTokenRequest,
+    AuthToken,
 } from '.'
 
 export class ApiException extends Error {
@@ -58,6 +60,14 @@ export class ApiClient {
 
     passwordReset(request: PasswordResetRequest): Promise<void> {
         return this.post<void>({ endPoint: this.endpoint('auth', 'password-reset'), request })
+    }
+
+    refreshToken(request: RefreshTokenRequest): Promise<AuthToken> {
+        return this.post<AuthToken>({
+            endPoint: this.endpoint('auth', 'refresh'),
+            request,
+            requiresAuth: true,
+        })
     }
 
     private endpoint(base: BasePoints, request: RequestType): string {

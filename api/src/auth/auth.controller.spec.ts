@@ -13,6 +13,8 @@ import { mockConnection } from '../../test/mocks'
 import { AuthService } from './auth.service'
 import { User, UserService } from '../user'
 import { PasswordReset } from './password-reset.entity'
+import { AccessToken } from './access-token.entity'
+import { JwtModule } from '@nestjs/jwt'
 
 const HAPPY_REGISTER_REQUEST: RegisterRequest = {
     emailAddress: 's@s.com',
@@ -43,6 +45,7 @@ describe('AuthController', () => {
 
     beforeEach(async () => {
         const module = await Test.createTestingModule({
+            imports: [JwtModule.register({})],
             providers: [
                 UserService,
                 AuthService,
@@ -56,6 +59,10 @@ describe('AuthController', () => {
                 },
                 {
                     provide: getRepositoryToken(User),
+                    useFactory: mockConnection,
+                },
+                {
+                    provide: getRepositoryToken(AccessToken),
                     useFactory: mockConnection,
                 },
             ],

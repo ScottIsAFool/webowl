@@ -4,6 +4,8 @@ import {
     ConflictException,
     Controller,
     ForbiddenException,
+    HttpCode,
+    HttpStatus,
     NotFoundException,
     Post,
     Request,
@@ -18,16 +20,19 @@ import type {
     PasswordResetRequest,
     ChangePasswordRequest,
     ResendVerificationRequest,
+    RefreshTokenRequest,
+    AuthToken,
 } from '@webowl/apiclient'
 import { validate } from 'class-validator'
 import { User as UserEntity, UserService } from '../user'
-import { LocalAuthGuard } from '../guards'
 import { endpoint } from '../utils/endpoint-utils'
 import { isValidPassword } from './auth.utils'
 import { EmailVerification } from './email-verification.entity'
 import { PasswordReset } from './password-reset.entity'
 import type { AuthRequest } from './types'
 import { AuthService } from '.'
+import { LocalAuthGuard } from './local-auth.guard'
+import { JwtGuard } from './jwt.guard'
 
 @Controller('auth/')
 export class AuthController {
@@ -37,10 +42,15 @@ export class AuthController {
     ) {}
 
     @UseGuards(LocalAuthGuard)
+    @HttpCode(HttpStatus.OK)
     @Post(endpoint('login'))
-    login(@Request() req: AuthRequest): Promise<LoginResponse> {
+    async login(@Request() req: AuthRequest): Promise<LoginResponse> {
         return Promise.resolve({
             user: req.user.toDto(),
+            authToken: await this.authService.generateAccessToken({
+                emailAddress: req.user.emailAddress,
+                sub: req.user.id,
+            }),
         })
     }
 
@@ -77,6 +87,7 @@ export class AuthController {
         }
     }
 
+    @HttpCode(HttpStatus.OK)
     @Post(endpoint('verify-email'))
     async verifyEmail(@Body() request: VerifyRequest): Promise<void> {
         const { emailAddress, verificationCode } = request
@@ -103,6 +114,7 @@ export class AuthController {
         await this.authService.deleteEmailVerification(emailVerification)
     }
 
+    @HttpCode(HttpStatus.OK)
     @Post(endpoint('send-password-reset'))
     async sendPasswordReset(@Body() request: SendPasswordResetRequest): Promise<void> {
         const { emailAddress } = request
@@ -121,6 +133,7 @@ export class AuthController {
         }
     }
 
+    @HttpCode(HttpStatus.OK)
     @Post(endpoint('password-reset'))
     async passwordReset(@Body() request: PasswordResetRequest): Promise<void> {
         const { emailAddress, code, password } = request
@@ -153,7 +166,8 @@ export class AuthController {
         await this.authService.deletePasswordReset(resetPassword)
     }
 
-    // @UseGuards(JwtGuard)
+    @UseGuards(JwtGuard)
+    @HttpCode(HttpStatus.OK)
     @Post(endpoint('change-password'))
     async changePassword(
         @Request() req: AuthRequest,
@@ -179,6 +193,7 @@ export class AuthController {
         await this.userService.save(user)
     }
 
+    @HttpCode(HttpStatus.OK)
     @Post(endpoint('resend-verification'))
     async resendVerification(@Body() request: ResendVerificationRequest): Promise<void> {
         const { emailAddress } = request
@@ -194,5 +209,29 @@ export class AuthController {
         }
 
         // Send email
+    }
+
+    @HttpCode(HttpStatus.OK)
+    @Post(endpoint('refresh'))
+    async refreshToken(@Body() request: RefreshTokenRequest): Promise<AuthToken> {
+        const { emailAddress, refreshToken } = request
+        const user = await this.authService.getUserFromToken(refreshToken)
+        if (!user || user.emailAddress !== emailAddress) {
+            throw new UnauthorizedException()
+        }
+
+        const oldToken = await this.authService.getAccessTokenByRefreshToken(user.id, refreshToken)
+        if (!oldToken) {
+            throw new NotFoundException()
+        }
+
+        await this.authService.deleteAccessToken(oldToken)
+
+        const token = await this.authService.generateAccessToken({
+            emailAddress,
+            sub: user.id,
+        })
+
+        return token
     }
 }

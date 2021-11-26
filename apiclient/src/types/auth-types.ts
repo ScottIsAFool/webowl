@@ -18,6 +18,7 @@ export type LoginRequest = WithEmail & {
 
 export type LoginResponse = {
     user: User
+    authToken: AuthToken
 }
 
 export type RegisterRequest = {
@@ -45,6 +46,11 @@ export type PasswordResetRequest = WithEmail & {
     password: string
 }
 
+export type RefreshTokenRequest = {
+    emailAddress: string
+    refreshToken: string
+}
+
 export type AuthEndpoints =
     | 'verify-email'
     | 'register'
@@ -53,3 +59,10 @@ export type AuthEndpoints =
     | 'change-password'
     | 'password-reset'
     | 'send-password-reset'
+    | 'refresh'
+
+export type AuthToken = {
+    accessToken: string
+    expiresAt: number
+    refreshToken: string
+}

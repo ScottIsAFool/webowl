@@ -9,6 +9,7 @@ export type Configuration = {
     jwtToken: string
     sentryDSN?: string
     database: DatabaseConfiguration
+    expiryTime: number
 }
 
 type DatabaseConfiguration = {
@@ -42,6 +43,7 @@ export function getConfiguration(): Configuration {
         DB_ENCRYPTION_KEY,
         DB_ENCRYPTION_ALGORITHM,
         DB_ENCRYPTION_IV_LENGTH,
+        EXPIRY_TIME,
     } = process.env
 
     const jwtToken = validateEnv(JWT_TOKEN, 'JWT_TOKEN')
@@ -54,6 +56,7 @@ export function getConfiguration(): Configuration {
     const encryptionLength = validateEnv(DB_ENCRYPTION_IV_LENGTH, 'DB_ENCRYPTION_IV_LENGTH')
     const dbUrl = validateEnv(DATABASE_URL, 'DATABASE_URL')
     const ssl = validateEnv(DB_SSL, 'DB_SSL')
+    const expiryTime = validateEnv(EXPIRY_TIME, 'EXPIRY_TIME')
 
     const tlsOptions: boolean | TlsOptions =
         ssl === 'true'
@@ -69,6 +72,7 @@ export function getConfiguration(): Configuration {
         googleAPIKey: GOOGLE_API_KEY ?? '',
         jwtToken,
         sentryDSN,
+        expiryTime: parseInt(expiryTime),
         database: {
             url: dbUrl,
             ssl: tlsOptions,

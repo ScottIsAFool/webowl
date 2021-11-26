@@ -9,6 +9,7 @@ import {
 } from 'typeorm'
 import { hashSync, compareSync } from 'bcryptjs'
 import type { User as UserDto } from '@webowl/apiclient'
+import { getEncryptionTransformer } from '../auth/auth.utils'
 
 @Entity()
 @Unique(['emailAddress'])
@@ -26,11 +27,15 @@ export class User {
     @ValidateIf((x) => !x.isFacebookAuth && !x.isGoogleAuth && !x.isMicrosoftAuth)
     password!: string
 
-    @Column()
+    @Column({
+        transformer: getEncryptionTransformer(),
+    })
     @Length(2, 50)
     firstName!: string
 
-    @Column()
+    @Column({
+        transformer: getEncryptionTransformer(),
+    })
     @Length(2, 100)
     lastName!: string
 
@@ -55,13 +60,13 @@ export class User {
     @Column({ nullable: true })
     isGoogleAuth!: boolean
 
-    @Column({ nullable: true })
+    @Column({ nullable: true, transformer: getEncryptionTransformer() })
     googleAccessToken!: string
 
     @Column({ nullable: true })
     microsoftId!: string
 
-    @Column({ nullable: true })
+    @Column({ nullable: true, transformer: getEncryptionTransformer() })
     microsoftAccessToken!: string
 
     @Column({ nullable: true })

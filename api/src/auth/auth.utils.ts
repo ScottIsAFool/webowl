@@ -1,4 +1,6 @@
 import passwordValidator from 'password-validator'
+import { EncryptionTransformer } from 'typeorm-encrypted'
+import { getConfiguration } from '../config/configuration'
 
 const passwordSchema = new passwordValidator()
     .is()
@@ -25,4 +27,12 @@ const passwordSchema = new passwordValidator()
 export const isValidPassword = (password: string): boolean => {
     const isValid = passwordSchema.validate(password)
     return typeof isValid === 'boolean' && isValid
+}
+
+export function getEncryptionTransformer(): EncryptionTransformer | undefined {
+    if (process.env.JWT_TOKEN === undefined) return
+
+    const encryptionOptions = getConfiguration().database.encryption
+
+    return new EncryptionTransformer(encryptionOptions)
 }

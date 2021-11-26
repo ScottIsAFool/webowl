@@ -5,12 +5,15 @@ import { mockConnection } from '../../test/mocks'
 import { AuthService } from './auth.service'
 import { User, UserService } from '../user'
 import { PasswordReset } from './password-reset.entity'
+import { AccessToken } from './access-token.entity'
+import { JwtModule } from '@nestjs/jwt'
 
 describe('AuthService', () => {
-    let service: AuthService
+    let target: AuthService
 
     beforeEach(async () => {
         const module: TestingModule = await Test.createTestingModule({
+            imports: [JwtModule.register({})],
             providers: [
                 UserService,
                 AuthService,
@@ -26,13 +29,17 @@ describe('AuthService', () => {
                     provide: getRepositoryToken(User),
                     useFactory: mockConnection,
                 },
+                {
+                    provide: getRepositoryToken(AccessToken),
+                    useFactory: mockConnection,
+                },
             ],
         }).compile()
 
-        service = module.get<AuthService>(AuthService)
+        target = module.get<AuthService>(AuthService)
     })
 
     it('should be defined', () => {
-        expect(service).toBeDefined()
+        expect(target).toBeDefined()
     })
 })

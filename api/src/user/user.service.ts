@@ -28,6 +28,10 @@ export class UserService {
         return this.get({ type: 'email', emailAddress, options })
     }
 
+    getById(id: number, options?: UserOptions): Promise<User | undefined> {
+        return this.get({ type: 'userId', userId: id, options })
+    }
+
     get(by: GetUserBy): Promise<User | undefined> {
         const userOptions: FindOneOptions<User> =
             by.type === 'email'
