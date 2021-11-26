@@ -20,23 +20,20 @@ import type {
     ResendVerificationRequest,
 } from '@webowl/apiclient'
 import { validate } from 'class-validator'
-import { EmailVerification, PasswordReset, User as UserEntity } from '../entities'
+import { User as UserEntity, UserService } from '../user'
 import { LocalAuthGuard } from '../guards'
-import {
-    EmailVerificationRepository,
-    PasswordResetRepository,
-    UserRepository,
-} from '../repositories'
 import { endpoint } from '../utils/endpoint-utils'
 import { isValidPassword } from './auth.utils'
+import { EmailVerification } from './email-verification.entity'
+import { PasswordReset } from './password-reset.entity'
 import type { AuthRequest } from './types'
+import { AuthService } from '.'
 
 @Controller('auth/')
 export class AuthController {
     constructor(
-        private readonly userRepo: UserRepository,
-        private readonly verificationRepo: EmailVerificationRepository,
-        private readonly passwordRepo: PasswordResetRepository,
+        private readonly userService: UserService,
+        private readonly authService: AuthService,
     ) {}
 
     @UseGuards(LocalAuthGuard)
@@ -51,7 +48,7 @@ export class AuthController {
     async register(@Body() request: RegisterRequest): Promise<void> {
         const user = UserEntity.create(request)
 
-        const existingUser = await this.userRepo.getByEmail(user.emailAddress)
+        const existingUser = await this.userService.getByEmail(user.emailAddress)
         if (existingUser) {
             throw new ConflictException('Account already exists with that email address')
         }
@@ -70,9 +67,9 @@ export class AuthController {
         user.hashPassword()
 
         try {
-            await this.userRepo.save(user)
+            await this.userService.save(user)
             const verification = EmailVerification.create(user.emailAddress, user.id)
-            await this.verificationRepo.save(verification)
+            await this.authService.saveEmailVerification(verification)
 
             // send email out
         } catch (e: unknown) {
@@ -87,7 +84,7 @@ export class AuthController {
             throw new BadRequestException('Email address and code required')
         }
 
-        const emailVerification = await this.verificationRepo.get(emailAddress)
+        const emailVerification = await this.authService.getEmailVerification(emailAddress)
         if (!emailVerification) {
             throw new BadRequestException('No verification code for this email address')
         }
@@ -96,14 +93,14 @@ export class AuthController {
             throw new ForbiddenException('Verification code does not match')
         }
 
-        const user = await this.userRepo.getByEmail(emailAddress)
+        const user = await this.userService.getByEmail(emailAddress)
         if (!user) {
             throw new NotFoundException('User not found for this email address')
         }
 
         user.isVerified = true
-        await this.userRepo.save(user)
-        await this.verificationRepo.remove(emailVerification)
+        await this.userService.save(user)
+        await this.authService.deleteEmailVerification(emailVerification)
     }
 
     @Post(endpoint('send-password-reset'))
@@ -113,9 +110,9 @@ export class AuthController {
             throw new BadRequestException('Email address is required')
         }
 
-        const user = await this.userRepo.getByEmail(emailAddress)
+        const user = await this.userService.getByEmail(emailAddress)
         if (user) {
-            let passwordReset = await this.passwordRepo.get(emailAddress)
+            let passwordReset = await this.authService.getPasswordReset(emailAddress)
             if (!passwordReset) {
                 passwordReset = PasswordReset.create(emailAddress)
             }
@@ -131,7 +128,7 @@ export class AuthController {
             throw new BadRequestException('Email address and code required')
         }
 
-        const resetPassword = await this.passwordRepo.get(emailAddress)
+        const resetPassword = await this.authService.getPasswordReset(emailAddress)
         if (!resetPassword) {
             throw new NotFoundException('No password request found')
         }
@@ -144,7 +141,7 @@ export class AuthController {
             throw new BadRequestException('Password not strong enough')
         }
 
-        const user = await this.userRepo.getByEmail(emailAddress)
+        const user = await this.userService.getByEmail(emailAddress)
         if (!user) {
             throw new NotFoundException('User not found')
         }
@@ -152,7 +149,8 @@ export class AuthController {
         user.password = password
         user.hashPassword()
 
-        await this.userRepo.save(user)
+        await this.userService.save(user)
+        await this.authService.deletePasswordReset(resetPassword)
     }
 
     // @UseGuards(JwtGuard)
@@ -178,19 +176,19 @@ export class AuthController {
 
         user.password = newPassword
         user.hashPassword()
-        await this.userRepo.save(user)
+        await this.userService.save(user)
     }
 
     @Post(endpoint('resend-verification'))
     async resendVerification(@Body() request: ResendVerificationRequest): Promise<void> {
         const { emailAddress } = request
 
-        const code = await this.verificationRepo.get(emailAddress)
+        const code = await this.authService.getEmailVerification(emailAddress)
         if (!code) {
             return
         }
 
-        const user = await this.userRepo.getByEmail(emailAddress)
+        const user = await this.userService.getByEmail(emailAddress)
         if (!user) {
             return
         }

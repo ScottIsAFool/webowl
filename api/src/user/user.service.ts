@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common'
-import { EntityRepository, FindOneOptions, Repository } from 'typeorm'
-import { User } from '../entities'
+import { InjectRepository } from '@nestjs/typeorm'
+import type { FindOneOptions, Repository } from 'typeorm'
+import { User } from '.'
 
 type UserOptions = Record<string, never>
 
@@ -12,10 +13,11 @@ export type GetUserBy = (
 }
 
 @Injectable()
-@EntityRepository(User)
-export class UserRepository extends Repository<User> {
+export class UserService {
+    constructor(@InjectRepository(User) private readonly userRepository: Repository<User>) {}
+
     getUserByGoogleId(googleId: string): Promise<User | undefined> {
-        return this.findOne({
+        return this.userRepository.findOne({
             where: {
                 googleId: googleId,
             },
@@ -36,7 +38,11 @@ export class UserRepository extends Repository<User> {
 
         this.addUserOptions(userOptions, by.options)
 
-        return this.findOne(userOptions)
+        return this.userRepository.findOne(userOptions)
+    }
+
+    save(entity: User): Promise<User> {
+        return this.userRepository.save(entity)
     }
 
     private addUserOptions(userOptions: FindOneOptions<User>, options?: UserOptions) {

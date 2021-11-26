@@ -1,29 +1,21 @@
 import { Module } from '@nestjs/common'
 import { PassportModule } from '@nestjs/passport'
 import { TypeOrmModule } from '@nestjs/typeorm'
-import { AuthService } from '.'
-import { EmailVerification, PasswordReset, User } from '../entities'
-import {
-    EmailVerificationRepository,
-    PasswordResetRepository,
-    UserRepository,
-} from '../repositories'
+import { UserModule } from '../user/user.module'
 import { AuthController } from './auth.controller'
+import { AuthService } from './auth.service'
+import { EmailVerification } from './email-verification.entity'
 import { LocalStrategy } from './local.stategy'
+import { PasswordReset } from './password-reset.entity'
 
 @Module({
     imports: [
-        TypeOrmModule.forFeature([
-            User,
-            UserRepository,
-            EmailVerification,
-            EmailVerificationRepository,
-            PasswordReset,
-            PasswordResetRepository,
-        ]),
+        UserModule,
+        TypeOrmModule.forFeature([EmailVerification, PasswordReset]),
         PassportModule,
     ],
     controllers: [AuthController],
     providers: [AuthService, LocalStrategy],
+    exports: [AuthService],
 })
 export class AuthModule {}

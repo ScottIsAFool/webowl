@@ -2,11 +2,11 @@ import { Module } from '@nestjs/common'
 import { ConfigModule } from '@nestjs/config'
 import { APP_INTERCEPTOR } from '@nestjs/core'
 import { TypeOrmModule } from '@nestjs/typeorm'
-import { AuthModule } from '../auth'
 import { getConfiguration } from '../config/configuration'
-import { AppController, PingController } from '../controllers'
-import { EmailVerification, PasswordReset, User } from '../entities'
+import { PingModule } from '../ping'
 import { SentryInterceptor } from '../interceptors'
+import { AppController } from './app.controller'
+import { AuthModule } from '../auth/auth.module'
 
 @Module({
     imports: [
@@ -16,7 +16,8 @@ import { SentryInterceptor } from '../interceptors'
         TypeOrmModule.forRoot({
             ...getConfiguration().database,
             type: 'postgres',
-            entities: [User, EmailVerification, PasswordReset],
+            // entities: [User, PasswordReset, EmailVerification],
+            entities: ['dist/**/*.entity{.ts,.js}'],
             synchronize: false,
             migrations: ['dist/migrations/*.js'],
             migrationsRun: true,
@@ -25,8 +26,9 @@ import { SentryInterceptor } from '../interceptors'
             },
         }),
         AuthModule,
+        PingModule,
     ],
-    controllers: [AppController, PingController],
+    controllers: [AppController],
     providers: [
         {
             provide: APP_INTERCEPTOR,
