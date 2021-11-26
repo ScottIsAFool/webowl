@@ -12,12 +12,12 @@ export class PasswordReset {
 
     @Column()
     @IsNotEmpty()
-    resetCode!: string
+    code!: string
 
     static create(emailAddress: string): PasswordReset {
         const pw = new PasswordReset()
         pw.emailAddress = emailAddress
-        pw.resetCode = uuid()
+        pw.code = uuid()
 
         return pw
     }

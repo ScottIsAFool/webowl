@@ -133,7 +133,7 @@ export class AuthController {
             throw new NotFoundException('No password request found')
         }
 
-        if (code !== resetPassword.resetCode) {
+        if (code !== resetPassword.code) {
             throw new BadRequestException('Codes do not match')
         }
 
