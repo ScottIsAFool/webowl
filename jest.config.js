@@ -1,3 +1,5 @@
+const { join } = require('path')
+
 module.exports = {
     transform: { '^.+\\.(ts|tsx)?$': 'ts-jest' },
     clearMocks: true,
@@ -8,4 +10,5 @@ module.exports = {
     // moduleNameMapper: {
     //     '\\.(css|less|scss|png|jpg)$': '<rootDir>/test/resourcesMock.ts',
     // },
+    globalSetup: join(__dirname, 'global-setup.js'),
 }
