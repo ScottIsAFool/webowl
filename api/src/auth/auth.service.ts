@@ -29,9 +29,12 @@ export class AuthService {
     ) {}
 
     async getUserFromToken(accessToken: string): Promise<User | undefined> {
-        const { emailAddress } = this.jwtService.decode(accessToken) as JwtOptions
-        const user = await this.userService.getByEmail(emailAddress)
-        return user
+        const result = this.jwtService.decode(accessToken) as JwtOptions | undefined
+        if (result?.emailAddress) {
+            const user = await this.userService.getByEmail(result.emailAddress)
+            return user
+        }
+        return undefined
     }
 
     async generateAccessToken(options: JwtOptions): Promise<AuthToken> {
