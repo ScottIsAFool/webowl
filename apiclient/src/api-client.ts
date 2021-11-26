@@ -32,7 +32,11 @@ type BasePoints = 'auth'
 type RequestType = AuthEndpoints
 
 export class ApiClient {
-    constructor(private readonly baseUrl: string, private readonly accessToken?: string) {}
+    constructor(private readonly baseUrl: string, private readonly authToken?: AuthToken) {}
+
+    private get accessToken(): string | undefined {
+        return this.authToken?.accessToken
+    }
 
     login(request: LoginRequest): Promise<LoginResponse> {
         return this.post<LoginResponse>({ endPoint: this.endpoint('auth', 'login'), request })

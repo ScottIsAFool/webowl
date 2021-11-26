@@ -1,6 +1,5 @@
 import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from 'typeorm'
 import { getEncryptionTransformer } from './auth.utils'
-import { v4 as uuid } from 'uuid'
 import dayjs from 'dayjs'
 import { getConfiguration } from '../config/configuration'
 
