@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { GuardedRouteState } from '../routing/types'
+import { GuardedRouteState } from '../../routing/types'
 
 function Login(): JSX.Element {
     const navigate = useNavigate()

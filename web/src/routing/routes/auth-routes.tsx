@@ -1,11 +1,15 @@
 import * as React from 'react'
 import { useRoutes } from 'react-router-dom'
-import { Login } from '../../pages'
+import { Login, Register } from '../../pages/auth'
+import { IsAuthenticated } from '../is-authenticated'
+import { RouteResult } from '../types'
 
-function AuthRoutes(): React.ReactElement | JSX.Element | null {
+function AuthRoutes(): RouteResult {
+    const isAuthenticated = false
     const element = useRoutes([
         {
             path: '/register',
+            element: <IsAuthenticated target={<Register />} isAuthenticated={isAuthenticated} />,
         },
         {
             path: '/register-success/:email',
@@ -33,7 +37,7 @@ function AuthRoutes(): React.ReactElement | JSX.Element | null {
         },
         {
             path: '/login',
-            element: <Login />,
+            element: <IsAuthenticated target={<Login />} isAuthenticated={isAuthenticated} />,
         },
     ])
 

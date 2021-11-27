@@ -1,9 +1,10 @@
-import { PathRouteProps, LayoutRouteProps, IndexRouteProps } from 'react-router-dom'
-
-export type GuardedRouteProps = (PathRouteProps | LayoutRouteProps | IndexRouteProps) & {
+export type GuardedRouteProps = {
     isAuthenticated?: boolean
+    target: JSX.Element
 }
 
 export type GuardedRouteState = {
     from?: Location
 }
+
+export type RouteResult = React.ReactElement | JSX.Element | null

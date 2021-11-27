@@ -2,7 +2,7 @@ import * as React from 'react'
 import logo from './logo.svg'
 import './app.module.css'
 import { BrowserRouter as Router, Routes } from 'react-router-dom'
-import { AppRoutes, AuthRoutes } from './routing/routes'
+import { AppRoutes, AuthRoutes, LeagueRoutes } from './routing/routes'
 
 function App(): JSX.Element {
     return (
@@ -26,6 +26,7 @@ function App(): JSX.Element {
                 <body>
                     <Routes>
                         <AuthRoutes />
+                        <LeagueRoutes />
                         <AppRoutes />
                     </Routes>
                 </body>

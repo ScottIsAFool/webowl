@@ -1,16 +1,19 @@
 import * as React from 'react'
 import { useRoutes } from 'react-router-dom'
+import { Home, NotFound } from '../../pages'
+import { IsAuthenticated } from '../is-authenticated'
+import { RouteResult } from '../types'
 
-function AppRoutes(): React.ReactElement | JSX.Element | null {
-    // const isAuthenticated = false
+function AppRoutes(): RouteResult {
+    const isAuthenticated = false
     const element = useRoutes([
         {
             path: '/',
-            // element: isAuthenticated ? <Navigate to="/something" /> : <Home />,
+            element: <IsAuthenticated target={<Home />} isAuthenticated={isAuthenticated} />,
         },
         {
             path: '*',
-            // component: NotFound,
+            element: <NotFound />,
         },
     ])
 
