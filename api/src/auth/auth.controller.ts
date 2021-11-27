@@ -23,6 +23,7 @@ import type {
     ResendVerificationRequest,
     RefreshTokenRequest,
     AuthToken,
+    SocialAuthRequest,
 } from '@webowl/apiclient'
 import { validate } from 'class-validator'
 import { User, User as UserEntity, UserService } from '../user'
@@ -35,12 +36,15 @@ import { AuthService } from '.'
 import { LocalAuthGuard } from './local-auth.guard'
 import { JwtGuard } from './jwt.guard'
 import { AuthUser } from './auth-user.decorator'
+import { SocialAuthProvider } from '../social/social-provider.service'
+import type { SocialUser } from '../social/types'
 
 @Controller('auth/')
 export class AuthController {
     constructor(
         private readonly userService: UserService,
         private readonly authService: AuthService,
+        private readonly socialAuthProvider: SocialAuthProvider,
     ) {}
 
     @UseGuards(LocalAuthGuard)
@@ -247,6 +251,54 @@ export class AuthController {
         if (authorization) {
             const jwt = authorization.replace('Bearer ', '')
             await this.authService.deleteUserAccessToken(user.id, jwt)
+        }
+    }
+
+    @HttpCode(HttpStatus.OK)
+    @Post(endpoint('social'))
+    async socialLogin(request: SocialAuthRequest): Promise<LoginResponse> {
+        const { accessToken, provider, socialId } = request
+        if (!accessToken || !socialId) {
+            throw new BadRequestException('Missing request elements')
+        }
+
+        const socialProvider = this.socialAuthProvider.getSocialProvider(provider)
+
+        let socialUser: SocialUser
+        try {
+            socialUser = await socialProvider.getSocialUser(accessToken)
+        } catch (e: unknown) {
+            throw new BadRequestException(`${provider} API errored`)
+        }
+
+        if (socialUser.id !== socialId) {
+            throw new NotFoundException(`${provider} IDs do not match`)
+        }
+
+        let user = await this.userService.getByEmail(socialUser.emailAddress)
+        if (!user) {
+            user = User.create({
+                emailAddress: socialUser.emailAddress,
+                firstName: socialUser.firstName,
+                lastName: socialUser.lastName,
+                isVerified: true,
+            })
+            socialProvider.fillRemainingFields(user, socialUser)
+
+            const errors = await validate(user)
+            if (errors.length > 0) {
+                throw new BadRequestException(errors)
+            }
+
+            await this.userService.save(user)
+        }
+
+        return {
+            user,
+            authToken: await this.authService.generateAccessToken({
+                emailAddress: user.emailAddress,
+                sub: user.id,
+            }),
         }
     }
 }

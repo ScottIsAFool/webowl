@@ -26,7 +26,7 @@ export class FacebookProvider implements ISocialProvider {
                 id: user.id.toString(),
                 firstName: user.first_name,
                 lastName: user.last_name,
-                email: user.email,
+                emailAddress: user.email,
                 accessToken: accessToken,
             }
         } catch (e: unknown) {

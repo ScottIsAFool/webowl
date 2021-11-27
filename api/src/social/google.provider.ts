@@ -35,7 +35,7 @@ export class GoogleProvider implements ISocialProvider {
             firstName: name?.givenName ?? '',
             lastName: name?.familyName ?? '',
             id: profile?.id ?? '',
-            email: email?.value ?? '',
+            emailAddress: email?.value ?? '',
             accessToken: accessToken,
             avatar: avatar?.url ?? undefined,
         }

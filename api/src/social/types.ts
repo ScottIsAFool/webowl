@@ -11,7 +11,7 @@ export type SocialUser = {
     lastName: string
     firstName: string
     id: string
-    email: string
+    emailAddress: string
     accessToken: string
     avatar?: string
 }

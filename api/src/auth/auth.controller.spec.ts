@@ -15,6 +15,7 @@ import { User, UserService } from '../user'
 import { PasswordReset } from './password-reset.entity'
 import { AccessToken } from './access-token.entity'
 import { JwtModule } from '@nestjs/jwt'
+import { SocialModule } from '../social/social.module'
 
 const HAPPY_REGISTER_REQUEST: RegisterRequest = {
     emailAddress: 's@s.com',
@@ -45,7 +46,7 @@ describe('AuthController', () => {
 
     beforeEach(async () => {
         const module = await Test.createTestingModule({
-            imports: [JwtModule.register({})],
+            imports: [JwtModule.register({}), SocialModule],
             providers: [
                 UserService,
                 AuthService,

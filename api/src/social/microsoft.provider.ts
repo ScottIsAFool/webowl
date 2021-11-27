@@ -44,7 +44,7 @@ export class MicrosoftProvider implements ISocialProvider {
             firstName: response.givenName,
             lastName: response.surname,
             id: response.id,
-            email: response.userPrincipalName,
+            emailAddress: response.userPrincipalName,
         }
     }
 
