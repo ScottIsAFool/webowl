@@ -11,6 +11,7 @@ import type {
     PasswordResetRequest,
     RefreshTokenRequest,
     AuthToken,
+    SocialAuthRequest,
 } from '.'
 
 export class ApiException extends Error {
@@ -76,6 +77,10 @@ export class ApiClient {
 
     logout(): Promise<void> {
         return this.post<void>({ endPoint: this.endpoint('auth', 'logout'), requiresAuth: true })
+    }
+
+    socialLogin(request: SocialAuthRequest): Promise<LoginResponse> {
+        return this.post<LoginResponse>({ endPoint: this.endpoint('auth', 'social'), request })
     }
 
     private endpoint(base: BasePoints, request: RequestType): string {

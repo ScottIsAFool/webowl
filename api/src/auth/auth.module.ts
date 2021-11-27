@@ -11,6 +11,7 @@ import { PasswordReset } from './password-reset.entity'
 import { getConfiguration } from '../config/configuration'
 import { JwtStrategy } from './jwt.strategy'
 import { AccessToken } from './access-token.entity'
+import { SocialModule } from '../social/social.module'
 
 @Module({
     imports: [
@@ -23,6 +24,7 @@ import { AccessToken } from './access-token.entity'
                 expiresIn: `${getConfiguration().expiryTime}m`,
             },
         }),
+        SocialModule,
     ],
     controllers: [AuthController],
     providers: [AuthService, LocalStrategy, JwtStrategy],

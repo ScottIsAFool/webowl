@@ -58,6 +58,8 @@ export function getConfiguration(): Configuration {
     const ssl = validateEnv(DB_SSL, 'DB_SSL')
     const expiryTime = validateEnv(EXPIRY_TIME, 'EXPIRY_TIME')
 
+    const googleAPIKey = validateEnv(GOOGLE_API_KEY, 'GOOGLE_API_KEY')
+
     const tlsOptions: boolean | TlsOptions =
         ssl === 'true'
             ? {
@@ -69,10 +71,10 @@ export function getConfiguration(): Configuration {
         port: PORT ? parseInt(PORT) : 3000,
         baseUrl,
         corsRestrictions: CORS_RESTRICTIONS?.split(',') ?? [],
-        googleAPIKey: GOOGLE_API_KEY ?? '',
         jwtToken,
         sentryDSN,
         expiryTime: parseInt(expiryTime),
+        googleAPIKey,
         database: {
             url: dbUrl,
             ssl: tlsOptions,

@@ -29,6 +29,7 @@
         "database:run": "docker-compose -f docker-compose.db.yml up -d"
     },
     "dependencies": {
+        "@microsoft/microsoft-graph-client": "^3.0.1",
         "@nestjs/common": "^8.0.0",
         "@nestjs/config": "^1.1.3",
         "@nestjs/core": "^8.0.0",
@@ -41,6 +42,7 @@
         "bcryptjs": "^2.4.3",
         "class-validator": "^0.13.2",
         "dayjs": "^1.10.7",
+        "googleapis": "^91.0.0",
         "passport-jwt": "^4.0.0",
         "passport-local": "^1.0.0",
         "password-validator": "^5.2.1",
