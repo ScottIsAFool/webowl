@@ -3,7 +3,7 @@ import type { SocialProvider } from '@webowl/apiclient'
 import { FacebookProvider } from './facebook.provider'
 import { GoogleProvider } from './google.provider'
 import { MicrosoftProvider } from './microsoft.provider'
-import type { SocialMap, ISocialProvider } from './types'
+import type { ISocialProvider } from './types'
 
 @Injectable()
 export class SocialAuthProvider {
@@ -12,16 +12,12 @@ export class SocialAuthProvider {
         microsoftProvider: MicrosoftProvider,
         facebookProvider: FacebookProvider,
     ) {
-        this._socialMap = {
-            Facebook: facebookProvider,
-            Google: googleProvider,
-            Microsoft: microsoftProvider,
-        }
+        this.socialMap = [googleProvider, microsoftProvider, facebookProvider]
     }
 
-    private readonly _socialMap: SocialMap
+    private readonly socialMap: ISocialProvider[]
 
     getSocialProvider(provider: SocialProvider): ISocialProvider {
-        return this._socialMap[provider]
+        return this.socialMap.find((x) => x.provider === provider) as ISocialProvider
     }
 }

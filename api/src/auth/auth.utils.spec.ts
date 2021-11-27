@@ -9,7 +9,7 @@ describe('auth utils', () => {
             'longpasswordnumber5nospecial',
             'longpassword!!',
             'valid exceptTheSpace20!',
-        ])('throws if password (%p) not strong enough', async (password: string) => {
+        ])('throws if password (%p) not strong enough', (password: string) => {
             expect(isValidPassword(password)).toBeFalsy()
         })
     })

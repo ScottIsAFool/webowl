@@ -15,12 +15,12 @@ export class FacebookProvider implements ISocialProvider {
         try {
             const url = `${this._facebookUserUrl}${accessToken}`
             const response = await axios.get(url)
-            const user: {
+            const user = response.data as {
                 email: string
                 first_name: string
                 last_name: string
                 id: number
-            } = response.data
+            }
 
             return {
                 id: user.id.toString(),
@@ -29,7 +29,7 @@ export class FacebookProvider implements ISocialProvider {
                 email: user.email,
                 accessToken: accessToken,
             }
-        } catch (e) {
+        } catch (e: unknown) {
             throw new InternalServerErrorException('Comms to facebook broken')
         }
     }

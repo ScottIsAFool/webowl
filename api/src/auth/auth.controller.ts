@@ -120,7 +120,7 @@ export class AuthController {
     @Post(endpoint('send-password-reset'))
     async sendPasswordReset(@Body() request: SendPasswordResetRequest): Promise<void> {
         const { emailAddress } = request
-        if (!emailAddress?.trim()) {
+        if (!emailAddress.trim()) {
             throw new BadRequestException('Email address is required')
         }
 
@@ -139,7 +139,7 @@ export class AuthController {
     @Post(endpoint('password-reset'))
     async passwordReset(@Body() request: PasswordResetRequest): Promise<void> {
         const { emailAddress, code, password } = request
-        if (!emailAddress?.trim() || !code?.trim()) {
+        if (!emailAddress.trim() || !code.trim()) {
             throw new BadRequestException('Email address and code required')
         }
 
@@ -178,7 +178,7 @@ export class AuthController {
         const { user } = req
         const { oldPassword, newPassword } = request
 
-        if (!oldPassword?.trim() || !newPassword?.trim()) {
+        if (!oldPassword.trim() || !newPassword.trim()) {
             throw new BadRequestException('Old and new passwords must be provided')
         }
 

@@ -15,5 +15,3 @@ export type SocialUser = {
     accessToken: string
     avatar?: string
 }
-
-export type SocialMap = Record<SocialProvider, ISocialProvider>

@@ -86,7 +86,7 @@ export class AuthService {
 
     async validateUser(emailAddress: string, password: string): Promise<User | undefined> {
         const user = await this.userService.getByEmail(emailAddress)
-        if (user && user.checkIfPasswordIsValid(password)) {
+        if (user?.checkIfPasswordIsValid(password)) {
             return user
         }
 

@@ -24,7 +24,7 @@ export class User {
 
     @Column({ nullable: true })
     @Length(4, 100)
-    @ValidateIf((x) => !x.isFacebookAuth && !x.isGoogleAuth && !x.isMicrosoftAuth)
+    @ValidateIf((x: User) => !x.isFacebookAuth && !x.isGoogleAuth && !x.isMicrosoftAuth)
     password!: string
 
     @Column({

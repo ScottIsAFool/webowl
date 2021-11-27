@@ -34,10 +34,10 @@ export class MicrosoftProvider implements ISocialProvider {
     async getSocialUser(accessToken: string): Promise<SocialUser> {
         const client = this.getClient(accessToken)
 
-        const response: MicrosoftUser = await client
+        const response = (await client
             .api('/me')
             .select(['surname', 'givenName', 'id', 'userPrincipalName'])
-            .get()
+            .get()) as MicrosoftUser
 
         return {
             accessToken: accessToken,

@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import passwordValidator from 'password-validator'
 import { EncryptionTransformer } from 'typeorm-encrypted'
 import { getConfiguration } from '../config/configuration'
@@ -22,9 +24,9 @@ const passwordSchema = new passwordValidator()
     .not()
     .oneOf([
         /*TODO*/
-    ])
+    ]) as passwordValidator
 
-export const isValidPassword = (password: string): boolean => {
+export function isValidPassword(password: string): boolean {
     const isValid = passwordSchema.validate(password)
     return typeof isValid === 'boolean' && isValid
 }
