@@ -4,10 +4,12 @@ import {
     ConflictException,
     Controller,
     ForbiddenException,
+    Headers,
     HttpCode,
     HttpStatus,
     NotFoundException,
     Post,
+    Req,
     Request,
     UnauthorizedException,
     UseGuards,
@@ -24,7 +26,7 @@ import type {
     AuthToken,
 } from '@webowl/apiclient'
 import { validate } from 'class-validator'
-import { User as UserEntity, UserService } from '../user'
+import { User, User as UserEntity, UserService } from '../user'
 import { endpoint } from '../utils/endpoint-utils'
 import { isValidPassword } from './auth.utils'
 import { EmailVerification } from './email-verification.entity'
@@ -33,6 +35,7 @@ import type { AuthRequest } from './types'
 import { AuthService } from '.'
 import { LocalAuthGuard } from './local-auth.guard'
 import { JwtGuard } from './jwt.guard'
+import { AuthUser } from './auth-user.decorator'
 
 @Controller('auth/')
 export class AuthController {
@@ -44,12 +47,12 @@ export class AuthController {
     @UseGuards(LocalAuthGuard)
     @HttpCode(HttpStatus.OK)
     @Post(endpoint('login'))
-    async login(@Request() req: AuthRequest): Promise<LoginResponse> {
+    async login(@AuthUser() user: User): Promise<LoginResponse> {
         return Promise.resolve({
-            user: req.user.toDto(),
+            user,
             authToken: await this.authService.generateAccessToken({
-                emailAddress: req.user.emailAddress,
-                sub: req.user.id,
+                emailAddress: user.emailAddress,
+                sub: user.id,
             }),
         })
     }
@@ -233,5 +236,18 @@ export class AuthController {
         })
 
         return token
+    }
+
+    @HttpCode(HttpStatus.OK)
+    @UseGuards(JwtGuard)
+    @Post(endpoint('logout'))
+    async logout(
+        @Headers('authorization') authorization: string,
+        @AuthUser() user: User,
+    ): Promise<void> {
+        if (authorization) {
+            const jwt = authorization.replace('Bearer ', '')
+            await this.authService.deleteUserAccessToken(user.id, jwt)
+        }
     }
 }

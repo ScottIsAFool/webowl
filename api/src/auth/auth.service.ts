@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common'
+import { Injectable, Logger } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
 import { InjectRepository } from '@nestjs/typeorm'
 import type { AuthToken } from '@webowl/apiclient'
@@ -28,6 +28,8 @@ export class AuthService {
         private readonly jwtService: JwtService,
     ) {}
 
+    private readonly logger = new Logger(AuthService.name)
+
     async getUserFromToken(accessToken: string): Promise<User | undefined> {
         const result = this.jwtService.decode(accessToken) as JwtOptions | undefined
         if (result?.emailAddress) {
@@ -41,7 +43,9 @@ export class AuthService {
         const accessToken = await this.jwtService.signAsync(options)
         const refreshToken = await this.jwtService.signAsync(options, {
             secret: getConfiguration().jwtToken,
+            expiresIn: '9999 years',
         })
+
         const token = AccessToken.create({ accessToken, userId: options.sub, refreshToken })
 
         await this.accessTokenRepo.save(token)
@@ -68,6 +72,16 @@ export class AuthService {
 
     async deleteAccessToken(accessToken: AccessToken): Promise<void> {
         await this.accessTokenRepo.remove(accessToken)
+    }
+
+    async deleteUserAccessToken(userId: number, accessToken: string): Promise<void> {
+        const tokens = await this.accessTokenRepo.find({
+            where: { userId },
+        })
+        const token = tokens.find((x) => x.accessToken === accessToken)
+        if (token) {
+            await this.accessTokenRepo.remove(token)
+        }
     }
 
     async validateUser(emailAddress: string, password: string): Promise<User | undefined> {

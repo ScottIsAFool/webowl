@@ -60,6 +60,7 @@ export type AuthEndpoints =
     | 'password-reset'
     | 'send-password-reset'
     | 'refresh'
+    | 'logout'
 
 export type AuthToken = {
     accessToken: string

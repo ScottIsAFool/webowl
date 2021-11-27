@@ -74,6 +74,10 @@ export class ApiClient {
         })
     }
 
+    logout(): Promise<void> {
+        return this.post<void>({ endPoint: this.endpoint('auth', 'logout'), requiresAuth: true })
+    }
+
     private endpoint(base: BasePoints, request: RequestType): string {
         return `${base}/${request}`
     }
