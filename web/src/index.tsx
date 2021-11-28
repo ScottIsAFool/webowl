@@ -1,6 +1,6 @@
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './styles/reactist.css'
-import './styles/index.module.css'
+import './styles/index.css'
 
 import * as React from 'react'
 import ReactDOM from 'react-dom'

@@ -47,7 +47,6 @@ export type PasswordResetRequest = WithEmail & {
 }
 
 export type RefreshTokenRequest = {
-    emailAddress: string
     refreshToken: string
 }
 

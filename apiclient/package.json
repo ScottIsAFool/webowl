@@ -38,9 +38,11 @@
         }
     ],
     "devDependencies": {
+        "mockdate": "^3.0.5",
         "tsdx": "^0.14.1"
     },
     "dependencies": {
-        "axios": "^0.24.0"
+        "axios": "^0.24.0",
+        "dayjs": "^1.10.7"
     }
 }

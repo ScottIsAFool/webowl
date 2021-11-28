@@ -21,11 +21,15 @@ function App(): JSX.Element {
             id="container"
             height="full"
         >
-            <header className={styles.app_header}>
-                <Header />
-            </header>
+            {isAuthenticated ? (
+                <header className={styles.app_header}>
+                    <Header />
+                </header>
+            ) : null}
 
-            <div id="body">{element}</div>
+            <Box id="body" height="full">
+                {element}
+            </Box>
         </Box>
     )
 }

@@ -1,4 +1,5 @@
 import axios from 'axios'
+import dayjs from 'dayjs'
 import type {
     AuthEndpoints,
     ChangePasswordRequest,
@@ -13,6 +14,7 @@ import type {
     AuthToken,
     SocialAuthRequest,
 } from '.'
+import { hasAuthTokenExpired } from './utils/date-utils'
 
 export class ApiException extends Error {
     constructor(readonly status: number, readonly messageText: string) {
@@ -76,7 +78,9 @@ export class ApiClient {
             requiresAuth: true,
         })
 
-        this.onTokenRefresh?.(response)
+        if (this.onTokenRefresh) {
+            this.onTokenRefresh(response)
+        }
 
         return response
     }
@@ -102,8 +106,10 @@ export class ApiClient {
         request?: Record<string, unknown>
         requiresAuth?: boolean
     }): Promise<T> {
-        if (requiresAuth && !this.accessToken) {
+        if (requiresAuth && !this.authToken?.accessToken) {
             throw new Error('Not signed in')
+        } else if (requiresAuth) {
+            await this.checkAndUpdateToken(this.authToken)
         }
         const url = new URL(endPoint, this.baseUrl)
 
@@ -133,8 +139,10 @@ export class ApiClient {
         request?: Record<string, unknown>
         requiresAuth?: boolean
     }): Promise<T> {
-        if (requiresAuth && !this.accessToken) {
+        if (requiresAuth && !this.authToken?.accessToken) {
             throw new Error('Not signed in')
+        } else if (requiresAuth) {
+            await this.checkAndUpdateToken(this.authToken)
         }
         const url = new URL(endPoint, this.baseUrl)
 
@@ -161,8 +169,10 @@ export class ApiClient {
         endPoint: string
         requiresAuth?: boolean
     }): Promise<T> {
-        if (requiresAuth && !this.accessToken) {
+        if (requiresAuth && !this.authToken?.accessToken) {
             throw new Error('Not signed in')
+        } else if (requiresAuth) {
+            await this.checkAndUpdateToken(this.authToken)
         }
         const url = new URL(endPoint, this.baseUrl)
 
@@ -180,5 +190,13 @@ export class ApiClient {
         }
 
         return response.data as T
+    }
+
+    private async checkAndUpdateToken(authToken?: AuthToken): Promise<void> {
+        if (!authToken) return
+        const expiryate = dayjs.unix(authToken.expiresAt)
+        if (hasAuthTokenExpired(expiryate.toDate())) {
+            await this.refreshToken(authToken)
+        }
     }
 }

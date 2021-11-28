@@ -1,6 +1,7 @@
 :root {
     --webowl-background: #282c34;
     --webowl-foreground: white;
+    --webowl-accent: #34282c;
 
     --webowl-margin-small: 6px;
     --webowl-margin-medium: 12px;
@@ -9,13 +10,18 @@
 
     --reactist-bg-default: var(--webowl-background);
     --reactist-content-primary: var(--webowl-foreground);
+    --reactist-chromatic-content-blue: var(--webowl-accent);
+}
+
+html,
+body {
+    height: 100%;
 }
 
 #root {
     height: 100%;
 }
 
-html,
 body {
     margin: 0;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu',
@@ -24,7 +30,6 @@ body {
     -moz-osx-font-smoothing: grayscale;
     background-color: var(--webowl-background);
     color: var(--webowl-foreground);
-    height: 100%;
 }
 
 code {

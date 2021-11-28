@@ -220,21 +220,21 @@ export class AuthController {
     @HttpCode(HttpStatus.OK)
     @Post(endpoint('refresh'))
     async refreshToken(@Body() request: RefreshTokenRequest): Promise<AuthToken> {
-        const { emailAddress, refreshToken } = request
+        const { refreshToken } = request
         const user = await this.authService.getUserFromToken(refreshToken)
-        if (!user || user.emailAddress !== emailAddress) {
+        if (!user) {
             throw new UnauthorizedException()
         }
 
         const oldToken = await this.authService.getAccessTokenByRefreshToken(user.id, refreshToken)
         if (!oldToken) {
-            throw new NotFoundException()
+            throw new UnauthorizedException()
         }
 
         await this.authService.deleteAccessToken(oldToken)
 
         const token = await this.authService.generateAccessToken({
-            emailAddress,
+            emailAddress: user.emailAddress,
             sub: user.id,
         })
 
