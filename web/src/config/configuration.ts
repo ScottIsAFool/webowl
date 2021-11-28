@@ -1,5 +1,6 @@
 type Configuration = {
     baseUrl: string
+    googleClientId: string
 }
 
 function validateWithMessage<T>(value: T | undefined, errorMessage: string): T | never {
@@ -15,9 +16,10 @@ function validateEnv<T>(value: T | undefined, name: string): T | never {
 }
 
 export function getConfiguration(): Configuration {
-    const { REACT_APP_API_URL } = process.env
+    const { REACT_APP_API_URL, REACT_APP_GOOGLE_CLIENT_ID } = process.env
 
     const baseUrl = validateEnv(REACT_APP_API_URL, 'REACT_APP_API_URL')
+    const googleClientId = validateEnv(REACT_APP_GOOGLE_CLIENT_ID, 'REACT_APP_GOOGLE_CLIENT_ID')
 
-    return { baseUrl }
+    return { baseUrl, googleClientId }
 }

@@ -269,7 +269,7 @@ export class AuthController {
 
     @HttpCode(HttpStatus.OK)
     @Post(endpoint('social'))
-    async socialLogin(request: SocialAuthRequest): Promise<LoginResponse> {
+    async socialLogin(@Body() request: SocialAuthRequest): Promise<LoginResponse> {
         const { accessToken, provider, socialId } = request
         if (!accessToken || !socialId) {
             throw new BadRequestException('Missing request elements')
@@ -307,7 +307,7 @@ export class AuthController {
         }
 
         return {
-            user,
+            user: user.toDto(),
             authToken: await this.authService.generateAccessToken({
                 emailAddress: user.emailAddress,
                 sub: user.id,

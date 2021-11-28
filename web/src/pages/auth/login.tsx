@@ -18,6 +18,7 @@ import { ReactComponent as LoginImage } from '../../assets/images/Login.svg'
 import { ReactComponent as RegisterImage } from '../../assets/images/Register.svg'
 
 import styles from './login.module.css'
+import { SocialAuthButtons } from '../../components'
 
 type LoginStep = 'initial' | 'password' | 'register'
 
@@ -133,6 +134,8 @@ function Login(): JSX.Element {
                     {loginStep === 'initial' ? (
                         <form onSubmit={doCheckEmail}>
                             <Stack space="medium">
+                                <SocialAuthButtons />
+                                <hr />
                                 <TextField
                                     label="Email address"
                                     value={emailAddress}
