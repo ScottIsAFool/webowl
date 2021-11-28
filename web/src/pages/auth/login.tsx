@@ -100,7 +100,7 @@ function Login(): JSX.Element {
 
     return (
         <Box display="flex" flexDirection="column" width="full" height="full">
-            <Box id="header" paddingBottom="xlarge">
+            <Box id="header">
                 <TextLink href="/">
                     <Heading level="1" size="largest">
                         Webowl

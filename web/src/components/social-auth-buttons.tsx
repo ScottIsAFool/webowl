@@ -1,9 +1,14 @@
 import * as React from 'react'
-import { Box, Button } from '@doist/reactist'
+import { Button, Stack } from '@doist/reactist'
 import { getConfiguration } from '../config/configuration'
 import { ReactComponent as GoogleIcon } from '../assets/icons/google.svg'
+import { ReactComponent as FacebookIcon } from '../assets/icons/facebook.svg'
+import { ReactComponent as AppleIcon } from '../assets/icons/apple.svg'
+import { ReactComponent as MicrosoftIcon } from '../assets/icons/microsoft.svg'
 import { GoogleLoginResponse, GoogleLoginResponseOffline, useGoogleLogin } from 'react-google-login'
 import { useApiClient, useAuth } from '../hooks'
+
+import style from './social-auth-buttons.module.css'
 
 const { googleClientId } = getConfiguration()
 
@@ -32,7 +37,12 @@ function SocialAuthButtons(): JSX.Element {
     })
 
     return (
-        <Box display="flex" flexDirection="column" width="full" paddingBottom="small">
+        <Stack
+            width="full"
+            paddingBottom="small"
+            space="small"
+            exceptionallySetClassName={style.buttons}
+        >
             <Button
                 variant="secondary"
                 startIcon={<GoogleIcon />}
@@ -42,7 +52,24 @@ function SocialAuthButtons(): JSX.Element {
             >
                 Log in with Google
             </Button>
-        </Box>
+            <Button variant="secondary" startIcon={<FacebookIcon />} size="large">
+                Log in with Facebook
+            </Button>
+            <Button
+                variant="secondary"
+                startIcon={<MicrosoftIcon className={style.microsoft} />}
+                size="large"
+            >
+                Log in with Microsoft
+            </Button>
+            {/* <Button
+                variant="secondary"
+                startIcon={<AppleIcon className={style.apple} />}
+                size="large"
+            >
+                Log in with Apple
+            </Button> */}
+        </Stack>
     )
 }
 

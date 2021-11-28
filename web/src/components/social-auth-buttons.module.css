@@ -1,0 +1,12 @@
+.buttons button {
+    width: 100%;
+}
+
+.apple {
+    margin-top: 4px;
+    transform: scale(3);
+}
+
+.microsoft svg {
+    max-height: 18px;
+}
