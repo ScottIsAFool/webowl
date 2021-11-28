@@ -1,6 +1,7 @@
 import * as React from 'react'
+import type { CheckEmailResponse } from '@webowl/apiclient'
 import { useApiClient, useAuth } from '.'
-import type { ActionResult } from '../types'
+import type { ActionResult, ActionResultWithValue } from '../types'
 import { errorMessage } from '../utils/error-utils'
 
 type UserManagementResult = {
@@ -12,6 +13,7 @@ type UserManagementResult = {
         firstName: string,
         lastName: string,
     ): Promise<ActionResult>
+    checkEmail: (emailAddress: string) => Promise<ActionResultWithValue<CheckEmailResponse>>
 }
 
 function useUserManagement(): UserManagementResult {
@@ -55,10 +57,27 @@ function useUserManagement(): UserManagementResult {
         }
     }
 
+    async function checkEmail(
+        emailAddress: string,
+    ): Promise<ActionResultWithValue<CheckEmailResponse>> {
+        if (!emailAddress) return { type: 'error', message: 'No email address provided' }
+
+        try {
+            setBusy(true)
+            const response = await apiClient.checkEmail({ emailAddress })
+            return { type: 'success', value: response }
+        } catch (e: unknown) {
+            return errorMessage(e)
+        } finally {
+            setBusy(false)
+        }
+    }
+
     return {
         busy,
         login,
         register,
+        checkEmail,
     }
 }
 

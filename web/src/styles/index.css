@@ -1,6 +1,7 @@
 :root {
     --webowl-background: #475d80;
     --webowl-foreground: white;
+    --webowl-foreground-subtle: #ffffff8f;
     --webowl-accent: #84b748;
     --webowl-accent-hover: #a0de58;
     --webowl-accent-disabled: #9fb485;
@@ -12,6 +13,7 @@
 
     --reactist-bg-default: var(--webowl-background);
     --reactist-content-primary: var(--webowl-foreground);
+    --reactist-content-secondary: var(--webowl-foreground-subtle);
     --reactist-chromatic-content-blue: var(--webowl-accent);
     --reactist-chromatic-content-red: red;
 
