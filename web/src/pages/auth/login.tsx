@@ -61,7 +61,7 @@ function Login(): JSX.Element {
             alignItems="center"
             height="full"
         >
-            <Box border="secondary" borderRadius="full" padding="xlarge">
+            <Box padding="xlarge" id="login-container" style={{ minWidth: '324px' }}>
                 <Box paddingBottom="large">
                     <Heading level="1" size="larger">
                         Login
@@ -79,7 +79,7 @@ function Login(): JSX.Element {
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                         />
-                        <Box width="full" display="flex" flexDirection="column" paddingTop="medium">
+                        <Box width="full" display="flex" flexDirection="column" paddingTop="small">
                             <Button
                                 variant="primary"
                                 type="submit"
@@ -88,6 +88,11 @@ function Login(): JSX.Element {
                             >
                                 Login
                             </Button>
+                            {errorMessage ? (
+                                <Box paddingTop="medium">
+                                    <Text tone="danger">{errorMessage}</Text>
+                                </Box>
+                            ) : null}
                         </Box>
                     </Stack>
                 </form>

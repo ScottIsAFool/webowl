@@ -1,11 +1,11 @@
 import * as React from 'react'
-import { Box, Column, Columns, Heading, Stack, TextLink } from '@doist/reactist'
+import { Box, Column, Columns, Heading, TextLink } from '@doist/reactist'
 import { ReactComponent as Spreadsheet } from '../assets/images/Spreadsheet.svg'
 
 function Home(): JSX.Element {
     return (
-        <Stack width="full" space="xxlarge">
-            <Box id="header">
+        <Box display="flex" flexDirection="column" width="full" height="full">
+            <Box id="header" paddingBottom="xlarge">
                 <Columns alignY="center">
                     <Column width="content">
                         <TextLink href="/">
@@ -23,10 +23,16 @@ function Home(): JSX.Element {
                     </Column>
                 </Columns>
             </Box>
-            <Box id="content" display="flex" alignItems="center" justifyContent="center">
+            <Box
+                id="content"
+                display="flex"
+                alignItems="center"
+                justifyContent="center"
+                height="full"
+            >
                 <Spreadsheet height="300px" />
             </Box>
-        </Stack>
+        </Box>
     )
 }
 

@@ -1,7 +1,9 @@
 :root {
-    --webowl-background: #282c34;
+    --webowl-background: #475d80;
     --webowl-foreground: white;
-    --webowl-accent: #34282c;
+    --webowl-accent: #84b748;
+    --webowl-accent-hover: #a0de58;
+    --webowl-accent-disabled: #9fb485;
 
     --webowl-margin-small: 6px;
     --webowl-margin-medium: 12px;
@@ -11,7 +13,11 @@
     --reactist-bg-default: var(--webowl-background);
     --reactist-content-primary: var(--webowl-foreground);
     --reactist-chromatic-content-blue: var(--webowl-accent);
-    --reactist-btn-idle-fill: var(--webowl-accent);
+    --reactist-chromatic-content-red: red;
+
+    --reactist-actionable-primary-idle-fill: var(--webowl-accent);
+    --reactist-actionable-primary-hover-fill: var(--webowl-accent-hover);
+    --reactist-actionable-primary-disabled-fill: var(--webowl-accent-disabled);
 }
 
 html,
@@ -21,6 +27,10 @@ body {
 
 #root {
     height: 100%;
+}
+
+a:hover {
+    color: var(--webowl-accent);
 }
 
 body {
