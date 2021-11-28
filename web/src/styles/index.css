@@ -48,3 +48,19 @@ body {
 code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
+
+::placeholder {
+    /* Chrome, Firefox, Opera, Safari 10.1+ */
+    color: var(--webowl-foreground-subtle);
+    opacity: 1; /* Firefox */
+}
+
+:-ms-input-placeholder {
+    /* Internet Explorer 10-11 */
+    color: var(--webowl-foreground-subtle);
+}
+
+::-ms-input-placeholder {
+    /* Microsoft Edge */
+    color: var(--webowl-foreground-subtle);
+}
