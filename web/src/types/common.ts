@@ -5,7 +5,10 @@ export type ActionResultWithValue<T> =
     | { type: 'error'; message: string }
     | { type: 'idle' }
 
-export type ActionResult = ActionResultWithValue<never>
+export type ActionResult =
+    | { type: 'success' }
+    | { type: 'error'; message: string }
+    | { type: 'idle' }
 
 export type WithChildren = {
     children?: ReactNode

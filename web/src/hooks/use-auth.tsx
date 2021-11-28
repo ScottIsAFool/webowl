@@ -15,6 +15,7 @@ type AuthResult = {
     authToken?: AuthToken
     authenticatedUser?: User
     updateAuthToken: (token: AuthToken) => void
+    updateAuthDetails: (details: AuthDetails) => void
     logOut: () => void
 }
 
@@ -23,6 +24,7 @@ type ProviderProps = WithChildren
 const AuthContext = React.createContext<AuthResult>({
     isAuthenticated: false,
     updateAuthToken: () => undefined,
+    updateAuthDetails: () => undefined,
     logOut: () => undefined,
 })
 
@@ -36,20 +38,31 @@ function useAuthInternal(): AuthResult {
         getFromStorage(AUTH_FILE),
     )
 
+    const updateAuthDetails = React.useCallback(function updateAuthDetails(
+        authDetails?: AuthDetails,
+    ) {
+        if (authDetails) {
+            saveToStorage(AUTH_FILE, authDetails)
+            setAuthDetails(authDetails)
+        } else {
+            removeFromStorage(AUTH_FILE)
+            setAuthDetails(undefined)
+        }
+    },
+    [])
+
     const updateAuthToken = React.useCallback(
         function updateAuthToken(authToken?: AuthToken) {
             if (authToken) {
-                saveToStorage(AUTH_FILE, authToken)
-                setAuthDetails({
+                updateAuthDetails({
                     ...authDetails,
                     authToken,
                 })
             } else {
-                removeFromStorage(AUTH_FILE)
-                setAuthDetails(undefined)
+                updateAuthDetails(undefined)
             }
         },
-        [authDetails],
+        [authDetails, updateAuthDetails],
     )
 
     const logOut = React.useCallback(
@@ -63,6 +76,7 @@ function useAuthInternal(): AuthResult {
         authToken: authDetails?.authToken,
         authenticatedUser: authDetails?.user,
         updateAuthToken,
+        updateAuthDetails,
         logOut,
     }
 }
