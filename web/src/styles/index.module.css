@@ -1,0 +1,31 @@
+:root {
+    --webowl-background: #282c34;
+    --webowl-foreground: white;
+
+    --webowl-margin-small: 6px;
+    --webowl-margin-medium: 12px;
+    --webowl-margin-large: 18px;
+    --webowl-margin-xlarge: 24px;
+
+    --reactist-bg-default: var(--webowl-background);
+}
+
+#root {
+    height: 100%;
+}
+
+html,
+body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu',
+        'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background-color: var(--webowl-background);
+    color: var(--webowl-foreground);
+    height: 100%;
+}
+
+code {
+    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+}

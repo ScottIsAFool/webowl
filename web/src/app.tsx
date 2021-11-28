@@ -10,12 +10,22 @@ function App(): JSX.Element {
     const { isAuthenticated } = useAuth()
     const element = useRoutes(routes(isAuthenticated))
     return (
-        <Box className={styles.App}>
+        <Box
+            display="flex"
+            flexDirection="column"
+            padding={{
+                desktop: 'xlarge',
+                tablet: 'xlarge',
+                mobile: 'medium',
+            }}
+            id="container"
+            height="full"
+        >
             <header className={styles.app_header}>
                 <Header />
             </header>
 
-            <body>{element}</body>
+            <div id="body">{element}</div>
         </Box>
     )
 }

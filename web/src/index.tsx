@@ -1,7 +1,9 @@
-import React from 'react'
-import ReactDOM from 'react-dom'
 import 'bootstrap/dist/css/bootstrap.min.css'
-import './index.css'
+import './styles/reactist.css'
+import './styles/index.module.css'
+
+import * as React from 'react'
+import ReactDOM from 'react-dom'
 import { App } from './app'
 import { BrowserRouter as Router } from 'react-router-dom'
 import { ContextProviderComposer } from './components/context-provider-composer'
