@@ -1,9 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import * as React from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { useAuth, useUserManagement } from '../../hooks'
-import { useApiClient } from '../../hooks/use-api-client'
-import { GuardedRouteState } from '../../routing/types'
+import { useUserManagement } from '../../hooks'
+import type { GuardedRouteState } from '../../routing/types'
 
 function Login(): JSX.Element {
     const navigate = useNavigate()
@@ -26,8 +25,6 @@ function Login(): JSX.Element {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const doLogin = React.useCallback(
         async function doLogin() {
-            if (!emailAddress || !password) return
-
             setErrorMessage('')
 
             const response = await login(emailAddress, password)
