@@ -2,10 +2,17 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import './index.css'
 import { App } from './app'
+import { ContextProviderComposer } from './components/context-provider-composer'
+import { AuthProvider } from './hooks'
+
+const providerTypes = [AuthProvider]
+const providers = providerTypes.map((Provider, i) => <Provider key={i} />)
 
 ReactDOM.render(
     <React.StrictMode>
-        <App />
+        <ContextProviderComposer contextProviders={providers}>
+            <App />
+        </ContextProviderComposer>
     </React.StrictMode>,
     document.getElementById('root'),
 )

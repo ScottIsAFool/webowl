@@ -39,6 +39,8 @@ export class ApiClient {
         return this.authToken?.accessToken
     }
 
+    onTokenRefresh?: (authToken: AuthToken) => void
+
     login(request: LoginRequest): Promise<LoginResponse> {
         return this.post<LoginResponse>({ endPoint: this.endpoint('auth', 'login'), request })
     }
@@ -67,12 +69,16 @@ export class ApiClient {
         return this.post<void>({ endPoint: this.endpoint('auth', 'password-reset'), request })
     }
 
-    refreshToken(request: RefreshTokenRequest): Promise<AuthToken> {
-        return this.post<AuthToken>({
+    async refreshToken(request: RefreshTokenRequest): Promise<AuthToken> {
+        const response = await this.post<AuthToken>({
             endPoint: this.endpoint('auth', 'refresh'),
             request,
             requiresAuth: true,
         })
+
+        this.onTokenRefresh?.(response)
+
+        return response
     }
 
     logout(): Promise<void> {

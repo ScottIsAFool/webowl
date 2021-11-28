@@ -1,11 +1,12 @@
 import * as React from 'react'
 import { useRoutes } from 'react-router-dom'
+import { useAuth } from '../../hooks'
 import { Login, Register } from '../../pages/auth'
 import { IsAuthenticated } from '../is-authenticated'
 import { RouteResult } from '../types'
 
 function AuthRoutes(): RouteResult {
-    const isAuthenticated = false
+    const { isAuthenticated } = useAuth()
     const element = useRoutes([
         {
             path: '/register',
