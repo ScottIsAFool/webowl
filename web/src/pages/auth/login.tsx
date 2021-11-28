@@ -12,7 +12,11 @@ import * as React from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useUserManagement } from '../../hooks'
 import type { GuardedRouteState } from '../../routing/types'
+import { ReactComponent as LoginInitialImage } from '../../assets/images/LoginInitial.svg'
 import { ReactComponent as LoginImage } from '../../assets/images/Login.svg'
+import { ReactComponent as RegisterImage } from '../../assets/images/Register.svg'
+
+import styles from './login.module.css'
 
 type LoginStep = 'initial' | 'password' | 'register'
 
@@ -231,8 +235,14 @@ function Login(): JSX.Element {
                 )}
             </Box>
             <Hidden below="tablet">
-                <Box>
-                    <LoginImage height="300px" />
+                <Box className={styles.image}>
+                    {loginStep === 'initial' ? (
+                        <LoginInitialImage />
+                    ) : loginStep === 'password' ? (
+                        <LoginImage />
+                    ) : (
+                        <RegisterImage />
+                    )}
                 </Box>
             </Hidden>
         </Box>
