@@ -1,14 +1,21 @@
 import * as React from 'react'
-import { AuthToken } from '@webowl/apiclient'
+import { AuthToken, User } from '@webowl/apiclient'
 import { WithChildren } from '../types'
 import { getFromStorage, removeFromStorage, saveToStorage } from '../utils/storage-utils'
 
 const AUTH_FILE = 't.json'
 
+type AuthDetails = {
+    authToken?: AuthToken
+    user?: User
+}
+
 type AuthResult = {
     isAuthenticated: boolean
     authToken?: AuthToken
+    authenticatedUser?: User
     updateAuthToken: (token: AuthToken) => void
+    logOut: () => void
 }
 
 type ProviderProps = WithChildren
@@ -16,6 +23,7 @@ type ProviderProps = WithChildren
 const AuthContext = React.createContext<AuthResult>({
     isAuthenticated: false,
     updateAuthToken: () => undefined,
+    logOut: () => undefined,
 })
 
 function AuthProvider({ children }: ProviderProps): JSX.Element {
@@ -24,21 +32,38 @@ function AuthProvider({ children }: ProviderProps): JSX.Element {
 }
 
 function useAuthInternal(): AuthResult {
-    const [authToken, setAuthToken] = React.useState<AuthToken | undefined>(
+    const [authDetails, setAuthDetails] = React.useState<AuthDetails | undefined>(
         getFromStorage(AUTH_FILE),
     )
 
-    const updateAuthToken = React.useCallback(function updateAuthToken(authToken?: AuthToken) {
-        setAuthToken(authToken)
-        if (authToken) {
-            saveToStorage(AUTH_FILE, authToken)
-        } else {
-            removeFromStorage(AUTH_FILE)
-        }
-    }, [])
+    const updateAuthToken = React.useCallback(
+        function updateAuthToken(authToken?: AuthToken) {
+            if (authToken) {
+                saveToStorage(AUTH_FILE, authToken)
+                setAuthDetails({
+                    ...authDetails,
+                    authToken,
+                })
+            } else {
+                removeFromStorage(AUTH_FILE)
+                setAuthDetails(undefined)
+            }
+        },
+        [authDetails],
+    )
+
+    const logOut = React.useCallback(
+        function logOut() {
+            updateAuthToken(undefined)
+        },
+        [updateAuthToken],
+    )
     return {
-        isAuthenticated: Boolean(authToken),
+        isAuthenticated: Boolean(authDetails),
+        authToken: authDetails?.authToken,
+        authenticatedUser: authDetails?.user,
         updateAuthToken,
+        logOut,
     }
 }
 
