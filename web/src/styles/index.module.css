@@ -8,6 +8,7 @@
     --webowl-margin-xlarge: 24px;
 
     --reactist-bg-default: var(--webowl-background);
+    --reactist-content-primary: var(--webowl-foreground);
 }
 
 #root {

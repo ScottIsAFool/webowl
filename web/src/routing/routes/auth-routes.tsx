@@ -6,13 +6,22 @@ import { IsAuthenticated } from '../is-authenticated'
 function authRoutes(isAuthenticated: boolean): RouteObject[] {
     return [
         {
-            path: 'auth/*',
-            element: <Navigate to="/auth/login" />,
+            path: 'auth/',
             children: [
+                {
+                    path: '',
+                    element: <Navigate to="/auth/login" />,
+                },
                 {
                     path: 'register',
                     element: (
                         <IsAuthenticated target={<Register />} isAuthenticated={isAuthenticated} />
+                    ),
+                },
+                {
+                    path: 'login',
+                    element: (
+                        <IsAuthenticated target={<Login />} isAuthenticated={isAuthenticated} />
                     ),
                 },
                 // {
@@ -39,12 +48,6 @@ function authRoutes(isAuthenticated: boolean): RouteObject[] {
                 // {
                 //     path: '/request-password-reset',
                 // },
-                {
-                    path: 'login',
-                    element: (
-                        <IsAuthenticated target={<Login />} isAuthenticated={isAuthenticated} />
-                    ),
-                },
             ],
         },
     ]

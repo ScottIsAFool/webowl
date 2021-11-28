@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import { Box, Heading, Text } from '@doist/reactist'
 import * as React from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useUserManagement } from '../../hooks'
@@ -12,9 +13,9 @@ function Login(): JSX.Element {
     const [password, setPassword] = React.useState('')
     const [errorMessage, setErrorMessage] = React.useState<string | undefined>()
 
-    const state = location.state as GuardedRouteState
+    const state = location.state as GuardedRouteState | undefined
 
-    const from = state.from?.pathname || '/'
+    const from = state?.from?.pathname || '/'
 
     function onLeave() {
         setEmailAddress('')
@@ -38,7 +39,12 @@ function Login(): JSX.Element {
         },
         [emailAddress, from, login, navigate, password],
     )
-    return <>Login</>
+    return (
+        <Box>
+            <Heading level="1">Login</Heading>
+            {from ? <Text>Redirect to: {from}</Text> : null}
+        </Box>
+    )
 }
 
 export { Login }

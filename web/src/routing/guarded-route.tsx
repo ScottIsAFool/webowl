@@ -7,7 +7,7 @@ function GuardedRoute({ target, isAuthenticated }: GuardedRouteProps): JSX.Eleme
     return isAuthenticated ? (
         target
     ) : (
-        <Navigate to="/login" state={{ from: location }} replace={true} />
+        <Navigate to="/auth/login" state={{ from: location }} replace={true} />
     )
 }
 
