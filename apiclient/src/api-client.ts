@@ -13,6 +13,8 @@ import type {
     RefreshTokenRequest,
     AuthToken,
     SocialAuthRequest,
+    CheckEmailRequest,
+    CheckEmailResponse,
 } from '.'
 import { hasAuthTokenExpired } from './utils/date-utils'
 
@@ -91,6 +93,13 @@ export class ApiClient {
 
     socialLogin(request: SocialAuthRequest): Promise<LoginResponse> {
         return this.post<LoginResponse>({ endPoint: this.endpoint('auth', 'social'), request })
+    }
+
+    checkEmail(request: CheckEmailRequest): Promise<CheckEmailResponse> {
+        return this.post<CheckEmailResponse>({
+            endPoint: this.endpoint('auth', 'check-email'),
+            request,
+        })
     }
 
     private endpoint(base: BasePoints, request: RequestType): string {

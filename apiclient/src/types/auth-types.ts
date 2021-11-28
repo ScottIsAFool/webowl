@@ -61,9 +61,17 @@ export type AuthEndpoints =
     | 'refresh'
     | 'logout'
     | 'social'
+    | 'check-email'
 
 export type AuthToken = {
     accessToken: string
     expiresAt: number
     refreshToken: string
+}
+
+export type CheckEmailRequest = WithEmail
+
+export type CheckEmailResponse = {
+    exists: boolean
+    verified: boolean
 }

@@ -24,6 +24,8 @@ import type {
     RefreshTokenRequest,
     AuthToken,
     SocialAuthRequest,
+    CheckEmailRequest,
+    CheckEmailResponse,
 } from '@webowl/apiclient'
 import { validate } from 'class-validator'
 import { User, User as UserEntity, UserService } from '../user'
@@ -46,6 +48,17 @@ export class AuthController {
         private readonly authService: AuthService,
         private readonly socialAuthProvider: SocialAuthProvider,
     ) {}
+
+    @HttpCode(HttpStatus.OK)
+    @Post(endpoint('check-email'))
+    async checkEmail(@Body() request: CheckEmailRequest): Promise<CheckEmailResponse> {
+        const { emailAddress } = request
+        const user = await this.userService.getByEmail(emailAddress)
+        return {
+            exists: Boolean(user),
+            verified: Boolean(user?.isVerified),
+        }
+    }
 
     @UseGuards(LocalAuthGuard)
     @HttpCode(HttpStatus.OK)
