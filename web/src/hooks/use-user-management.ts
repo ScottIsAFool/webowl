@@ -43,7 +43,7 @@ function useUserManagement(): UserManagementResult {
         firstName: string,
         lastName: string,
     ): Promise<ActionResult> {
-        if (!emailAddress || !password || firstName || lastName)
+        if (!emailAddress || !password || !firstName || !lastName)
             return { type: 'error', message: 'Details missing' }
 
         try {

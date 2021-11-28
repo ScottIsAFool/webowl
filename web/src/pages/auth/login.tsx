@@ -19,10 +19,13 @@ type LoginStep = 'initial' | 'password' | 'register'
 function Login(): JSX.Element {
     const navigate = useNavigate()
     const location = useLocation()
-    const { login, checkEmail, busy } = useUserManagement()
+    // eslint-disable-next-line @typescript-eslint/unbound-method
+    const { login, checkEmail, register, busy } = useUserManagement()
     const [loginStep, setLoginStep] = React.useState<LoginStep>('initial')
     const [emailAddress, setEmailAddress] = React.useState('')
     const [password, setPassword] = React.useState('')
+    const [firstName, setFirstName] = React.useState('')
+    const [lastName, setLastName] = React.useState('')
     const [errorMessage, setErrorMessage] = React.useState<string | undefined>()
 
     const state = location.state as GuardedRouteState | undefined
@@ -30,11 +33,14 @@ function Login(): JSX.Element {
     const from = state?.from?.pathname || '/'
 
     const canLogIn = Boolean(emailAddress) && Boolean(password)
+    const canRegister = canLogIn && Boolean(firstName) && Boolean(lastName)
 
     function onLeave() {
         setEmailAddress('')
         setPassword('')
         setErrorMessage('')
+        setFirstName('')
+        setLastName('')
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -72,6 +78,20 @@ function Login(): JSX.Element {
         [checkEmail, emailAddress],
     )
 
+    const doRegister = React.useCallback(
+        async function doRegister() {
+            setErrorMessage('')
+
+            const response = await register(emailAddress, password, firstName, lastName)
+            if (response.type === 'success') {
+                // Do something, navigate to a success page?
+            } else if (response.type === 'error') {
+                setErrorMessage(response.message)
+            }
+        },
+        [emailAddress, firstName, lastName, password, register],
+    )
+
     return (
         <Box
             display="flex"
@@ -91,7 +111,7 @@ function Login(): JSX.Element {
                     </Heading>
                     {loginStep !== 'initial' ? (
                         <Text tone="secondary">
-                            With <strong>{emailAddress}</strong>
+                            As <strong>{emailAddress}</strong>
                         </Text>
                     ) : null}
                 </Stack>
@@ -162,7 +182,53 @@ function Login(): JSX.Element {
                             </Box>
                         </Stack>
                     </form>
-                ) : null}
+                ) : (
+                    <form onSubmit={doRegister}>
+                        <Stack space="medium">
+                            <TextField
+                                label="First name"
+                                value={firstName}
+                                onChange={(e) => setFirstName(e.target.value)}
+                                placeholder="Enter your first name..."
+                                autoFocus
+                            />
+                            <TextField
+                                label="Last name"
+                                value={lastName}
+                                onChange={(e) => setLastName(e.target.value)}
+                                placeholder="Enter your last name..."
+                            />
+                            <PasswordField
+                                label="Password"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                placeholder="Enter a password..."
+                                hint="Password must be at least 8 characters long with a number and special character"
+                            />
+                            <Box
+                                width="full"
+                                display="flex"
+                                flexDirection="column"
+                                paddingTop="small"
+                            >
+                                <Button
+                                    variant="primary"
+                                    type="submit"
+                                    disabled={!canRegister || busy}
+                                    loading={busy}
+                                    size="large"
+                                >
+                                    Sign up
+                                </Button>
+                                {errorMessage ? (
+                                    <Box paddingTop="medium">
+                                        <Text tone="danger">{errorMessage}</Text>
+                                    </Box>
+                                ) : null}
+                            </Box>
+                        </Stack>
+                    </form>
+                )}
             </Box>
             <Hidden below="tablet">
                 <Box>
