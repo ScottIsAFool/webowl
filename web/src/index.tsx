@@ -1,7 +1,9 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
+import 'bootstrap/dist/css/bootstrap.min.css'
 import './index.css'
 import { App } from './app'
+import { BrowserRouter as Router } from 'react-router-dom'
 import { ContextProviderComposer } from './components/context-provider-composer'
 import { AuthProvider } from './hooks'
 
@@ -11,7 +13,9 @@ const providers = providerTypes.map((Provider, i) => <Provider key={i} />)
 ReactDOM.render(
     <React.StrictMode>
         <ContextProviderComposer contextProviders={providers}>
-            <App />
+            <Router>
+                <App />
+            </Router>
         </ContextProviderComposer>
     </React.StrictMode>,
     document.getElementById('root'),

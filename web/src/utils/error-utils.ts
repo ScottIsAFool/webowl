@@ -1,4 +1,4 @@
-import { ApiException } from '@webowl/apiclient'
+import type { ApiException } from '@webowl/apiclient'
 
 export function errorMessage(
     e: unknown,

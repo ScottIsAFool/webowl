@@ -1,20 +1,15 @@
 import * as React from 'react'
-import { useRoutes } from 'react-router-dom'
-import { useAuth } from '../../hooks'
-import { Leagues } from '../../pages'
+import type { RouteObject } from 'react-router-dom'
+import { Leagues } from '../../pages/leagues'
 import { GuardedRoute } from '../guarded-route'
-import { RouteResult } from '../types'
 
-function LeagueRoutes(): RouteResult {
-    const { isAuthenticated } = useAuth()
-    const element = useRoutes([
+function leagueRoutes(isAuthenticated: boolean): RouteObject[] {
+    return [
         {
-            path: '/leagues',
+            path: 'leagues',
             element: <GuardedRoute target={<Leagues />} isAuthenticated={isAuthenticated} />,
         },
-    ])
-
-    return element
+    ]
 }
 
-export { LeagueRoutes }
+export { leagueRoutes }

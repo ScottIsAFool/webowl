@@ -1,24 +1,24 @@
 import * as React from 'react'
-import { useRoutes } from 'react-router-dom'
-import { useAuth } from '../../hooks'
-import { Home, NotFound } from '../../pages'
+import type { RouteObject } from 'react-router-dom'
+import { About, Home, NotFound } from '../../pages'
 import { IsAuthenticated } from '../is-authenticated'
-import { RouteResult } from '../types'
 
-function AppRoutes(): RouteResult {
-    const { isAuthenticated } = useAuth()
-    const element = useRoutes([
+function appRoutes(isAuthenticated: boolean, children: RouteObject[]): RouteObject[] {
+    return [
         {
             path: '/',
             element: <IsAuthenticated target={<Home />} isAuthenticated={isAuthenticated} />,
+            children,
+        },
+        {
+            path: '/about',
+            element: <About />,
         },
         {
             path: '*',
             element: <NotFound />,
         },
-    ])
-
-    return element
+    ]
 }
 
-export { AppRoutes }
+export { appRoutes }

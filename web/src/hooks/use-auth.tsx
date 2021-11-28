@@ -1,6 +1,6 @@
 import * as React from 'react'
-import { AuthToken, User } from '@webowl/apiclient'
-import { WithChildren } from '../types'
+import type { AuthToken, User } from '@webowl/apiclient'
+import type { WithChildren } from '../types'
 import { getFromStorage, removeFromStorage, saveToStorage } from '../utils/storage-utils'
 
 const AUTH_FILE = 't.json'

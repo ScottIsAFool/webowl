@@ -6,5 +6,3 @@ export type GuardedRouteProps = {
 export type GuardedRouteState = {
     from?: Location
 }
-
-export type RouteResult = React.ReactElement | JSX.Element | null
