@@ -2,6 +2,9 @@
     --webowl-background: #475d80;
     --webowl-background-information: #ca932d;
 
+    --webowl-menu-background: #425778;
+    --webowl-menu-background-hover: #3c4e6c;
+
     --webowl-foreground: white;
     --webowl-foreground-subtle: #ffffff8f;
 
@@ -23,6 +26,26 @@
     --reactist-actionable-primary-idle-fill: var(--webowl-accent);
     --reactist-actionable-primary-hover-fill: var(--webowl-accent-hover);
     --reactist-actionable-primary-disabled-fill: var(--webowl-accent-disabled);
+
+    --reactist-actionable-quaternary-hover-fill: var(--webowl-menu-background-hover);
+    --reactist-actionable-quaternary-hover-tint: var(--webowl-foreground);
+    --reactist-actionable-quaternary-disabled-fill: var(--webowl-accent-disabled);
+}
+
+.reactist_menulist[role='menu'] {
+    background-color: var(--webowl-menu-background);
+    border-color: gray;
+    margin: 4px 0;
+}
+
+.reactist_menulist[role='menu'] [role='menuitem'] {
+    color: var(--webowl-foreground);
+    background-color: var(--webowl-menu-background);
+}
+
+.reactist_menulist[role='menu'] [role='menuitem']:hover {
+    color: var(--webowl-foreground);
+    background-color: var(--webowl-menu-background-hover);
 }
 
 html,
