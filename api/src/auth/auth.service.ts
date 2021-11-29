@@ -112,4 +112,8 @@ export class AuthService {
     async deletePasswordReset(passwordReset: PasswordReset): Promise<void> {
         await this.passwordRepo.remove(passwordReset)
     }
+
+    savePasswordReset(passwordReset: PasswordReset): Promise<PasswordReset> {
+        return this.passwordRepo.save(passwordReset)
+    }
 }

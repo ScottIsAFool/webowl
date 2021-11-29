@@ -1,4 +1,4 @@
-import { Column, Entity, Unique, PrimaryColumn } from 'typeorm'
+import { Column, Entity, Unique, PrimaryColumn, CreateDateColumn } from 'typeorm'
 import { IsNotEmpty } from 'class-validator'
 import { v4 as uuid } from 'uuid'
 
@@ -17,6 +17,9 @@ export class EmailVerification {
     @Column()
     @IsNotEmpty()
     userId!: number
+
+    @CreateDateColumn()
+    createdAt!: Date
 
     static create(emailAddress: string, userId: number): EmailVerification {
         const ev = new EmailVerification()

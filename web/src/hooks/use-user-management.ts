@@ -16,6 +16,8 @@ type UserManagementResult = {
     checkEmail: (emailAddress: string) => Promise<ActionResultWithValue<CheckEmailResponse>>
     resendVerification: (emailAddress: string) => Promise<ActionResult>
     verifyEmail: (emailAddress: string, verificationCode: string) => Promise<ActionResult>
+    requestPasswordReset: (emailAddress: string) => Promise<ActionResult>
+    passwordReset: (emailAddress: string, code: string, password: string) => Promise<ActionResult>
 }
 
 function useUserManagement(): UserManagementResult {
@@ -117,6 +119,27 @@ function useUserManagement(): UserManagementResult {
         [apiClient],
     )
 
+    const requestPasswordReset = React.useCallback(
+        function requestPasswordReset(emailAddress: string) {
+            return makeCall(() => apiClient.requestPasswordReset({ emailAddress }))
+        },
+        [apiClient],
+    )
+
+    const passwordReset = React.useCallback(
+        function passwordReset(
+            emailAddress: string,
+            code: string,
+            password: string,
+        ): Promise<ActionResult> {
+            if (!emailAddress || !code || !password)
+                return Promise.resolve({ type: 'error', message: 'Missing details' })
+
+            return makeCall(() => apiClient.passwordReset({ emailAddress, code, password }))
+        },
+        [apiClient],
+    )
+
     return {
         busy,
         login,
@@ -124,6 +147,8 @@ function useUserManagement(): UserManagementResult {
         checkEmail,
         resendVerification,
         verifyEmail,
+        requestPasswordReset,
+        passwordReset,
     }
 }
 

@@ -117,6 +117,14 @@ describe('AuthController', () => {
                 .spyOn(authService, 'saveEmailVerification')
                 .mockImplementation(() => Promise.resolve({} as EmailVerification))
 
+            jest.spyOn(authService, 'generateAccessToken').mockImplementation(() =>
+                Promise.resolve({
+                    accessToken: 'kwijibo',
+                    refreshToken: 'obijiwk',
+                    expiresAt: 123456789,
+                }),
+            )
+
             await target.register(HAPPY_REGISTER_REQUEST)
 
             expect(saveUser).toHaveBeenCalledTimes(1)

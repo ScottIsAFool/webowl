@@ -65,7 +65,7 @@ export class ApiClient {
         return this.post<void>({ endPoint: this.endpoint('auth', 'change-password'), request })
     }
 
-    sendPasswordReset(request: SendPasswordResetRequest): Promise<void> {
+    requestPasswordReset(request: SendPasswordResetRequest): Promise<void> {
         return this.post<void>({ endPoint: this.endpoint('auth', 'send-password-reset'), request })
     }
 

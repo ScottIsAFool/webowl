@@ -155,6 +155,8 @@ export class AuthController {
             let passwordReset = await this.authService.getPasswordReset(emailAddress)
             if (!passwordReset) {
                 passwordReset = PasswordReset.create(emailAddress)
+
+                await this.authService.savePasswordReset(passwordReset)
             }
 
             // Send email

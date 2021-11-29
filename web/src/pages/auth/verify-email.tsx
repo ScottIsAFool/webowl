@@ -1,18 +1,16 @@
 import { Stack, Text, TextLink } from '@doist/reactist'
 import * as React from 'react'
-import { Navigate, useParams } from 'react-router-dom'
-import { useAuth, useUserManagement } from '../../hooks'
-
-type UrlParams = {
-    email: string | undefined
-    code: string | undefined
-}
+import { Navigate } from 'react-router-dom'
+import { useAuth, useQuery, useUserManagement } from '../../hooks'
 
 function VerifyEmail(): JSX.Element | null {
     const { authenticatedUser, setVerified } = useAuth()
-    const { email, code } = useParams() as UrlParams
+    const query = useQuery()
     const { verifyEmail } = useUserManagement()
     const [isVerified, setIsVerified] = React.useState(false)
+
+    const code = query.get('code')
+    const email = query.get('email')
 
     const canVerify = Boolean(email) && Boolean(code) && !authenticatedUser?.verified
 

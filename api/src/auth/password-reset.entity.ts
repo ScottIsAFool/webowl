@@ -1,5 +1,5 @@
 import { IsNotEmpty } from 'class-validator'
-import { Column, Entity, PrimaryColumn, Unique } from 'typeorm'
+import { Column, CreateDateColumn, Entity, PrimaryColumn, Unique } from 'typeorm'
 import { v4 as uuid } from 'uuid'
 
 @Entity()
@@ -13,6 +13,9 @@ export class PasswordReset {
     @Column()
     @IsNotEmpty()
     code!: string
+
+    @CreateDateColumn()
+    createdAt!: Date
 
     static create(emailAddress: string): PasswordReset {
         const pw = new PasswordReset()

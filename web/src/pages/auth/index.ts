@@ -1,3 +1,5 @@
 export * from './login'
 export * from './resend-verification'
 export * from './verify-email'
+export * from './password-reset'
+export * from './request-password-reset'

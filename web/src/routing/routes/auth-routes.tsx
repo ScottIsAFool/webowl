@@ -1,9 +1,20 @@
 import * as React from 'react'
 import { Navigate, RouteObject } from 'react-router-dom'
-import { Login, ResendVerification, VerifyEmail } from '../../pages/auth'
+import {
+    Login,
+    PasswordReset,
+    RequestPasswordReset,
+    ResendVerification,
+    VerifyEmail,
+} from '../../pages/auth'
 import { IsAuthenticated } from '../is-authenticated'
 
-type AuthRoute = 'login' | 'resend-verification' | 'verify-email/:email/:code'
+type AuthRoute =
+    | 'login'
+    | 'resend-verification'
+    | 'verify-email'
+    | 'password-reset'
+    | 'request-password-reset'
 
 function ar(route: AuthRoute): string {
     return route
@@ -33,30 +44,17 @@ function authRoutes(isAuthenticated: boolean): RouteObject[] {
                     element: <ResendVerification />,
                 },
                 {
-                    path: ar('verify-email/:email/:code'),
+                    path: ar('verify-email'),
                     element: <VerifyEmail />,
                 },
-                // {
-                //     path: '/verify-email/:email/:code',
-                // },
-                // {
-                //     path: '/verify-email/:email',
-                // },
-                // {
-                //     path: '/verify-email',
-                // },
-                // {
-                //     path: '/password-reset',
-                // },
-                // {
-                //     path: '/password-reset/:email',
-                // },
-                // {
-                //     path: '/password-reset/:email/:code',
-                // },
-                // {
-                //     path: '/request-password-reset',
-                // },
+                {
+                    path: ar('password-reset'),
+                    element: <PasswordReset />,
+                },
+                {
+                    path: ar('request-password-reset'),
+                    element: <RequestPasswordReset />,
+                },
             ],
         },
     ]

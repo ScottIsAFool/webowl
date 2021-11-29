@@ -17,7 +17,7 @@ import { ReactComponent as LoginInitialImage } from '../../assets/images/LoginIn
 import { ReactComponent as LoginImage } from '../../assets/images/Login.svg'
 import { ReactComponent as RegisterImage } from '../../assets/images/Register.svg'
 
-import styles from './login.module.css'
+import styles from './auth.module.css'
 import { SocialAuthButtons } from '../../components'
 import type { ActionResult } from '../../types'
 
@@ -145,6 +145,8 @@ function Login(): JSX.Element {
                                     onChange={(e) => setEmailAddress(e.target.value)}
                                     placeholder="Enter your email..."
                                     autoFocus
+                                    type="email"
+                                    autoComplete="username"
                                 />
                                 <Box
                                     width="full"
@@ -178,6 +180,7 @@ function Login(): JSX.Element {
                                     onChange={(e) => setPassword(e.target.value)}
                                     placeholder="Enter your password..."
                                     autoFocus
+                                    autoComplete="current-password"
                                 />
                                 <Box
                                     width="full"
