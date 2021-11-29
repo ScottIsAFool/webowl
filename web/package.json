@@ -4,8 +4,10 @@
     "private": true,
     "dependencies": {
         "@doist/reactist": "^11.0.0",
+        "@microsoft/microsoft-graph-types": "^2.10.0",
         "bootstrap": "^5.1.3",
         "dayjs": "^1.10.7",
+        "msal": "^1.4.15",
         "node-sass": "^6.0.1",
         "react": "^17.0.2",
         "react-bootstrap": "^2.0.2",

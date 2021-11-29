@@ -100,7 +100,7 @@ function Login(): JSX.Element {
 
     return (
         <Box display="flex" flexDirection="column" width="full" height="full">
-            <Box id="header">
+            <Box id="header" width="fitContent">
                 <TextLink href="/">
                     <Heading level="1" size="largest">
                         Webowl
@@ -247,7 +247,7 @@ function Login(): JSX.Element {
                         </form>
                     )}
                 </Box>
-                <Hidden below="tablet">
+                <Hidden below="desktop">
                     <Box className={styles.image}>
                         {loginStep === 'initial' ? (
                             <LoginInitialImage />

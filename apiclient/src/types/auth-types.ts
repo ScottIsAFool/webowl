@@ -7,6 +7,7 @@ export type User = {
     emailAddress: string
     firstName: string
     lastName: string
+    verified: boolean
     isFacebookAuth?: boolean
     isGoogleAuth?: boolean
     isMicrosoftAuth?: boolean

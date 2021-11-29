@@ -65,7 +65,7 @@ export class AuthController {
     @Post(endpoint('login'))
     async login(@AuthUser() user: User): Promise<LoginResponse> {
         return Promise.resolve({
-            user,
+            user: user.toDto(),
             authToken: await this.authService.generateAccessToken({
                 emailAddress: user.emailAddress,
                 sub: user.id,

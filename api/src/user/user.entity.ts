@@ -95,6 +95,7 @@ export class User {
             isFacebookAuth: this.isFacebookAuth,
             isGoogleAuth: this.isGoogleAuth,
             isMicrosoftAuth: this.isMicrosoftAuth,
+            verified: this.isVerified,
         }
     }
 }
