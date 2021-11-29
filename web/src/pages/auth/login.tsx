@@ -19,6 +19,7 @@ import { ReactComponent as RegisterImage } from '../../assets/images/Register.sv
 
 import styles from './login.module.css'
 import { SocialAuthButtons } from '../../components'
+import type { ActionResult } from '../../types'
 
 type LoginStep = 'initial' | 'password' | 'register'
 
@@ -49,7 +50,18 @@ function Login(): JSX.Element {
         setLastName('')
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const handleResponse = React.useCallback(
+        function handleResponse(response: ActionResult) {
+            if (response.type === 'success') {
+                onLeave()
+                navigate(from, { replace: true })
+            } else if (response.type === 'error') {
+                setErrorMessage(response.message)
+            }
+        },
+        [from, navigate],
+    )
+
     const doLogin = React.useCallback(
         async function doLogin(event: React.FormEvent<HTMLFormElement>) {
             event.preventDefault()
@@ -58,14 +70,9 @@ function Login(): JSX.Element {
 
             const response = await login(emailAddress, password)
 
-            if (response.type === 'success') {
-                navigate(from, { replace: true })
-                onLeave()
-            } else if (response.type === 'error') {
-                setErrorMessage(response.message)
-            }
+            handleResponse(response)
         },
-        [emailAddress, from, login, navigate, password],
+        [emailAddress, handleResponse, login, password],
     )
 
     const doCheckEmail = React.useCallback(
@@ -85,17 +92,14 @@ function Login(): JSX.Element {
     )
 
     const doRegister = React.useCallback(
-        async function doRegister() {
-            setErrorMessage('')
+        async function doRegister(event: React.FormEvent<HTMLFormElement>) {
+            event.preventDefault()
+            setErrorMessage(undefined)
 
             const response = await register(emailAddress, password, firstName, lastName)
-            if (response.type === 'success') {
-                // Do something, navigate to a success page?
-            } else if (response.type === 'error') {
-                setErrorMessage(response.message)
-            }
+            handleResponse(response)
         },
-        [emailAddress, firstName, lastName, password, register],
+        [emailAddress, firstName, handleResponse, lastName, password, register],
     )
 
     return (

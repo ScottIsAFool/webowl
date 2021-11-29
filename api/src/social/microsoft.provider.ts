@@ -15,16 +15,12 @@ type MicrosoftUser = {
     userPrincipalName: string
 }
 
-class ShiftyMicrosoftAuthProvider implements AuthenticationProvider {
-    constructor(accessToken: string) {
-        this._accessToken = accessToken
-    }
-    private _accessToken: string
+class WebowlMicrosoftAuthProvider implements AuthenticationProvider {
+    constructor(private accessToken: string) {}
     getAccessToken(
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         _authenticationProviderOptions?: AuthenticationProviderOptions,
     ): Promise<string> {
-        return Promise.resolve(this._accessToken)
+        return Promise.resolve(this.accessToken)
     }
 }
 
@@ -56,7 +52,7 @@ export class MicrosoftProvider implements ISocialProvider {
 
     private getClient(accessToken: string): Client {
         return Client.initWithMiddleware({
-            authProvider: new ShiftyMicrosoftAuthProvider(accessToken),
+            authProvider: new WebowlMicrosoftAuthProvider(accessToken),
         })
     }
 }

@@ -1,7 +1,17 @@
 import * as React from 'react'
 import { Navigate, RouteObject } from 'react-router-dom'
-import { Login } from '../../pages/auth'
+import { Login, ResendVerification } from '../../pages/auth'
 import { IsAuthenticated } from '../is-authenticated'
+
+type AuthRoute = 'login' | 'resend-verification'
+
+function ar(route: AuthRoute): string {
+    return route
+}
+
+export function authNavigate(route: AuthRoute): string {
+    return `/auth/${route}`
+}
 
 function authRoutes(isAuthenticated: boolean): RouteObject[] {
     return [
@@ -10,13 +20,17 @@ function authRoutes(isAuthenticated: boolean): RouteObject[] {
             children: [
                 {
                     path: '',
-                    element: <Navigate to="/auth/login" />,
+                    element: <Navigate to={authNavigate('login')} />,
                 },
                 {
-                    path: 'login',
+                    path: ar('login'),
                     element: (
                         <IsAuthenticated target={<Login />} isAuthenticated={isAuthenticated} />
                     ),
+                },
+                {
+                    path: ar('resend-verification'),
+                    element: <ResendVerification />,
                 },
                 // {
                 //     path: '/register-success/:email',

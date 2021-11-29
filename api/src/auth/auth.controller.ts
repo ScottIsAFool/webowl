@@ -74,7 +74,7 @@ export class AuthController {
     }
 
     @Post(endpoint('register'))
-    async register(@Body() request: RegisterRequest): Promise<void> {
+    async register(@Body() request: RegisterRequest): Promise<LoginResponse> {
         const user = UserEntity.create(request)
 
         const existingUser = await this.userService.getByEmail(user.emailAddress)
@@ -101,6 +101,15 @@ export class AuthController {
             await this.authService.saveEmailVerification(verification)
 
             // send email out
+
+            // Return the login response
+            return {
+                user: user.toDto(),
+                authToken: await this.authService.generateAccessToken({
+                    emailAddress: user.emailAddress,
+                    sub: user.id,
+                }),
+            }
         } catch (e: unknown) {
             throw new BadRequestException(e)
         }

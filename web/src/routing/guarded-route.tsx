@@ -1,5 +1,6 @@
 import * as React from 'react'
 import { Navigate, useLocation } from 'react-router-dom'
+import { authNavigate } from './routes/auth-routes'
 import type { GuardedRouteProps } from './types'
 
 function GuardedRoute({ target, isAuthenticated }: GuardedRouteProps): JSX.Element | null {
@@ -7,7 +8,7 @@ function GuardedRoute({ target, isAuthenticated }: GuardedRouteProps): JSX.Eleme
     return isAuthenticated ? (
         target
     ) : (
-        <Navigate to="/auth/login" state={{ from: location }} replace={true} />
+        <Navigate to={authNavigate('login')} state={{ from: location }} replace={true} />
     )
 }
 

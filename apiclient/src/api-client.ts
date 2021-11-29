@@ -49,8 +49,8 @@ export class ApiClient {
         return this.post<LoginResponse>({ endPoint: this.endpoint('auth', 'login'), request })
     }
 
-    register(request: RegisterRequest): Promise<void> {
-        return this.post<void>({ endPoint: this.endpoint('auth', 'register'), request })
+    register(request: RegisterRequest): Promise<LoginResponse> {
+        return this.post<LoginResponse>({ endPoint: this.endpoint('auth', 'register'), request })
     }
 
     verifyEmail(request: VerifyRequest): Promise<void> {

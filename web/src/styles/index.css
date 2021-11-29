@@ -1,7 +1,10 @@
 :root {
     --webowl-background: #475d80;
+    --webowl-background-information: #ca932d;
+
     --webowl-foreground: white;
     --webowl-foreground-subtle: #ffffff8f;
+
     --webowl-accent: #84b748;
     --webowl-accent-hover: #a0de58;
     --webowl-accent-disabled: #9fb485;

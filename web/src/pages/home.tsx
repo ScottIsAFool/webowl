@@ -1,6 +1,7 @@
 import * as React from 'react'
 import { Box, Column, Columns, Heading, TextLink } from '@doist/reactist'
 import { ReactComponent as Spreadsheet } from '../assets/images/Spreadsheet.svg'
+import { leagueNavigate } from '../routing/routes/league-routes'
 
 function Home(): JSX.Element {
     return (
@@ -16,7 +17,7 @@ function Home(): JSX.Element {
                     </Column>
                     <Column width="auto">
                         <Box display="flex" alignItems="flexEnd" justifyContent="flexEnd">
-                            <TextLink href="/leagues">
+                            <TextLink href={leagueNavigate('')}>
                                 <Heading level="1">Open leagues</Heading>
                             </TextLink>
                         </Box>
