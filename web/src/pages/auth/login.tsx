@@ -26,7 +26,6 @@ type LoginStep = 'initial' | 'password' | 'register'
 function Login(): JSX.Element {
     const navigate = useNavigate()
     const location = useLocation()
-    // eslint-disable-next-line @typescript-eslint/unbound-method
     const { login, checkEmail, register, busy } = useUserManagement()
     const [loginStep, setLoginStep] = React.useState<LoginStep>('initial')
     const [emailAddress, setEmailAddress] = React.useState('')

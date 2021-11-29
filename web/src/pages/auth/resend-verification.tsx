@@ -5,7 +5,6 @@ import { useAuth, useUserManagement } from '../../hooks'
 
 function ResendVerification(): JSX.Element {
     const { authenticatedUser } = useAuth()
-    // eslint-disable-next-line @typescript-eslint/unbound-method
     const { busy, resendVerification } = useUserManagement()
     const [verificationSent, setVerificationSent] = React.useState(false)
     if (!authenticatedUser) {

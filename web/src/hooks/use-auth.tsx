@@ -17,6 +17,7 @@ type AuthResult = {
     updateAuthToken: (token: AuthToken) => void
     updateAuthDetails: (details: AuthDetails) => void
     logOut: () => void
+    setVerified: (value: boolean) => void
 }
 
 type ProviderProps = WithChildren
@@ -26,6 +27,7 @@ const AuthContext = React.createContext<AuthResult>({
     updateAuthToken: () => undefined,
     updateAuthDetails: () => undefined,
     logOut: () => undefined,
+    setVerified: () => undefined,
 })
 
 function AuthProvider({ children }: ProviderProps): JSX.Element {
@@ -71,6 +73,20 @@ function useAuthInternal(): AuthResult {
         },
         [updateAuthToken],
     )
+
+    const setVerified = React.useCallback(
+        function setVerified(value: boolean) {
+            if (!authDetails?.user) return
+            updateAuthDetails({
+                ...authDetails,
+                user: {
+                    ...authDetails.user,
+                    verified: value,
+                },
+            })
+        },
+        [authDetails, updateAuthDetails],
+    )
     return {
         isAuthenticated: Boolean(authDetails),
         authToken: authDetails?.authToken,
@@ -78,6 +94,7 @@ function useAuthInternal(): AuthResult {
         updateAuthToken,
         updateAuthDetails,
         logOut,
+        setVerified,
     }
 }
 

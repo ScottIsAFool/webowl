@@ -1,9 +1,9 @@
 import * as React from 'react'
 import { Navigate, RouteObject } from 'react-router-dom'
-import { Login, ResendVerification } from '../../pages/auth'
+import { Login, ResendVerification, VerifyEmail } from '../../pages/auth'
 import { IsAuthenticated } from '../is-authenticated'
 
-type AuthRoute = 'login' | 'resend-verification'
+type AuthRoute = 'login' | 'resend-verification' | 'verify-email/:email/:code'
 
 function ar(route: AuthRoute): string {
     return route
@@ -19,7 +19,7 @@ function authRoutes(isAuthenticated: boolean): RouteObject[] {
             path: 'auth/',
             children: [
                 {
-                    path: '',
+                    index: true,
                     element: <Navigate to={authNavigate('login')} />,
                 },
                 {
@@ -32,9 +32,10 @@ function authRoutes(isAuthenticated: boolean): RouteObject[] {
                     path: ar('resend-verification'),
                     element: <ResendVerification />,
                 },
-                // {
-                //     path: '/register-success/:email',
-                // },
+                {
+                    path: ar('verify-email/:email/:code'),
+                    element: <VerifyEmail />,
+                },
                 // {
                 //     path: '/verify-email/:email/:code',
                 // },
