@@ -1,21 +1,29 @@
 import * as React from 'react'
-import type { User } from '@webowl/apiclient'
+import type { User, UserResponse } from '@webowl/apiclient'
 import type { WithChildren } from '../types'
 import { getFromStorage, removeFromStorage, saveToStorage } from '../utils/storage-utils'
+import { makeCallWithValue, ResultWith } from '../utils/result-utils'
+import { useApiClient } from '.'
 
 const USER_FILE = 'u.json'
 
 type UserManagementResult = {
+    busy: boolean
     authenticatedUser?: User
     updateUser: (user?: User) => void
     setVerified: (value: boolean) => void
+    refreshAuthenticatedUser: () => void
+    getAuthenticatedUser: () => Promise<ResultWith<UserResponse>>
 }
 
 type ProviderProps = WithChildren
 
 const UserContext = React.createContext<UserManagementResult>({
+    busy: false,
     updateUser: () => undefined,
     setVerified: () => undefined,
+    refreshAuthenticatedUser: () => undefined,
+    getAuthenticatedUser: () => Promise.resolve({ type: 'idle' }),
 })
 
 function UserProvider({ children }: ProviderProps): JSX.Element {
@@ -24,6 +32,8 @@ function UserProvider({ children }: ProviderProps): JSX.Element {
 }
 
 function useUserManagementInternal(): UserManagementResult {
+    const [busy, setBusy] = React.useState(false)
+    const { apiClient } = useApiClient()
     const [authenticatedUser, setAuthenticatedUser] = React.useState<User | undefined>(
         getFromStorage(USER_FILE),
     )
@@ -49,10 +59,32 @@ function useUserManagementInternal(): UserManagementResult {
         [authenticatedUser, updateUser],
     )
 
+    const getAuthenticatedUser = React.useCallback(
+        function getAuthenticatedUser(): Promise<ResultWith<UserResponse>> {
+            return makeCallWithValue(() => apiClient.getAuthenticatedUser(), setBusy)
+        },
+        [apiClient],
+    )
+
+    const refreshAuthenticatedUser = React.useCallback(
+        async function refreshAuthenticatedUser() {
+            const response = await getAuthenticatedUser()
+            if (response.type === 'error') {
+                // Display an error
+            } else if (response.type === 'success') {
+                updateUser(response.value.user)
+            }
+        },
+        [getAuthenticatedUser, updateUser],
+    )
+
     return {
+        busy,
         authenticatedUser,
         updateUser,
         setVerified,
+        getAuthenticatedUser,
+        refreshAuthenticatedUser,
     }
 }
 

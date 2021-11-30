@@ -1,22 +1,19 @@
 import * as React from 'react'
-import { useAccountCreation, useLeagueManagement } from '.'
+import { useLeagueManagement, useUserManagement } from '.'
 
 export type AppLifecycleResult = {
     startup: () => void
 }
 
 function useAppLifecycle(): AppLifecycleResult {
-    const { getAuthenticatedUser } = useAccountCreation()
+    const { refreshAuthenticatedUser } = useUserManagement()
     const { getLeagues } = useLeagueManagement()
     const startup = React.useCallback(
         async function startup() {
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            const [authenticatedUser, leagues] = await Promise.all([
-                getAuthenticatedUser(),
-                getLeagues(),
-            ])
+            const [_, leagues] = await Promise.all([refreshAuthenticatedUser(), getLeagues()])
         },
-        [getAuthenticatedUser, getLeagues],
+        [getLeagues, refreshAuthenticatedUser],
     )
 
     return {
