@@ -11,7 +11,7 @@ import {
 } from '@doist/reactist'
 import * as React from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { useUserManagement } from '../../hooks'
+import { useAccountCreation } from '../../hooks'
 import type { GuardedRouteState } from '../../routing/types'
 import { ReactComponent as LoginInitialImage } from '../../assets/images/LoginInitial.svg'
 import { ReactComponent as LoginImage } from '../../assets/images/Login.svg'
@@ -26,7 +26,7 @@ type LoginStep = 'initial' | 'password' | 'register'
 function Login(): JSX.Element {
     const navigate = useNavigate()
     const location = useLocation()
-    const { login, checkEmail, register, busy } = useUserManagement()
+    const { login, checkEmail, register, busy } = useAccountCreation()
     const [loginStep, setLoginStep] = React.useState<LoginStep>('initial')
     const [emailAddress, setEmailAddress] = React.useState('')
     const [password, setPassword] = React.useState('')

@@ -1,12 +1,12 @@
 import * as React from 'react'
-import { useUserManagement } from '.'
+import { useAccountCreation } from '.'
 
 export type AppLifecycleResult = {
     startup: () => void
 }
 
 function useAppLifecycle(): AppLifecycleResult {
-    const { getAuthenticatedUser } = useUserManagement()
+    const { getAuthenticatedUser } = useAccountCreation()
     const startup = React.useCallback(
         async function startup() {
             // eslint-disable-next-line @typescript-eslint/no-unused-vars

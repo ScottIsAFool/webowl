@@ -4,7 +4,7 @@ import { useApiClient, useAuth } from '.'
 import type { ActionResult, ActionResultWithValue } from '../types'
 import { errorMessage } from '../utils/error-utils'
 
-type UserManagementResult = {
+type AccountCreationResult = {
     busy: boolean
     login: (emailAddress: string, password: string) => Promise<ActionResult>
     register: (
@@ -21,7 +21,7 @@ type UserManagementResult = {
     getAuthenticatedUser: () => Promise<ActionResult>
 }
 
-function useUserManagement(): UserManagementResult {
+function useAccountCreation(): AccountCreationResult {
     const { updateAuthDetails } = useAuth()
     const { apiClient } = useApiClient()
     const [busy, setBusy] = React.useState(false)
@@ -161,4 +161,4 @@ function useUserManagement(): UserManagementResult {
     }
 }
 
-export { useUserManagement }
+export { useAccountCreation }

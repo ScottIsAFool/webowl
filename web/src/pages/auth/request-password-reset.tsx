@@ -1,12 +1,12 @@
 import { Box, Button, Heading, Hidden, Stack, Text, TextField, TextLink } from '@doist/reactist'
 import * as React from 'react'
-import { useQuery, useUserManagement } from '../../hooks'
+import { useQuery, useAccountCreation } from '../../hooks'
 import { ReactComponent as ForgotPasswordImage } from '../../assets/images/ForgotPassword.svg'
 
 import styles from './auth.module.css'
 
 function RequestPasswordReset(): JSX.Element {
-    const { requestPasswordReset, busy } = useUserManagement()
+    const { requestPasswordReset, busy } = useAccountCreation()
     const query = useQuery()
     const [email, setEmail] = React.useState(query.get('email') ?? '')
 

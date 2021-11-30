@@ -1,14 +1,14 @@
 import { Box, Button, Heading, Hidden, PasswordField, Stack, Text, TextLink } from '@doist/reactist'
 import * as React from 'react'
 import { Navigate, useNavigate } from 'react-router-dom'
-import { useQuery, useUserManagement } from '../../hooks'
+import { useQuery, useAccountCreation } from '../../hooks'
 import { ReactComponent as ResetPasswordImage } from '../../assets/images/ResetPassword.svg'
 
 import styles from './auth.module.css'
 import { authNavigate } from '../../routing/routes/auth-routes'
 
 function PasswordReset(): JSX.Element {
-    const { passwordReset, busy } = useUserManagement()
+    const { passwordReset, busy } = useAccountCreation()
     const navigate = useNavigate()
     const query = useQuery()
     const email = query.get('email')

@@ -1,11 +1,11 @@
 import { Box, Button, Stack, Text } from '@doist/reactist'
 import * as React from 'react'
 import { Navigate } from 'react-router'
-import { useAuth, useUserManagement } from '../../hooks'
+import { useAuth, useAccountCreation } from '../../hooks'
 
 function ResendVerification(): JSX.Element {
     const { authenticatedUser } = useAuth()
-    const { busy, resendVerification } = useUserManagement()
+    const { busy, resendVerification } = useAccountCreation()
     const [verificationSent, setVerificationSent] = React.useState(false)
     if (!authenticatedUser) {
         throw new Error('Should not have got here if not authenticated 🤔')
