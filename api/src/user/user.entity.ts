@@ -98,6 +98,7 @@ export class User {
             isGoogleAuth: this.isGoogleAuth ?? undefined,
             isMicrosoftAuth: this.isMicrosoftAuth ?? undefined,
             verified: this.isVerified,
+            defaultLeagueId: this.defaultLeagueId,
         }
     }
 }

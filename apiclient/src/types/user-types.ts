@@ -7,6 +7,7 @@ export type User = {
     isFacebookAuth?: boolean
     isGoogleAuth?: boolean
     isMicrosoftAuth?: boolean
+    defaultLeagueId?: number
 }
 
 export type UserResponse = {

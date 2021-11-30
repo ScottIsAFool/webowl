@@ -34,9 +34,7 @@ export class LeagueController {
             throw new BadRequestException(errors)
         }
 
-        leagueEntity.createdBy = user
-
-        const league = await this.leagueService.save(leagueEntity)
+        const league = await this.leagueService.addLeague(leagueEntity, user)
 
         return {
             league: league.toDto(),
