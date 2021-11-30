@@ -15,6 +15,10 @@ import type {
     SocialAuthRequest,
     CheckEmailRequest,
     CheckEmailResponse,
+    AddLeagueRequest,
+    LeagueResponse,
+    UpdateLeagueRequest,
+    LeaguesResponse,
 } from '.'
 import type { UserEndpoints, UserResponse } from './types/user-types'
 import { hasAuthTokenExpired } from './utils/date-utils'
@@ -34,7 +38,7 @@ type ServerError = {
     statusCode: number
 }
 
-type BasePoints = 'auth' | 'user'
+type BasePoints = 'auth' | 'user' | 'leagues'
 type RequestType = AuthEndpoints | UserEndpoints
 
 export class ApiClient {
@@ -107,7 +111,34 @@ export class ApiClient {
         })
     }
 
-    private endpoint(base: BasePoints, request: RequestType): string {
+    addLeague(request: AddLeagueRequest): Promise<LeagueResponse> {
+        return this.post<LeagueResponse>({
+            endPoint: this.endpoint('leagues', ''),
+            request,
+            requiresAuth: true,
+        })
+    }
+
+    updateLeague(id: number, request: UpdateLeagueRequest): Promise<LeagueResponse> {
+        return this.post<LeagueResponse>({
+            endPoint: this.endpoint('leagues', id),
+            request,
+            requiresAuth: true,
+        })
+    }
+
+    deleteLeague(id: number): Promise<void> {
+        return this.delete({ endPoint: this.endpoint('leagues', id), requiresAuth: true })
+    }
+
+    getLeagues(): Promise<LeaguesResponse> {
+        return this.get<LeaguesResponse>({
+            endPoint: this.endpoint('leagues', ''),
+            requiresAuth: true,
+        })
+    }
+
+    private endpoint(base: BasePoints, request: RequestType | number): string {
         return `${base}/${request}`
     }
 

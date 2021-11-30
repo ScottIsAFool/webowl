@@ -19,7 +19,7 @@ import { ReactComponent as RegisterImage } from '../../assets/images/Register.sv
 
 import styles from './auth.module.css'
 import { SocialAuthButtons } from '../../components'
-import type { ActionResult } from '../../types'
+import type { Result } from '../../utils/result-utils'
 
 type LoginStep = 'initial' | 'password' | 'register'
 
@@ -50,7 +50,7 @@ function Login(): JSX.Element {
     }
 
     const handleResponse = React.useCallback(
-        function handleResponse(response: ActionResult) {
+        function handleResponse(response: Result) {
             if (response.type === 'success') {
                 onLeave()
                 navigate(from, { replace: true })

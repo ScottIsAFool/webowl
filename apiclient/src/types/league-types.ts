@@ -23,6 +23,4 @@ export type LeaguesResponse = {
     leagues: League[]
 }
 
-export type UpdateLeagueRequest = {
-    league: Partial<League>
-}
+export type UpdateLeagueRequest = Partial<League>

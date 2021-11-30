@@ -1,4 +1,5 @@
 import * as React from 'react'
+import { Text } from '@doist/reactist'
 import { useParams } from 'react-router-dom'
 
 function League(): JSX.Element {
@@ -6,7 +7,11 @@ function League(): JSX.Element {
     if (!id) {
         return <>No id provided</>
     }
-    return <>League with id '{id}'</>
+    return (
+        <Text>
+            League with id <strong>{id}</strong>
+        </Text>
+    )
 }
 
 export { League }

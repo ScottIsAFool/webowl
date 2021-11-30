@@ -1,24 +1,23 @@
 import * as React from 'react'
 import type { CheckEmailResponse, UserResponse } from '@webowl/apiclient'
 import { useApiClient, useAuth } from '.'
-import type { ActionResult, ActionResultWithValue } from '../types'
-import { errorMessage } from '../utils/error-utils'
+import { makeCall, makeCallWithValue, Result, ResultWith } from '../utils/result-utils'
 
 type AccountCreationResult = {
     busy: boolean
-    login: (emailAddress: string, password: string) => Promise<ActionResult>
+    login: (emailAddress: string, password: string) => Promise<Result>
     register: (
         emailAddress: string,
         password: string,
         firstName: string,
         lastName: string,
-    ) => Promise<ActionResult>
-    checkEmail: (emailAddress: string) => Promise<ActionResultWithValue<CheckEmailResponse>>
-    resendVerification: (emailAddress: string) => Promise<ActionResult>
-    verifyEmail: (emailAddress: string, verificationCode: string) => Promise<ActionResult>
-    requestPasswordReset: (emailAddress: string) => Promise<ActionResult>
-    passwordReset: (emailAddress: string, code: string, password: string) => Promise<ActionResult>
-    getAuthenticatedUser: () => Promise<ActionResult>
+    ) => Promise<Result>
+    checkEmail: (emailAddress: string) => Promise<ResultWith<CheckEmailResponse>>
+    resendVerification: (emailAddress: string) => Promise<Result>
+    verifyEmail: (emailAddress: string, verificationCode: string) => Promise<Result>
+    requestPasswordReset: (emailAddress: string) => Promise<Result>
+    passwordReset: (emailAddress: string, code: string, password: string) => Promise<Result>
+    getAuthenticatedUser: () => Promise<Result>
 }
 
 function useAccountCreation(): AccountCreationResult {
@@ -26,45 +25,15 @@ function useAccountCreation(): AccountCreationResult {
     const { apiClient } = useApiClient()
     const [busy, setBusy] = React.useState(false)
 
-    async function makeCall(call: () => Promise<void>): Promise<ActionResult> {
-        try {
-            setBusy(true)
-            await call()
-            return { type: 'success' }
-        } catch (e: unknown) {
-            return errorMessage(e)
-        } finally {
-            setBusy(false)
-        }
-    }
-
-    async function makeCallWithValue<T>(call: () => Promise<T>): Promise<ActionResultWithValue<T>> {
-        try {
-            setBusy(true)
-            const response = await call()
-            return { type: 'success', value: response }
-        } catch (e: unknown) {
-            return errorMessage(e)
-        } finally {
-            setBusy(false)
-        }
-    }
-
     const login = React.useCallback(
-        async function login(emailAddress: string, password: string): Promise<ActionResult> {
+        function login(emailAddress: string, password: string): Promise<Result> {
             if (!emailAddress || !password) {
-                return { type: 'error', message: 'No login details provided' }
+                return Promise.resolve({ type: 'error', message: 'No login details provided' })
             }
-            try {
-                setBusy(true)
+            return makeCall(async () => {
                 const response = await apiClient.login({ emailAddress, password })
                 updateAuthDetails(response)
-                return { type: 'success' }
-            } catch (e: unknown) {
-                return errorMessage(e)
-            } finally {
-                setBusy(false)
-            }
+            }, setBusy)
         },
         [apiClient, updateAuthDetails],
     )
@@ -75,7 +44,7 @@ function useAccountCreation(): AccountCreationResult {
             password: string,
             firstName: string,
             lastName: string,
-        ): Promise<ActionResult> {
+        ): Promise<Result> {
             if (!emailAddress || !password || !firstName || !lastName)
                 return Promise.resolve({ type: 'error', message: 'Details missing' })
             return makeCall(async () => {
@@ -86,15 +55,13 @@ function useAccountCreation(): AccountCreationResult {
                     password,
                 })
                 updateAuthDetails(response)
-            })
+            }, setBusy)
         },
         [apiClient, updateAuthDetails],
     )
 
     const checkEmail = React.useCallback(
-        function checkEmail(
-            emailAddress: string,
-        ): Promise<ActionResultWithValue<CheckEmailResponse>> {
+        function checkEmail(emailAddress: string): Promise<ResultWith<CheckEmailResponse>> {
             if (!emailAddress)
                 return Promise.resolve({ type: 'error', message: 'No email address provided' })
 
@@ -104,25 +71,25 @@ function useAccountCreation(): AccountCreationResult {
     )
 
     const resendVerification = React.useCallback(
-        function resendVerification(emailAddress: string): Promise<ActionResult> {
-            return makeCall(() => apiClient.resendVerification({ emailAddress }))
+        function resendVerification(emailAddress: string): Promise<Result> {
+            return makeCall(() => apiClient.resendVerification({ emailAddress }), setBusy)
         },
         [apiClient],
     )
 
     const verifyEmail = React.useCallback(
-        function verifyEmail(
-            emailAddress: string,
-            verificationCode: string,
-        ): Promise<ActionResult> {
-            return makeCall(() => apiClient.verifyEmail({ emailAddress, verificationCode }))
+        function verifyEmail(emailAddress: string, verificationCode: string): Promise<Result> {
+            return makeCall(
+                () => apiClient.verifyEmail({ emailAddress, verificationCode }),
+                setBusy,
+            )
         },
         [apiClient],
     )
 
     const requestPasswordReset = React.useCallback(
         function requestPasswordReset(emailAddress: string) {
-            return makeCall(() => apiClient.requestPasswordReset({ emailAddress }))
+            return makeCall(() => apiClient.requestPasswordReset({ emailAddress }), setBusy)
         },
         [apiClient],
     )
@@ -132,18 +99,21 @@ function useAccountCreation(): AccountCreationResult {
             emailAddress: string,
             code: string,
             password: string,
-        ): Promise<ActionResult> {
+        ): Promise<Result> {
             if (!emailAddress || !code || !password)
                 return Promise.resolve({ type: 'error', message: 'Missing details' })
 
-            return makeCall(() => apiClient.passwordReset({ emailAddress, code, password }))
+            return makeCall(
+                () => apiClient.passwordReset({ emailAddress, code, password }),
+                setBusy,
+            )
         },
         [apiClient],
     )
 
     const getAuthenticatedUser = React.useCallback(
-        function getAuthenticatedUser(): Promise<ActionResultWithValue<UserResponse>> {
-            return makeCallWithValue(() => apiClient.getAuthenticatedUser())
+        function getAuthenticatedUser(): Promise<ResultWith<UserResponse>> {
+            return makeCallWithValue(() => apiClient.getAuthenticatedUser(), setBusy)
         },
         [apiClient],
     )
