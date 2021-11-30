@@ -3,7 +3,9 @@ import { InjectRepository } from '@nestjs/typeorm'
 import type { FindOneOptions, Repository } from 'typeorm'
 import { User } from '.'
 
-type UserOptions = Record<string, never>
+type UserOptions = {
+    includeLeagues?: boolean
+}
 
 export type GetUserBy = (
     | { type: 'userId'; userId: number }
@@ -52,6 +54,10 @@ export class UserService {
     private addUserOptions(userOptions: FindOneOptions<User>, options?: UserOptions) {
         if (options) {
             const relations: string[] = []
+
+            if (options.includeLeagues) {
+                relations.push('leagues')
+            }
 
             if (relations.length > 0) {
                 userOptions.relations = relations

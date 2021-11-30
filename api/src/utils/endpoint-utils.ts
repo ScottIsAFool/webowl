@@ -1,6 +1,6 @@
-import type { AuthEndpoints } from '@webowl/apiclient'
+import type { AuthEndpoints, LeagueEndpoints } from '@webowl/apiclient'
 
-type Endpoint = AuthEndpoints
+type Endpoint = AuthEndpoints | LeagueEndpoints
 
 export function endpoint(endpoint: Endpoint): string {
     return endpoint

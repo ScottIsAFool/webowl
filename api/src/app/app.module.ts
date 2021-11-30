@@ -7,6 +7,7 @@ import { PingModule } from '../ping'
 import { SentryInterceptor } from '../interceptors'
 import { AppController } from './app.controller'
 import { AuthModule } from '../auth/auth.module'
+import { LeagueModule } from '../league/league.module'
 
 @Module({
     imports: [
@@ -26,6 +27,7 @@ import { AuthModule } from '../auth/auth.module'
             },
         }),
         AuthModule,
+        LeagueModule,
         PingModule,
     ],
     controllers: [AppController],

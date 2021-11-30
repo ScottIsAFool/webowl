@@ -3,6 +3,7 @@ import {
     Column,
     CreateDateColumn,
     Entity,
+    OneToMany,
     PrimaryGeneratedColumn,
     Unique,
     UpdateDateColumn,
@@ -10,6 +11,7 @@ import {
 import { hashSync, compareSync } from 'bcryptjs'
 import type { User as UserDto } from '@webowl/apiclient'
 import { getEncryptionTransformer } from '../auth/auth.utils'
+import { League } from '../league/league.entity'
 
 @Entity()
 @Unique(['emailAddress'])
@@ -71,6 +73,12 @@ export class User {
 
     @Column({ nullable: true })
     isMicrosoftAuth!: boolean
+
+    @Column({ nullable: true })
+    defaultLeagueId?: number
+
+    @OneToMany(() => League, (league) => league.createdBy)
+    leagues!: League[]
 
     hashPassword(): void {
         this.password = hashSync(this.password, 8)
