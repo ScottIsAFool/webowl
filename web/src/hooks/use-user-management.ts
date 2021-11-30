@@ -1,5 +1,5 @@
 import * as React from 'react'
-import type { CheckEmailResponse } from '@webowl/apiclient'
+import type { CheckEmailResponse, UserResponse } from '@webowl/apiclient'
 import { useApiClient, useAuth } from '.'
 import type { ActionResult, ActionResultWithValue } from '../types'
 import { errorMessage } from '../utils/error-utils'
@@ -18,6 +18,7 @@ type UserManagementResult = {
     verifyEmail: (emailAddress: string, verificationCode: string) => Promise<ActionResult>
     requestPasswordReset: (emailAddress: string) => Promise<ActionResult>
     passwordReset: (emailAddress: string, code: string, password: string) => Promise<ActionResult>
+    getAuthenticatedUser: () => Promise<ActionResult>
 }
 
 function useUserManagement(): UserManagementResult {
@@ -140,6 +141,13 @@ function useUserManagement(): UserManagementResult {
         [apiClient],
     )
 
+    const getAuthenticatedUser = React.useCallback(
+        function getAuthenticatedUser(): Promise<ActionResultWithValue<UserResponse>> {
+            return makeCallWithValue(() => apiClient.getAuthenticatedUser())
+        },
+        [apiClient],
+    )
+
     return {
         busy,
         login,
@@ -149,6 +157,7 @@ function useUserManagement(): UserManagementResult {
         verifyEmail,
         requestPasswordReset,
         passwordReset,
+        getAuthenticatedUser,
     }
 }
 
