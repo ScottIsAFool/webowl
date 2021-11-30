@@ -1,6 +1,6 @@
 import * as React from 'react'
 import type { CheckEmailResponse } from '@webowl/apiclient'
-import { useApiClient, useAuth } from '.'
+import { useApiClient, useAppState, useAuth } from '.'
 import { makeCall, makeCallWithValue, Result, ResultWith } from '../utils/result-utils'
 
 type AccountCreationResult = {
@@ -20,8 +20,9 @@ type AccountCreationResult = {
 }
 
 function useAccountCreation(): AccountCreationResult {
-    const { updateAuthDetails } = useAuth()
+    const { updateAuthToken } = useAuth()
     const { apiClient } = useApiClient()
+    const { dispatch } = useAppState()
     const [busy, setBusy] = React.useState(false)
 
     const login = React.useCallback(
@@ -31,10 +32,11 @@ function useAccountCreation(): AccountCreationResult {
             }
             return makeCall(async () => {
                 const response = await apiClient.login({ emailAddress, password })
-                updateAuthDetails(response)
+                dispatch({ type: 'update-user', user: response.user })
+                updateAuthToken(response.authToken)
             }, setBusy)
         },
-        [apiClient, updateAuthDetails],
+        [apiClient, dispatch, updateAuthToken],
     )
 
     const register = React.useCallback(
@@ -53,10 +55,11 @@ function useAccountCreation(): AccountCreationResult {
                     lastName,
                     password,
                 })
-                updateAuthDetails(response)
+                dispatch({ type: 'update-user', user: response.user })
+                updateAuthToken(response.authToken)
             }, setBusy)
         },
-        [apiClient, updateAuthDetails],
+        [apiClient, dispatch, updateAuthToken],
     )
 
     const checkEmail = React.useCallback(

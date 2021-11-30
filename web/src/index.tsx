@@ -7,18 +7,20 @@ import ReactDOM from 'react-dom'
 import { App } from './app'
 import { BrowserRouter as Router } from 'react-router-dom'
 import { ContextProviderComposer } from './components/context-provider-composer'
-import { AuthProvider, UserProvider } from './hooks'
+import { AppStateProvider, AuthProvider, UserProvider } from './hooks'
 
 const providerTypes = [AuthProvider, UserProvider]
 const providers = providerTypes.map((Provider, i) => <Provider key={i} />)
 
 ReactDOM.render(
     <React.StrictMode>
-        <ContextProviderComposer contextProviders={providers}>
-            <Router>
-                <App />
-            </Router>
-        </ContextProviderComposer>
+        <AppStateProvider>
+            <ContextProviderComposer contextProviders={providers}>
+                <Router>
+                    <App />
+                </Router>
+            </ContextProviderComposer>
+        </AppStateProvider>
     </React.StrictMode>,
     document.getElementById('root'),
 )

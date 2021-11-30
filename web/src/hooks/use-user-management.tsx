@@ -1,17 +1,13 @@
 import * as React from 'react'
 import type { User, UserResponse } from '@webowl/apiclient'
 import type { WithChildren } from '../types'
-import { getFromStorage, removeFromStorage, saveToStorage } from '../utils/storage-utils'
 import { makeCallWithValue, ResultWith } from '../utils/result-utils'
-import { useApiClient } from '.'
-
-const USER_FILE = 'u.json'
+import { useApiClient, useAppState } from '.'
 
 type UserManagementResult = {
     busy: boolean
     authenticatedUser?: User
     updateUser: (user?: User) => void
-    setVerified: (value: boolean) => void
     refreshAuthenticatedUser: () => void
     getAuthenticatedUser: () => Promise<ResultWith<UserResponse>>
 }
@@ -21,7 +17,6 @@ type ProviderProps = WithChildren
 const UserContext = React.createContext<UserManagementResult>({
     busy: false,
     updateUser: () => undefined,
-    setVerified: () => undefined,
     refreshAuthenticatedUser: () => undefined,
     getAuthenticatedUser: () => Promise.resolve({ type: 'idle' }),
 })
@@ -34,29 +29,14 @@ function UserProvider({ children }: ProviderProps): JSX.Element {
 function useUserManagementInternal(): UserManagementResult {
     const [busy, setBusy] = React.useState(false)
     const { apiClient } = useApiClient()
-    const [authenticatedUser, setAuthenticatedUser] = React.useState<User | undefined>(
-        getFromStorage(USER_FILE),
-    )
+    const { state, dispatch } = useAppState()
+    const { authenticatedUser } = state.user
 
-    const updateUser = React.useCallback(function updateUser(user?: User) {
-        if (user) {
-            saveToStorage(USER_FILE, user)
-            setAuthenticatedUser(user)
-        } else {
-            removeFromStorage(USER_FILE)
-            setAuthenticatedUser(undefined)
-        }
-    }, [])
-
-    const setVerified = React.useCallback(
-        function setVerified(value: boolean) {
-            if (!authenticatedUser) return
-            updateUser({
-                ...authenticatedUser,
-                verified: value,
-            })
+    const updateUser = React.useCallback(
+        function updateUser(user?: User) {
+            dispatch({ type: 'update-user', user })
         },
-        [authenticatedUser, updateUser],
+        [dispatch],
     )
 
     const getAuthenticatedUser = React.useCallback(
@@ -82,7 +62,6 @@ function useUserManagementInternal(): UserManagementResult {
         busy,
         authenticatedUser,
         updateUser,
-        setVerified,
         getAuthenticatedUser,
         refreshAuthenticatedUser,
     }
