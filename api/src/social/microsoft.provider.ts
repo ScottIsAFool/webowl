@@ -45,7 +45,6 @@ export class MicrosoftProvider implements ISocialProvider {
     }
 
     fillRemainingFields(user: User, socialUser: SocialUser): void {
-        user.microsoftAccessToken = socialUser.accessToken
         user.microsoftId = socialUser.id
         user.isMicrosoftAuth = true
     }

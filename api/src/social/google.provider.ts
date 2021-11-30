@@ -42,7 +42,6 @@ export class GoogleProvider implements ISocialProvider {
     }
 
     fillRemainingFields(user: User, socialUser: SocialUser): void {
-        user.googleAccessToken = socialUser.accessToken
         user.isGoogleAuth = true
         user.googleId = socialUser.id
     }

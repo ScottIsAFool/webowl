@@ -1,16 +1,7 @@
+import type { User } from './user-types'
+
 type WithEmail = {
     emailAddress: string
-}
-
-export type User = {
-    id: number
-    emailAddress: string
-    firstName: string
-    lastName: string
-    verified: boolean
-    isFacebookAuth?: boolean
-    isGoogleAuth?: boolean
-    isMicrosoftAuth?: boolean
 }
 
 export type LoginRequest = WithEmail & {

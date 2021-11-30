@@ -51,7 +51,7 @@ export class User {
     isVerified!: boolean
 
     @Column({ nullable: true })
-    isFacebookAuth!: boolean
+    isFacebookAuth?: boolean
 
     @Column({ nullable: true })
     facebookId!: string
@@ -60,19 +60,13 @@ export class User {
     googleId!: string
 
     @Column({ nullable: true })
-    isGoogleAuth!: boolean
-
-    @Column({ nullable: true, transformer: getEncryptionTransformer() })
-    googleAccessToken!: string
+    isGoogleAuth?: boolean
 
     @Column({ nullable: true })
     microsoftId!: string
 
-    @Column({ nullable: true, transformer: getEncryptionTransformer() })
-    microsoftAccessToken!: string
-
     @Column({ nullable: true })
-    isMicrosoftAuth!: boolean
+    isMicrosoftAuth?: boolean
 
     @Column({ nullable: true })
     defaultLeagueId?: number
@@ -100,9 +94,9 @@ export class User {
             emailAddress: this.emailAddress,
             firstName: this.firstName,
             lastName: this.lastName,
-            isFacebookAuth: this.isFacebookAuth,
-            isGoogleAuth: this.isGoogleAuth,
-            isMicrosoftAuth: this.isMicrosoftAuth,
+            isFacebookAuth: this.isFacebookAuth ?? undefined,
+            isGoogleAuth: this.isGoogleAuth ?? undefined,
+            isMicrosoftAuth: this.isMicrosoftAuth ?? undefined,
             verified: this.isVerified,
         }
     }

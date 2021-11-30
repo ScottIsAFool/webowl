@@ -16,6 +16,7 @@ import type {
     CheckEmailRequest,
     CheckEmailResponse,
 } from '.'
+import type { UserEndpoints, UserResponse } from './types/user-types'
 import { hasAuthTokenExpired } from './utils/date-utils'
 
 export class ApiException extends Error {
@@ -33,8 +34,8 @@ type ServerError = {
     statusCode: number
 }
 
-type BasePoints = 'auth'
-type RequestType = AuthEndpoints
+type BasePoints = 'auth' | 'user'
+type RequestType = AuthEndpoints | UserEndpoints
 
 export class ApiClient {
     constructor(private readonly baseUrl: string, private readonly authToken?: AuthToken) {}
@@ -44,6 +45,10 @@ export class ApiClient {
     }
 
     onTokenRefresh?: (authToken: AuthToken) => void
+
+    getAuthenticatedUser(): Promise<UserResponse> {
+        return this.get<UserResponse>({ endPoint: this.endpoint('user', ''), requiresAuth: true })
+    }
 
     login(request: LoginRequest): Promise<LoginResponse> {
         return this.post<LoginResponse>({ endPoint: this.endpoint('auth', 'login'), request })
