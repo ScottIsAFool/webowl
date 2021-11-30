@@ -2,14 +2,14 @@ import * as React from 'react'
 import { Box, Column, Columns, Heading, Text, TextLink } from '@doist/reactist'
 import type { SpaceWithNegatives } from '@doist/reactist/lib/new-components/common-types'
 import type { ResponsiveProp } from '@doist/reactist/lib/new-components/responsive-props'
-import { useAuth } from '../hooks'
+import { useUserManagement } from '../hooks'
 import { authNavigate } from '../routing/routes/auth-routes'
 
 import styles from './header.module.css'
 import { ProfileButton } from './profile-button'
 
 function Header(): JSX.Element {
-    const { authenticatedUser } = useAuth()
+    const { authenticatedUser } = useUserManagement()
 
     return (
         <Box

@@ -1,10 +1,10 @@
 import { Avatar, Box, Button, Menu, MenuButton, MenuItem, MenuList, Text } from '@doist/reactist'
 import * as React from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useAuth } from '../hooks'
+import { useAuth, useUserManagement } from '../hooks'
 
 const AsButton = React.forwardRef<HTMLButtonElement, unknown>(function AsButton({ ...props }, ref) {
-    const { authenticatedUser } = useAuth()
+    const { authenticatedUser } = useUserManagement()
     if (!authenticatedUser) throw new Error()
     return (
         <Button

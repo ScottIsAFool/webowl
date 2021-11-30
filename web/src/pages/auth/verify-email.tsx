@@ -1,10 +1,10 @@
 import { Stack, Text, TextLink } from '@doist/reactist'
 import * as React from 'react'
 import { Navigate } from 'react-router-dom'
-import { useAuth, useQuery, useAccountCreation } from '../../hooks'
+import { useQuery, useAccountCreation, useUserManagement } from '../../hooks'
 
 function VerifyEmail(): JSX.Element | null {
-    const { authenticatedUser, setVerified } = useAuth()
+    const { authenticatedUser, setVerified } = useUserManagement()
     const query = useQuery()
     const { verifyEmail } = useAccountCreation()
     const [isVerified, setIsVerified] = React.useState(false)

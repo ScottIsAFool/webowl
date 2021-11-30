@@ -2,6 +2,7 @@ import * as React from 'react'
 import type { AuthToken, User } from '@webowl/apiclient'
 import type { WithChildren } from '../types'
 import { getFromStorage, removeFromStorage, saveToStorage } from '../utils/storage-utils'
+import { useUserManagement } from '.'
 
 const AUTH_FILE = 't.json'
 
@@ -13,11 +14,9 @@ type AuthDetails = {
 type AuthResult = {
     isAuthenticated: boolean
     authToken?: AuthToken
-    authenticatedUser?: User
     updateAuthToken: (token: AuthToken) => void
-    updateAuthDetails: (details: AuthDetails) => void
     logOut: () => void
-    setVerified: (value: boolean) => void
+    updateAuthDetails: (details: AuthDetails) => void
 }
 
 type ProviderProps = WithChildren
@@ -25,9 +24,8 @@ type ProviderProps = WithChildren
 const AuthContext = React.createContext<AuthResult>({
     isAuthenticated: false,
     updateAuthToken: () => undefined,
-    updateAuthDetails: () => undefined,
     logOut: () => undefined,
-    setVerified: () => undefined,
+    updateAuthDetails: () => undefined,
 })
 
 function AuthProvider({ children }: ProviderProps): JSX.Element {
@@ -36,36 +34,20 @@ function AuthProvider({ children }: ProviderProps): JSX.Element {
 }
 
 function useAuthInternal(): AuthResult {
-    const [authDetails, setAuthDetails] = React.useState<AuthDetails | undefined>(
+    const { updateUser } = useUserManagement()
+    const [authToken, setAuthToken] = React.useState<AuthToken | undefined>(
         getFromStorage(AUTH_FILE),
     )
 
-    const updateAuthDetails = React.useCallback(function updateAuthDetails(
-        authDetails?: AuthDetails,
-    ) {
-        if (authDetails) {
-            saveToStorage(AUTH_FILE, authDetails)
-            setAuthDetails(authDetails)
+    const updateAuthToken = React.useCallback(function updateAuthToken(authToken?: AuthToken) {
+        if (authToken) {
+            saveToStorage(AUTH_FILE, authToken)
+            setAuthToken(authToken)
         } else {
             removeFromStorage(AUTH_FILE)
-            setAuthDetails(undefined)
+            setAuthToken(undefined)
         }
-    },
-    [])
-
-    const updateAuthToken = React.useCallback(
-        function updateAuthToken(authToken?: AuthToken) {
-            if (authToken) {
-                updateAuthDetails({
-                    ...authDetails,
-                    authToken,
-                })
-            } else {
-                updateAuthDetails(undefined)
-            }
-        },
-        [authDetails, updateAuthDetails],
-    )
+    }, [])
 
     const logOut = React.useCallback(
         function logOut() {
@@ -74,27 +56,21 @@ function useAuthInternal(): AuthResult {
         [updateAuthToken],
     )
 
-    const setVerified = React.useCallback(
-        function setVerified(value: boolean) {
-            if (!authDetails?.user) return
-            updateAuthDetails({
-                ...authDetails,
-                user: {
-                    ...authDetails.user,
-                    verified: value,
-                },
-            })
+    const updateAuthDetails = React.useCallback(
+        function updateAuthDetails(details: AuthDetails) {
+            const { authToken, user } = details
+            updateAuthToken(authToken)
+            updateUser(user)
         },
-        [authDetails, updateAuthDetails],
+        [updateAuthToken, updateUser],
     )
+
     return {
-        isAuthenticated: Boolean(authDetails),
-        authToken: authDetails?.authToken,
-        authenticatedUser: authDetails?.user,
+        isAuthenticated: Boolean(authToken),
+        authToken: authToken,
         updateAuthToken,
-        updateAuthDetails,
         logOut,
-        setVerified,
+        updateAuthDetails,
     }
 }
 
