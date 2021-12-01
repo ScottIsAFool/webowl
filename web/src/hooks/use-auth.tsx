@@ -1,22 +1,16 @@
 import * as React from 'react'
-import type { AuthToken, User } from '@webowl/apiclient'
+import type { AuthToken } from '@webowl/apiclient'
 import type { WithChildren } from '../types'
 import { getFromStorage, removeFromStorage, saveToStorage } from '../utils/storage-utils'
 import { useAppState } from '.'
 
 const AUTH_FILE = 't.json'
 
-type AuthDetails = {
-    authToken?: AuthToken
-    user?: User
-}
-
 type AuthResult = {
     isAuthenticated: boolean
     authToken?: AuthToken
     updateAuthToken: (token: AuthToken) => void
     logOut: () => void
-    updateAuthDetails: (details: AuthDetails) => void
 }
 
 type ProviderProps = WithChildren
@@ -25,7 +19,6 @@ const AuthContext = React.createContext<AuthResult>({
     isAuthenticated: false,
     updateAuthToken: () => undefined,
     logOut: () => undefined,
-    updateAuthDetails: () => undefined,
 })
 
 function AuthProvider({ children }: ProviderProps): JSX.Element {
@@ -57,20 +50,11 @@ function useAuthInternal(): AuthResult {
         [dispatch, updateAuthToken],
     )
 
-    const updateAuthDetails = React.useCallback(
-        function updateAuthDetails(details: AuthDetails) {
-            const { authToken } = details
-            updateAuthToken(authToken)
-        },
-        [updateAuthToken],
-    )
-
     return {
         isAuthenticated: Boolean(authToken),
         authToken: authToken,
         updateAuthToken,
         logOut,
-        updateAuthDetails,
     }
 }
 

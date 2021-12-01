@@ -6,16 +6,29 @@ import { ReactComponent as GoogleIcon } from '../assets/icons/google.svg'
 // import { ReactComponent as AppleIcon } from '../assets/icons/apple.svg'
 import { ReactComponent as MicrosoftIcon } from '../assets/icons/microsoft.svg'
 import { GoogleLoginResponse, GoogleLoginResponseOffline, useGoogleLogin } from 'react-google-login'
-import { useApiClient, useAuth, useMicrosoftLogin } from '../hooks'
+import { useApiClient, useAuth, useMicrosoftLogin, useUserManagement } from '../hooks'
 import type { AuthResponse, AuthError } from 'msal'
 import type { User } from '@microsoft/microsoft-graph-types'
 
 import style from './social-auth-buttons.module.css'
+import type { LoginResponse } from '@webowl/apiclient'
 
 const { googleClientId } = getConfiguration()
 
 function SocialAuthButtons(): JSX.Element {
     const { apiClient } = useApiClient()
+    const { updateUser } = useUserManagement()
+    const { updateAuthToken } = useAuth()
+
+    const updateAuthDetails = React.useCallback(
+        function updateAuthDetails(authDetails: LoginResponse) {
+            const { authToken, user } = authDetails
+
+            updateUser(user)
+            updateAuthToken(authToken)
+        },
+        [updateAuthToken, updateUser],
+    )
     const microsoftCallback = React.useCallback(
         async function microsoftCallback(
             error: AuthError | null,
@@ -24,11 +37,12 @@ function SocialAuthButtons(): JSX.Element {
             if (result && 'id' in result) {
                 const { accessToken, id } = result
                 try {
-                    await apiClient.socialLogin({
+                    const response = await apiClient.socialLogin({
                         accessToken,
                         socialId: id ?? '',
                         provider: 'Microsoft',
                     })
+                    updateAuthDetails(response)
                 } catch (e: unknown) {
                     // noop
                 }
@@ -36,7 +50,7 @@ function SocialAuthButtons(): JSX.Element {
                 // noop
             }
         },
-        [apiClient],
+        [apiClient, updateAuthDetails],
     )
     const { login: microsoftLogin } = useMicrosoftLogin({
         clientId: '47acea2d-684f-4ac5-b473-9ffec5c4f23d',
@@ -45,7 +59,6 @@ function SocialAuthButtons(): JSX.Element {
         withUserData: true,
     })
     const [googleLoading, setGoogleLoading] = React.useState(false)
-    const { updateAuthDetails } = useAuth()
     const onGoogleSuccess = React.useCallback(
         async function onSuccess(response: GoogleLoginResponse | GoogleLoginResponseOffline) {
             if ('googleId' in response) {
@@ -53,13 +66,13 @@ function SocialAuthButtons(): JSX.Element {
                 const { accessToken, googleId } = response
 
                 try {
-                    const serverResponse = await apiClient.socialLogin({
+                    const response = await apiClient.socialLogin({
                         accessToken,
                         provider: 'Google',
                         socialId: googleId,
                     })
 
-                    updateAuthDetails(serverResponse)
+                    updateAuthDetails(response)
                 } finally {
                     setGoogleLoading(false)
                 }
@@ -67,6 +80,7 @@ function SocialAuthButtons(): JSX.Element {
         },
         [apiClient, updateAuthDetails],
     )
+
     const { signIn: googleSignIn, loaded } = useGoogleLogin({
         clientId: googleClientId,
         onSuccess: onGoogleSuccess,
