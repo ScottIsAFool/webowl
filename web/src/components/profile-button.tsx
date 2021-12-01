@@ -17,7 +17,7 @@ import { ReactComponent as PlusIcon } from '../assets/icons/plus.svg'
 import { ReactComponent as LogoutIcon } from '../assets/icons/logout.svg'
 
 import styles from './profile-button.module.css'
-import { useAppDispatch } from '../reducers/hooks'
+import { useAppDispatch, useAppSelector } from '../reducers/hooks'
 import { actions } from '../reducers/actions'
 
 const AsButton = React.forwardRef<HTMLButtonElement, unknown>(function AsButton({ ...props }, ref) {
@@ -39,6 +39,7 @@ const AsButton = React.forwardRef<HTMLButtonElement, unknown>(function AsButton(
 function ProfileButton(): JSX.Element {
     const { logOut } = useAuth()
     const { authenticatedUser } = useUserManagement()
+    const leagues = useAppSelector((state) => state.leagues.leagues)
     const dispatch = useAppDispatch()
     if (!authenticatedUser) throw new Error()
     const fullName = `${authenticatedUser.firstName} ${authenticatedUser.lastName}`
@@ -67,10 +68,24 @@ function ProfileButton(): JSX.Element {
                         </Columns>
                     </MenuItem>
                     <hr />
+                    {leagues.map((league) => (
+                        <MenuItem key={league.id}>
+                            <Avatar
+                                size="xs"
+                                user={{
+                                    name: league.name,
+                                    email: league.name,
+                                }}
+                                className={styles.icon}
+                            />
+                            {league.name}
+                        </MenuItem>
+                    ))}
                     <MenuItem onSelect={() => dispatch(actions.addLeaguePopup(true))}>
                         <PlusIcon className={styles.icon} />
                         Add league
                     </MenuItem>
+                    <hr />
                     <MenuItem onSelect={logOut}>
                         <LogoutIcon className={styles.icon} />
                         Log out
