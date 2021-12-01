@@ -17,6 +17,8 @@ import { ReactComponent as PlusIcon } from '../assets/icons/plus.svg'
 import { ReactComponent as LogoutIcon } from '../assets/icons/logout.svg'
 
 import styles from './profile-button.module.css'
+import { useAppDispatch } from '../reducers/hooks'
+import { actions } from '../reducers/actions'
 
 const AsButton = React.forwardRef<HTMLButtonElement, unknown>(function AsButton({ ...props }, ref) {
     const { authenticatedUser } = useUserManagement()
@@ -37,6 +39,7 @@ const AsButton = React.forwardRef<HTMLButtonElement, unknown>(function AsButton(
 function ProfileButton(): JSX.Element {
     const { logOut } = useAuth()
     const { authenticatedUser } = useUserManagement()
+    const dispatch = useAppDispatch()
     if (!authenticatedUser) throw new Error()
     const fullName = `${authenticatedUser.firstName} ${authenticatedUser.lastName}`
     return (
@@ -64,7 +67,7 @@ function ProfileButton(): JSX.Element {
                         </Columns>
                     </MenuItem>
                     <hr />
-                    <MenuItem>
+                    <MenuItem onSelect={() => dispatch(actions.addLeaguePopup(true))}>
                         <PlusIcon className={styles.icon} />
                         Add league
                     </MenuItem>

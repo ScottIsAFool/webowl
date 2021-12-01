@@ -1,5 +1,7 @@
-import { actions as userActions } from './user'
+import { userSlice } from './user/slice'
+import { popupsSlice } from './popups/slice'
 
 export const actions = {
-    ...userActions,
+    ...userSlice.actions,
+    ...popupsSlice.actions,
 }

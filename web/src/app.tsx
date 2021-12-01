@@ -5,6 +5,7 @@ import { routes } from './routing/routes'
 import { Box, Loading } from '@doist/reactist'
 import { Header } from './components'
 import { useAppLifecycle, useAuth } from './hooks'
+import { AddLeague } from './components/popups'
 
 function App(): JSX.Element {
     const { isAuthenticated } = useAuth()
@@ -44,6 +45,8 @@ function App(): JSX.Element {
             >
                 {element}
             </Box>
+
+            <AddLeague />
         </Box>
     )
 }
