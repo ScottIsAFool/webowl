@@ -26,24 +26,22 @@ function App(): JSX.Element {
             <Loading aria-label="App loading..." />
         </Box>
     ) : (
-        <Box
-            display="flex"
-            flexDirection="column"
-            padding={{
-                desktop: 'xlarge',
-                tablet: 'xlarge',
-                mobile: 'medium',
-            }}
-            id="container"
-            height="full"
-        >
+        <Box display="flex" flexDirection="column" id="container" height="full">
             {isAuthenticated ? (
                 <header className={styles.app_header}>
                     <Header />
                 </header>
             ) : null}
 
-            <Box id="body" height="full">
+            <Box
+                id="body"
+                height="full"
+                padding={{
+                    desktop: 'xlarge',
+                    tablet: 'xlarge',
+                    mobile: 'medium',
+                }}
+            >
                 {element}
             </Box>
         </Box>
