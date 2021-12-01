@@ -2,14 +2,30 @@ import * as React from 'react'
 import styles from './app.module.css'
 import { useRoutes } from 'react-router-dom'
 import { routes } from './routing/routes'
-import { Box } from '@doist/reactist'
+import { Box, Loading } from '@doist/reactist'
 import { Header } from './components'
-import { useAuth } from './hooks'
+import { useAppLifecycle, useAuth } from './hooks'
 
 function App(): JSX.Element {
     const { isAuthenticated } = useAuth()
+    const { busy, startup } = useAppLifecycle()
     const element = useRoutes(routes(isAuthenticated))
-    return (
+
+    React.useEffect(function onStartup() {
+        startup()
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
+    return busy ? (
+        <Box
+            height="full"
+            display="flex"
+            flexDirection="column"
+            justifyContent="center"
+            alignItems="center"
+        >
+            <Loading aria-label="App loading..." />
+        </Box>
+    ) : (
         <Box
             display="flex"
             flexDirection="column"
