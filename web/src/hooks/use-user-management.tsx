@@ -2,7 +2,9 @@ import * as React from 'react'
 import type { User, UserResponse } from '@webowl/apiclient'
 import type { WithChildren } from '../types'
 import { makeCallWithValue, ResultWith } from '../utils/result-utils'
-import { useApiClient, useAppState } from '.'
+import { useApiClient } from '.'
+import { useAppDispatch, useAppSelector } from '../reducers/hooks'
+import { actions } from '../reducers/actions'
 
 type UserManagementResult = {
     busy: boolean
@@ -29,12 +31,12 @@ function UserProvider({ children }: ProviderProps): JSX.Element {
 function useUserManagementInternal(): UserManagementResult {
     const [busy, setBusy] = React.useState(false)
     const { apiClient } = useApiClient()
-    const { state, dispatch } = useAppState()
-    const { authenticatedUser } = state.user
+    const authenticatedUser = useAppSelector((state) => state.user.authenticatedUser)
+    const dispatch = useAppDispatch()
 
     const updateUser = React.useCallback(
         function updateUser(user?: User) {
-            dispatch({ type: 'update-user', user })
+            dispatch(actions.addOrUpdateUser(user))
         },
         [dispatch],
     )

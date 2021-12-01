@@ -1,11 +1,10 @@
 import { Stack, Text, TextLink } from '@doist/reactist'
 import * as React from 'react'
 import { Navigate } from 'react-router-dom'
-import { useQuery, useAccountCreation, useUserManagement, useAppState } from '../../hooks'
+import { useQuery, useAccountCreation, useUserManagement } from '../../hooks'
 
 function VerifyEmail(): JSX.Element | null {
     const { authenticatedUser } = useUserManagement()
-    const { dispatch } = useAppState()
     const query = useQuery()
     const { verifyEmail } = useAccountCreation()
     const [isVerified, setIsVerified] = React.useState(false)
@@ -23,10 +22,9 @@ function VerifyEmail(): JSX.Element | null {
                 // Display an error
             } else {
                 setIsVerified(true)
-                dispatch({ type: 'set-verified', value: true })
             }
         },
-        [code, dispatch, email, verifyEmail],
+        [code, email, verifyEmail],
     )
 
     React.useEffect(function pageLoad() {

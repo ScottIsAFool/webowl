@@ -1,7 +1,9 @@
 import * as React from 'react'
 import type { CheckEmailResponse } from '@webowl/apiclient'
-import { useApiClient, useAppState, useAuth } from '.'
+import { useApiClient, useAuth } from '.'
 import { makeCall, makeCallWithValue, Result, ResultWith } from '../utils/result-utils'
+import { useAppDispatch } from '../reducers/hooks'
+import { actions } from '../reducers/actions'
 
 type AccountCreationResult = {
     busy: boolean
@@ -22,8 +24,8 @@ type AccountCreationResult = {
 function useAccountCreation(): AccountCreationResult {
     const { updateAuthToken } = useAuth()
     const { apiClient } = useApiClient()
-    const { dispatch } = useAppState()
     const [busy, setBusy] = React.useState(false)
+    const dispatch = useAppDispatch()
 
     const login = React.useCallback(
         function login(emailAddress: string, password: string): Promise<Result> {
@@ -32,7 +34,7 @@ function useAccountCreation(): AccountCreationResult {
             }
             return makeCall(async () => {
                 const response = await apiClient.login({ emailAddress, password })
-                dispatch({ type: 'update-user', user: response.user })
+                dispatch(actions.addOrUpdateUser(response.user))
                 updateAuthToken(response.authToken)
             }, setBusy)
         },
@@ -80,13 +82,19 @@ function useAccountCreation(): AccountCreationResult {
     )
 
     const verifyEmail = React.useCallback(
-        function verifyEmail(emailAddress: string, verificationCode: string): Promise<Result> {
-            return makeCall(
+        async function verifyEmail(
+            emailAddress: string,
+            verificationCode: string,
+        ): Promise<Result> {
+            const response = await makeCall(
                 () => apiClient.verifyEmail({ emailAddress, verificationCode }),
                 setBusy,
             )
+
+            dispatch(actions.setVerified(response.type === 'success'))
+            return response
         },
-        [apiClient],
+        [apiClient, dispatch],
     )
 
     const requestPasswordReset = React.useCallback(

@@ -16,6 +16,10 @@ function useAppLifecycle(): AppLifecycleResult {
             try {
                 // eslint-disable-next-line @typescript-eslint/no-unused-vars
                 const [_, leagues] = await Promise.all([refreshAuthenticatedUser(), getLeagues()])
+
+                if (leagues.type === 'success') {
+                    // dispatch({ type: 'merge-leagues', leagues: leagues.value.leagues })
+                }
             } finally {
                 setBusy(false)
             }

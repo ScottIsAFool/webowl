@@ -2,7 +2,6 @@ import * as React from 'react'
 import type { AuthToken } from '@webowl/apiclient'
 import type { WithChildren } from '../types'
 import { getFromStorage, removeFromStorage, saveToStorage } from '../utils/storage-utils'
-import { useAppState } from '.'
 
 const AUTH_FILE = 't.json'
 
@@ -27,7 +26,6 @@ function AuthProvider({ children }: ProviderProps): JSX.Element {
 }
 
 function useAuthInternal(): AuthResult {
-    const { dispatch } = useAppState()
     const [authToken, setAuthToken] = React.useState<AuthToken | undefined>(
         getFromStorage(AUTH_FILE),
     )
@@ -42,13 +40,10 @@ function useAuthInternal(): AuthResult {
         }
     }, [])
 
-    const logOut = React.useCallback(
-        function logOut() {
-            updateAuthToken(undefined)
-            dispatch({ type: 'delete-user' })
-        },
-        [dispatch, updateAuthToken],
-    )
+    const logOut = React.useCallback(function logOut() {
+        localStorage.clear()
+        window.location.href = '/'
+    }, [])
 
     return {
         isAuthenticated: Boolean(authToken),
