@@ -32,6 +32,11 @@
     --reactist-actionable-quaternary-disabled-fill: var(--webowl-accent-disabled);
 }
 
+option {
+    background-color: var(--webowl-menu-background-hover);
+    color: var(--webowl-foreground);
+}
+
 .reactist_menulist[role='menu'] {
     background-color: var(--webowl-menu-background);
     border-color: gray;

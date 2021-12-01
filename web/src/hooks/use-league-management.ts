@@ -1,11 +1,12 @@
 import * as React from 'react'
-import type { LeaguesResponse } from '@webowl/apiclient'
+import type { League, LeagueResponse, LeaguesResponse } from '@webowl/apiclient'
 import { makeCallWithValue, ResultWith } from '../utils/result-utils'
 import { useApiClient } from '.'
 
 type LeagueManagementResult = {
     busy: boolean
     getLeagues: () => Promise<ResultWith<LeaguesResponse>>
+    addLeague: (league: Omit<League, 'id' | 'createdById'>) => Promise<ResultWith<LeagueResponse>>
 }
 
 function useLeagueManagement(): LeagueManagementResult {
@@ -17,9 +18,19 @@ function useLeagueManagement(): LeagueManagementResult {
         },
         [apiClient],
     )
+
+    const addLeague = React.useCallback(
+        async function addLeague(league: Omit<League, 'id' | 'createdById'>) {
+            const response = await makeCallWithValue(() => apiClient.addLeague(league), setBusy)
+
+            return response
+        },
+        [apiClient],
+    )
     return {
         busy,
         getLeagues,
+        addLeague,
     }
 }
 
