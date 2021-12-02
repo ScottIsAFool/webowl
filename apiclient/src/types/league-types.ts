@@ -13,7 +13,7 @@ export type League = {
     createdById: number
 }
 
-export type AddLeagueRequest = Omit<League, 'id'>
+export type AddLeagueRequest = Omit<League, 'id' | 'createdById'>
 
 export type LeagueResponse = {
     league: League
