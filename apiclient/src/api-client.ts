@@ -19,6 +19,7 @@ import type {
     LeagueResponse,
     UpdateLeagueRequest,
     LeaguesResponse,
+    LeagueUsersResponse,
 } from '.'
 import type { UserEndpoints, UserResponse } from './types/user-types'
 import { hasAuthTokenExpired } from './utils/date-utils'
@@ -39,7 +40,7 @@ type ServerError = {
 }
 
 type BasePoints = 'auth' | 'user' | 'leagues'
-type RequestType = AuthEndpoints | UserEndpoints
+type RequestType = AuthEndpoints | UserEndpoints | string
 
 export class ApiClient {
     constructor(private readonly baseUrl: string, private authToken?: AuthToken) {}
@@ -135,6 +136,13 @@ export class ApiClient {
     getLeagues(): Promise<LeaguesResponse> {
         return this.get<LeaguesResponse>({
             endPoint: this.endpoint('leagues', ''),
+            requiresAuth: true,
+        })
+    }
+
+    getLeagueUsers(id: number): Promise<LeagueUsersResponse> {
+        return this.get<LeagueUsersResponse>({
+            endPoint: this.endpoint('leagues', `${id}/users`),
             requiresAuth: true,
         })
     }
