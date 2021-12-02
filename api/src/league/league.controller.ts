@@ -1,5 +1,5 @@
 import type { AddLeagueRequest, LeagueResponse, LeaguesResponse } from '@webowl/apiclient'
-import { BadRequestException, Body, Controller, Get, Post, UseGuards } from '@nestjs/common'
+import { BadRequestException, Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common'
 import { AuthUser } from '../auth/auth-user.decorator'
 import { JwtGuard } from '../auth/jwt.guard'
 import type { User } from '../user'
@@ -7,6 +7,8 @@ import { endpoint } from '../utils/endpoint-utils'
 import { LeagueService } from './league.service'
 import { League } from './league.entity'
 import { validate } from 'class-validator'
+import { Role } from './league-role.decorator'
+import { RoleGuard } from './league-role.guard'
 
 @Controller('leagues')
 export class LeagueController {
@@ -39,5 +41,15 @@ export class LeagueController {
         return {
             league: league.toDto(),
         }
+    }
+
+    @UseGuards(JwtGuard, RoleGuard)
+    @Role('admin')
+    @Get(endpoint('/:id/users'))
+    async getLeagueUsers(@Param('id') leagueId: number): Promise<unknown> {
+        const league = await this.leagueService.getLeague(leagueId, { includeUsers: true })
+        const users = league?.leagueRoles.map((x) => x.user)
+
+        return users ?? []
     }
 }

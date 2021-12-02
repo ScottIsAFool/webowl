@@ -1,4 +1,4 @@
-export type LeagueEndpoints = '/' | ':id'
+export type LeagueEndpoints = '/' | '/:id' | '/:id/users'
 
 export type LeagueRole = 'admin' | 'user'
 

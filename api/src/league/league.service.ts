@@ -1,9 +1,13 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import type { Repository } from 'typeorm'
+import type { FindOneOptions, Repository } from 'typeorm'
 import { User, UserService } from '../user'
 import { LeagueRole } from './league-role.entity'
 import { League } from './league.entity'
+
+type LeagueOptions = {
+    includeUsers?: boolean
+}
 
 @Injectable()
 export class LeagueService {
@@ -31,6 +35,16 @@ export class LeagueService {
         return leagues
     }
 
+    async getLeague(leagueId: number, options?: LeagueOptions): Promise<League | undefined> {
+        const leagueOptions: FindOneOptions<League> = {
+            where: { id: leagueId },
+        }
+
+        this.addLeagueOptions(leagueOptions, options)
+
+        return this.leagueRepository.findOne(leagueOptions)
+    }
+
     async addLeague(league: League, user: User): Promise<League> {
         league.createdBy = user
         const savedLeague = await this.save(league)
@@ -44,5 +58,19 @@ export class LeagueService {
         }
 
         return savedLeague
+    }
+
+    private addLeagueOptions(leagueOptions: FindOneOptions<League>, options?: LeagueOptions) {
+        if (options) {
+            const relations: string[] = []
+
+            if (options.includeUsers) {
+                relations.push('leagueRoles')
+            }
+
+            if (relations.length > 0) {
+                leagueOptions.relations = relations
+            }
+        }
     }
 }
