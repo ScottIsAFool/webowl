@@ -1,5 +1,10 @@
 import * as React from 'react'
-import type { League, LeagueResponse, LeaguesResponse } from '@webowl/apiclient'
+import type {
+    League,
+    LeagueResponse,
+    LeaguesResponse,
+    LeagueUsersResponse,
+} from '@webowl/apiclient'
 import { makeCallWithValue, ResultWith } from '../utils/result-utils'
 import { useApiClient } from '.'
 import { useAppDispatch } from '../reducers/hooks'
@@ -9,6 +14,7 @@ type LeagueManagementResult = {
     busy: boolean
     getLeagues: () => Promise<ResultWith<LeaguesResponse>>
     addLeague: (league: Omit<League, 'id' | 'createdById'>) => Promise<ResultWith<LeagueResponse>>
+    getLeagueUsers: (leagueId: number) => Promise<ResultWith<LeagueUsersResponse>>
 }
 
 function useLeagueManagement(): LeagueManagementResult {
@@ -33,10 +39,23 @@ function useLeagueManagement(): LeagueManagementResult {
         },
         [apiClient, dispatch],
     )
+
+    const getLeagueUsers = React.useCallback(
+        async function getLeagueUsers(leagueId: number) {
+            const response = await makeCallWithValue(() => apiClient.getLeagueUsers(leagueId))
+            if (response.type === 'success') {
+                dispatch(actions.addOrUpdateLeagueUsers({ leagueId, users: response.value.users }))
+            }
+            return response
+        },
+        [apiClient, dispatch],
+    )
+
     return {
         busy,
         getLeagues,
         addLeague,
+        getLeagueUsers,
     }
 }
 
