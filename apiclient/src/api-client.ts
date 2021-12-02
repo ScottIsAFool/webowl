@@ -42,7 +42,7 @@ type BasePoints = 'auth' | 'user' | 'leagues'
 type RequestType = AuthEndpoints | UserEndpoints
 
 export class ApiClient {
-    constructor(private readonly baseUrl: string, private readonly authToken?: AuthToken) {}
+    constructor(private readonly baseUrl: string, private authToken?: AuthToken) {}
 
     private get accessToken(): string | undefined {
         return this.authToken?.accessToken
@@ -86,12 +86,13 @@ export class ApiClient {
         const response = await this.post<AuthToken>({
             endPoint: this.endpoint('auth', 'refresh'),
             request,
-            requiresAuth: true,
         })
 
         if (this.onTokenRefresh) {
             this.onTokenRefresh(response)
         }
+
+        this.authToken = response
 
         return response
     }

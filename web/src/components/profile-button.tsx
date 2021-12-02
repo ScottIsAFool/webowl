@@ -19,6 +19,7 @@ import { ReactComponent as LogoutIcon } from '../assets/icons/logout.svg'
 import styles from './profile-button.module.css'
 import { useAppDispatch, useAppSelector } from '../reducers/hooks'
 import { actions } from '../reducers/actions'
+import classNames from 'classnames'
 
 const AsButton = React.forwardRef<HTMLButtonElement, unknown>(function AsButton({ ...props }, ref) {
     const { authenticatedUser } = useUserManagement()
@@ -47,7 +48,7 @@ function ProfileButton(): JSX.Element {
         <Box>
             <Menu aria-label="profile-menu">
                 <MenuButton as={AsButton} />
-                <MenuList>
+                <MenuList aria-label="profile-menu">
                     <MenuItem>
                         <Columns alignY="top" space="small">
                             <Column width="content">
@@ -76,7 +77,7 @@ function ProfileButton(): JSX.Element {
                                     name: league.name,
                                     email: league.name,
                                 }}
-                                className={styles.icon}
+                                className={classNames(styles.icon, styles.league_avatar)}
                             />
                             {league.name}
                         </MenuItem>

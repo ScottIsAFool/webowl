@@ -19,10 +19,12 @@ import range from 'lodash/range'
 
 import styles from './add-league.module.css'
 import { useLeagueManagement } from '../../hooks'
+import { playerFormat } from '../../utils/league-utils'
 
 const teamNumbers = range(4, 51, 2)
 const gameNumbers = range(1, 5, 1)
 const playerNumbers = range(1, 6, 1)
+const playersPerTeamNumbers = range(2, 9, 1)
 
 type Buttons = {
     next?: AddLeagueSteps
@@ -52,6 +54,7 @@ function AddLeague(): JSX.Element | null {
     const [players, setPlayers] = React.useState(2)
     const [handicap, setHandicap] = React.useState(false)
     const [scratch, setScratch] = React.useState(false)
+    const [maxPlayersPerTeam, setMaxPlayersPerTeam] = React.useState(8)
     const addLeaguesOpen = useAppSelector((state) => state.popups.addLeague)
     const dispatch = useAppDispatch()
     const { addLeague, busy } = useLeagueManagement()
@@ -67,10 +70,11 @@ function AddLeague(): JSX.Element | null {
         setPlayers(2)
         setHandicap(false)
         setScratch(false)
+        setMaxPlayersPerTeam(8)
     }
 
     const buttonData = allButtonData[step]
-    const nextDisabled = !name
+    const nextDisabled = !name || maxPlayersPerTeam < players
 
     async function nextClicked(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault()
@@ -84,8 +88,9 @@ function AddLeague(): JSX.Element | null {
                 teamNumbers: teams,
                 localAssociation: association,
                 sanctionNumber: sanction,
-                handicap: true,
-                scratch: true,
+                handicap,
+                scratch,
+                maxPlayersPerTeam: maxPlayersPerTeam,
             })
 
             if (response.type === 'error') {
@@ -106,30 +111,13 @@ function AddLeague(): JSX.Element | null {
         return value === 1 ? '1 game' : `${value} games`
     }
 
-    function playerFormat(value: number) {
-        switch (value) {
-            case 1:
-                return 'Singles'
-            case 2:
-                return 'Doubles'
-            case 3:
-                return 'Trios'
-            case 4:
-                return 'Fours'
-            case 5:
-                return 'Fives'
-            default:
-                throw new Error('Unknown player count')
-        }
-    }
-
     if (!addLeaguesOpen) return null
     return (
         <Modal
             isOpen={true}
             width="large"
             onDismiss={close}
-            aria-lable="Add league"
+            aria-label="Add league"
             exceptionallySetClassName={styles.add_league}
         >
             <ModalHeader>
@@ -175,11 +163,22 @@ function AddLeague(): JSX.Element | null {
                             <SelectField
                                 label="The teams are..."
                                 value={players}
-                                onChange={(e) => parseInt(e.target.value)}
+                                onChange={(e) => setPlayers(parseInt(e.target.value))}
                             >
                                 {playerNumbers.map((x) => (
                                     <option key={x} value={x}>
                                         {playerFormat(x)}
+                                    </option>
+                                ))}
+                            </SelectField>
+                            <SelectField
+                                label="Maximum number of players per team"
+                                value={maxPlayersPerTeam}
+                                onChange={(e) => setMaxPlayersPerTeam(parseInt(e.target.value))}
+                            >
+                                {playersPerTeamNumbers.map((x) => (
+                                    <option key={x} value={x}>
+                                        {x}
                                     </option>
                                 ))}
                             </SelectField>

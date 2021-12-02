@@ -50,6 +50,9 @@ export class League {
     @Column()
     scratch!: boolean
 
+    @Column({ default: 8 })
+    maxPlayersPerTeam!: number
+
     @ManyToOne(() => User, (user) => user.leagues, { eager: true })
     createdBy!: User
 
@@ -71,6 +74,7 @@ export class League {
             handicap: this.handicap,
             scratch: this.scratch,
             createdById: this.createdBy.id,
+            maxPlayersPerTeam: this.maxPlayersPerTeam,
         }
     }
 }

@@ -11,6 +11,7 @@ export type League = {
     handicap: boolean
     scratch: boolean
     createdById: number
+    maxPlayersPerTeam: number
 }
 
 export type AddLeagueRequest = Omit<League, 'id' | 'createdById'>
