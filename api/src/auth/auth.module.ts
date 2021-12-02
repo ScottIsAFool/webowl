@@ -12,6 +12,7 @@ import { getConfiguration } from '../config/configuration'
 import { JwtStrategy } from './jwt.strategy'
 import { AccessToken } from './access-token.entity'
 import { SocialModule } from '../social/social.module'
+import { EmailModule } from '../email/email.module'
 
 @Module({
     imports: [
@@ -25,6 +26,7 @@ import { SocialModule } from '../social/social.module'
             },
         }),
         SocialModule,
+        EmailModule,
     ],
     controllers: [AuthController],
     providers: [AuthService, LocalStrategy, JwtStrategy],

@@ -16,6 +16,7 @@ import { PasswordReset } from './password-reset.entity'
 import { AccessToken } from './access-token.entity'
 import { JwtModule } from '@nestjs/jwt'
 import { SocialModule } from '../social/social.module'
+import { EmailService } from '../email/email.service'
 
 const HAPPY_REGISTER_REQUEST: RegisterRequest = {
     emailAddress: 's@s.com',
@@ -43,6 +44,7 @@ describe('AuthController', () => {
     let target: AuthController
     let userService: UserService
     let authService: AuthService
+    let emailService: EmailService
 
     beforeEach(async () => {
         const module = await Test.createTestingModule({
@@ -68,11 +70,24 @@ describe('AuthController', () => {
                 },
             ],
             controllers: [AuthController],
-        }).compile()
+        })
+            .useMocker((token) => {
+                if (token === EmailService) {
+                    return {
+                        sendEmailVerification: jest
+                            .fn()
+                            .mockImplementation(() => Promise.resolve()),
+                        sendPasswordReset: jest.fn().mockImplementation(() => Promise.resolve()),
+                    }
+                }
+                return undefined
+            })
+            .compile()
 
         target = await module.resolve(AuthController)
         userService = await module.resolve(UserService)
         authService = await module.resolve(AuthService)
+        emailService = await module.resolve(EmailService)
     })
 
     describe('register', () => {
@@ -129,6 +144,7 @@ describe('AuthController', () => {
 
             expect(saveUser).toHaveBeenCalledTimes(1)
             expect(saveVerification).toHaveBeenCalledTimes(1)
+            expect(emailService.sendEmailVerification).toHaveBeenCalledTimes(1)
         })
     })
 

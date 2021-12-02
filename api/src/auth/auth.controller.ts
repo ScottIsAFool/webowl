@@ -40,6 +40,7 @@ import { JwtGuard } from './jwt.guard'
 import { AuthUser } from './auth-user.decorator'
 import { SocialAuthProvider } from '../social/social-provider.service'
 import type { SocialUser } from '../social/types'
+import { EmailService } from '../email/email.service'
 
 @Controller('auth/')
 export class AuthController {
@@ -47,6 +48,7 @@ export class AuthController {
         private readonly userService: UserService,
         private readonly authService: AuthService,
         private readonly socialAuthProvider: SocialAuthProvider,
+        private readonly emailService: EmailService,
     ) {}
 
     @HttpCode(HttpStatus.OK)
@@ -101,6 +103,7 @@ export class AuthController {
             await this.authService.saveEmailVerification(verification)
 
             // send email out
+            await this.emailService.sendEmailVerification(verification)
 
             // Return the login response
             return {
@@ -160,6 +163,7 @@ export class AuthController {
             }
 
             // Send email
+            await this.emailService.sendPasswordReset(passwordReset)
         }
     }
 
@@ -239,6 +243,7 @@ export class AuthController {
         }
 
         // Send email
+        await this.emailService.sendEmailVerification(code)
     }
 
     @HttpCode(HttpStatus.OK)
