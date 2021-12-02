@@ -49,6 +49,10 @@ export class ApiClient {
         return this.authToken?.accessToken
     }
 
+    setAuthToken(token?: AuthToken): void {
+        this.authToken = token
+    }
+
     onTokenRefresh?: (authToken: AuthToken) => void
 
     getAuthenticatedUser(): Promise<UserResponse> {

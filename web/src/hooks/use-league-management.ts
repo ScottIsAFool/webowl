@@ -23,9 +23,13 @@ function useLeagueManagement(): LeagueManagementResult {
     const dispatch = useAppDispatch()
     const getLeagues = React.useCallback(
         function getLeagues() {
-            return makeCallWithValue(() => apiClient.getLeagues(), setBusy)
+            return makeCallWithValue(async () => {
+                const response = await apiClient.getLeagues()
+                dispatch(actions.mergeLeagues(response.leagues))
+                return response
+            }, setBusy)
         },
-        [apiClient],
+        [apiClient, dispatch],
     )
 
     const addLeague = React.useCallback(

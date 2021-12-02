@@ -1,6 +1,6 @@
 import * as React from 'react'
-import type { CheckEmailResponse } from '@webowl/apiclient'
-import { useApiClient, useAuth } from '.'
+import type { CheckEmailResponse, LoginResponse, SocialProvider } from '@webowl/apiclient'
+import { useApiClient, useAuth, useLeagueManagement } from '.'
 import { makeCall, makeCallWithValue, Result, ResultWith } from '../utils/result-utils'
 import { useAppDispatch } from '../reducers/hooks'
 import { actions } from '../reducers/actions'
@@ -19,13 +19,30 @@ type AccountCreationResult = {
     verifyEmail: (emailAddress: string, verificationCode: string) => Promise<Result>
     requestPasswordReset: (emailAddress: string) => Promise<Result>
     passwordReset: (emailAddress: string, code: string, password: string) => Promise<Result>
+    socialLogin: (
+        accessToken: string,
+        socialId: string,
+        provider: SocialProvider,
+    ) => Promise<Result>
 }
 
 function useAccountCreation(): AccountCreationResult {
     const { updateAuthToken } = useAuth()
     const { apiClient } = useApiClient()
+    const { getLeagues } = useLeagueManagement()
     const [busy, setBusy] = React.useState(false)
     const dispatch = useAppDispatch()
+
+    const postAuth = React.useCallback(
+        function postAuth(response: LoginResponse) {
+            dispatch(actions.addOrUpdateUser(response.user))
+            updateAuthToken(response.authToken)
+            getLeagues().catch(() => {
+                // noop
+            })
+        },
+        [dispatch, getLeagues, updateAuthToken],
+    )
 
     const login = React.useCallback(
         function login(emailAddress: string, password: string): Promise<Result> {
@@ -34,11 +51,10 @@ function useAccountCreation(): AccountCreationResult {
             }
             return makeCall(async () => {
                 const response = await apiClient.login({ emailAddress, password })
-                dispatch(actions.addOrUpdateUser(response.user))
-                updateAuthToken(response.authToken)
+                postAuth(response)
             }, setBusy)
         },
-        [apiClient, dispatch, updateAuthToken],
+        [apiClient, postAuth],
     )
 
     const register = React.useCallback(
@@ -57,11 +73,10 @@ function useAccountCreation(): AccountCreationResult {
                     lastName,
                     password,
                 })
-                dispatch({ type: 'update-user', user: response.user })
-                updateAuthToken(response.authToken)
+                postAuth(response)
             }, setBusy)
         },
-        [apiClient, dispatch, updateAuthToken],
+        [apiClient, postAuth],
     )
 
     const checkEmail = React.useCallback(
@@ -121,6 +136,16 @@ function useAccountCreation(): AccountCreationResult {
         [apiClient],
     )
 
+    const socialLogin = React.useCallback(
+        function socialLogin(accessToken: string, socialId: string, provider: SocialProvider) {
+            return makeCall(async () => {
+                const response = await apiClient.socialLogin({ accessToken, socialId, provider })
+                postAuth(response)
+            }, setBusy)
+        },
+        [apiClient, postAuth],
+    )
+
     return {
         busy,
         login,
@@ -130,6 +155,7 @@ function useAccountCreation(): AccountCreationResult {
         verifyEmail,
         requestPasswordReset,
         passwordReset,
+        socialLogin,
     }
 }
 

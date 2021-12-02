@@ -7,8 +7,9 @@ const LEAGUES_FILE = 'l.json'
 
 const initialState: LeaguesState = getFromStorage<League[]>(LEAGUES_FILE) ?? []
 
-function save(leagues: League[]) {
+function save(leagues: League[]): League[] {
     saveToStorage(LEAGUES_FILE, leagues)
+    return leagues
 }
 
 export const leaguesSlice = createSlice({
@@ -24,7 +25,7 @@ export const leaguesSlice = createSlice({
             } else {
                 state.push(league)
             }
-            save(state)
+            return save(state)
         },
         deleteLeague(state, action: PayloadAction<League>) {
             const league = action.payload
@@ -43,7 +44,7 @@ export const leaguesSlice = createSlice({
                 }
             })
             state = externalLeagues
-            save(state)
+            return save(state)
         },
     },
 })

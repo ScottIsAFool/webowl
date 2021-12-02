@@ -7,11 +7,11 @@ import ReactDOM from 'react-dom'
 import { App } from './app'
 import { BrowserRouter as Router } from 'react-router-dom'
 import { ContextProviderComposer } from './components/context-provider-composer'
-import { AuthProvider, UserProvider } from './hooks'
+import { ApiClientProvider, AuthProvider, UserProvider } from './hooks'
 import { Provider } from 'react-redux'
 import { store } from './reducers/store'
 
-const providerTypes = [AuthProvider, UserProvider]
+const providerTypes = [ApiClientProvider, AuthProvider, UserProvider]
 const providers = providerTypes.map((Provider, i) => <Provider key={i} />)
 
 ReactDOM.render(

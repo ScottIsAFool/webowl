@@ -6,8 +6,9 @@ const LEAGUE_USERS_FILE = 'lu.json'
 
 const initialState: LeagueUsersState = {}
 
-function save(state: LeagueUsersState) {
+function save(state: LeagueUsersState): LeagueUsersState {
     saveToStorage(LEAGUE_USERS_FILE, state)
+    return state
 }
 
 export const leagueUsersSlice = createSlice({
@@ -19,7 +20,7 @@ export const leagueUsersSlice = createSlice({
 
             state[leagueId] = users
 
-            save(state)
+            return save(state)
         },
     },
 })

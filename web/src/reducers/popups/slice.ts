@@ -9,6 +9,7 @@ export const popupsSlice = createSlice({
     reducers: {
         addLeaguePopup(state, open: PayloadAction<boolean | undefined>) {
             state.addLeague = open.payload
+            return state
         },
     },
 })
