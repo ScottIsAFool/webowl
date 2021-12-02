@@ -1,5 +1,7 @@
 export type LeagueEndpoints = '/' | ':id'
 
+export type LeagueRole = 'admin' | 'user'
+
 export type League = {
     id: number
     name: string

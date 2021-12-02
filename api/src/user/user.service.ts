@@ -4,7 +4,8 @@ import type { FindOneOptions, Repository } from 'typeorm'
 import { User } from '.'
 
 type UserOptions = {
-    includeLeagues?: boolean
+    includeCreatedLeagues?: boolean
+    includeMembersOfLeagues?: boolean
 }
 
 export type GetUserBy = (
@@ -55,7 +56,7 @@ export class UserService {
         if (options) {
             const relations: string[] = []
 
-            if (options.includeLeagues) {
+            if (options.includeCreatedLeagues) {
                 relations.push('leagues')
             }
 

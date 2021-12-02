@@ -12,6 +12,7 @@ import { hashSync, compareSync } from 'bcryptjs'
 import type { User as UserDto } from '@webowl/apiclient'
 import { getEncryptionTransformer } from '../auth/auth.utils'
 import { League } from '../league/league.entity'
+import { LeagueRole } from '../league/league-role.entity'
 
 @Entity()
 @Unique(['emailAddress'])
@@ -70,6 +71,9 @@ export class User {
 
     @Column({ nullable: true })
     defaultLeagueId?: number
+
+    @OneToMany(() => LeagueRole, (role) => role.user)
+    leagueRoles!: LeagueRole[]
 
     @OneToMany(() => League, (league) => league.createdBy)
     leagues!: League[]

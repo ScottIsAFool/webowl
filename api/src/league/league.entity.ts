@@ -3,12 +3,14 @@ import {
     CreateDateColumn,
     Entity,
     ManyToOne,
+    OneToMany,
     PrimaryGeneratedColumn,
     UpdateDateColumn,
 } from 'typeorm'
 import { User } from '../user/user.entity'
 import type { League as LeagueDto } from '@webowl/apiclient'
 import { IsDefined, Length, Min } from 'class-validator'
+import { LeagueRole } from './league-role.entity'
 
 @Entity()
 export class League {
@@ -55,6 +57,9 @@ export class League {
 
     @ManyToOne(() => User, (user) => user.leagues, { eager: true })
     createdBy!: User
+
+    @OneToMany(() => LeagueRole, (role) => role.league)
+    leagueRoles!: LeagueRole[]
 
     static create(o: Partial<League>): League {
         const league = new League()
