@@ -5,9 +5,7 @@ import { getFromStorage, saveToStorage } from '../../utils/storage-utils'
 
 const LEAGUES_FILE = 'l.json'
 
-const initialState: LeaguesState = {
-    leagues: getFromStorage<League[]>(LEAGUES_FILE) ?? [],
-}
+const initialState: LeaguesState = getFromStorage<League[]>(LEAGUES_FILE) ?? []
 
 function save(leagues: League[]) {
     saveToStorage(LEAGUES_FILE, leagues)
@@ -19,24 +17,24 @@ export const leaguesSlice = createSlice({
     reducers: {
         addOrUpdateLeague(state, action: PayloadAction<League>) {
             const league = action.payload
-            const existingLeague = state.leagues.find((x) => x.id === league.id)
+            const existingLeague = state.find((x) => x.id === league.id)
             if (existingLeague) {
-                const index = state.leagues.indexOf(existingLeague)
-                state.leagues[index] = league
+                const index = state.indexOf(existingLeague)
+                state[index] = league
             } else {
-                state.leagues.push(league)
+                state.push(league)
             }
-            save(state.leagues)
+            save(state)
         },
         deleteLeague(state, action: PayloadAction<League>) {
             const league = action.payload
-            state.leagues = state.leagues.filter((x) => x.id !== league.id)
-            save(state.leagues)
+            state = state.filter((x) => x.id !== league.id)
+            save(state)
         },
         mergeLeagues(state, action: PayloadAction<League[]>) {
             const externalLeagues = action.payload
             const allLeagues: League[] = externalLeagues.slice()
-            const stateWithRemovedLeagues = state.leagues.filter((x) => !isRemoved(x, allLeagues))
+            const stateWithRemovedLeagues = state.filter((x) => !isRemoved(x, allLeagues))
 
             stateWithRemovedLeagues.forEach((league) => {
                 const existingLeague = allLeagues.find((x) => x.id === league.id)
@@ -44,8 +42,8 @@ export const leaguesSlice = createSlice({
                     externalLeagues.push(league)
                 }
             })
-            state.leagues = externalLeagues
-            save(state.leagues)
+            state = externalLeagues
+            save(state)
         },
     },
 })

@@ -5,29 +5,31 @@ import type { UserState } from './types'
 
 const USER_FILE = 'u.json'
 
-const initialState: UserState = { authenticatedUser: getFromStorage<User>(USER_FILE) }
+const initialState: UserState = getFromStorage<User>(USER_FILE)
 
-function save(user?: User) {
+function save(user?: User | null): User | undefined | null {
     if (user) {
         saveToStorage(USER_FILE, user)
     }
+
+    return user
 }
 
 export const userSlice = createSlice({
     name: 'user',
-    initialState,
+    initialState: initialState ?? null,
     reducers: {
         setVerified(state, action: PayloadAction<boolean>) {
-            if (state.authenticatedUser) {
-                state.authenticatedUser.verified = action.payload
+            if (state) {
+                state.verified = action.payload
             }
 
-            save(state.authenticatedUser)
+            return save(state)
         },
-        addOrUpdateUser(state, action: PayloadAction<User | undefined>) {
+        addOrUpdateUser(state, action: PayloadAction<User | undefined | null>) {
             const user = action.payload
-            state.authenticatedUser = user
-            save(user)
+            state = user ?? null
+            return save(user)
         },
     },
 })

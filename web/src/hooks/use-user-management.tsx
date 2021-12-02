@@ -8,7 +8,7 @@ import { actions } from '../reducers/actions'
 
 type UserManagementResult = {
     busy: boolean
-    authenticatedUser?: User
+    authenticatedUser?: User | null
     updateUser: (user?: User) => void
     refreshAuthenticatedUser: () => void
     getAuthenticatedUser: () => Promise<ResultWith<UserResponse>>
@@ -31,7 +31,7 @@ function UserProvider({ children }: ProviderProps): JSX.Element {
 function useUserManagementInternal(): UserManagementResult {
     const [busy, setBusy] = React.useState(false)
     const { apiClient } = useApiClient()
-    const authenticatedUser = useAppSelector((state) => state.user.authenticatedUser)
+    const authenticatedUser = useAppSelector((state) => state.authenticatedUser)
     const dispatch = useAppDispatch()
 
     const updateUser = React.useCallback(

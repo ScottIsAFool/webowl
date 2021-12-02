@@ -1,5 +1,3 @@
 import type { User } from '@webowl/apiclient'
 
-export type UserState = {
-    authenticatedUser?: User
-}
+export type UserState = User | undefined | null

@@ -5,7 +5,7 @@ import { reducer as leaguesReducer } from './leagues'
 import { reducer as leagueUsersReducer } from './league-users'
 
 const rootReducer = combineReducers({
-    user: userReducer,
+    authenticatedUser: userReducer,
     popups: popupsReducer,
     leagues: leaguesReducer,
     leagueUsers: leagueUsersReducer,

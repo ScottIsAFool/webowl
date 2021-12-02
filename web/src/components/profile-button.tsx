@@ -40,7 +40,7 @@ const AsButton = React.forwardRef<HTMLButtonElement, unknown>(function AsButton(
 function ProfileButton(): JSX.Element {
     const { logOut } = useAuth()
     const { authenticatedUser } = useUserManagement()
-    const leagues = useAppSelector((state) => state.leagues.leagues)
+    const leagues = useAppSelector((state) => state.leagues)
     const dispatch = useAppDispatch()
     if (!authenticatedUser) throw new Error()
     const fullName = `${authenticatedUser.firstName} ${authenticatedUser.lastName}`

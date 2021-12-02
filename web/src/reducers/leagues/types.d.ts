@@ -1,5 +1,3 @@
 import type { League } from '@webowl/apiclient'
 
-export type LeaguesState = {
-    leagues: League[]
-}
+export type LeaguesState = League[]

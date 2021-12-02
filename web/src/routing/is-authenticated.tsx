@@ -1,7 +1,6 @@
 import * as React from 'react'
 import { Navigate } from 'react-router-dom'
 import { useUserManagement } from '../hooks'
-import { leagueNavigate } from './routes/league-routes'
 import type { GuardedRouteProps } from './types'
 
 function IsHomeAuthenticated({ isAuthenticated, target }: GuardedRouteProps): JSX.Element | null {
@@ -13,7 +12,7 @@ function IsHomeAuthenticated({ isAuthenticated, target }: GuardedRouteProps): JS
 }
 
 function IsAuthenticated({ isAuthenticated, target }: GuardedRouteProps): JSX.Element | null {
-    return isAuthenticated ? <Navigate to={leagueNavigate('')} replace={true} /> : target
+    return isAuthenticated ? <Navigate to="/" replace={true} /> : target
 }
 
 export { IsAuthenticated, IsHomeAuthenticated }
