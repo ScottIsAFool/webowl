@@ -2,7 +2,6 @@ import * as React from 'react'
 import type { AuthToken } from '@webowl/apiclient'
 import type { WithChildren } from '../types'
 import { getFromStorage, removeFromStorage, saveToStorage } from '../utils/storage-utils'
-import { useApiClient } from '.'
 
 const AUTH_FILE = 't.json'
 
@@ -27,24 +26,19 @@ function AuthProvider({ children }: ProviderProps): JSX.Element {
 }
 
 function useAuthInternal(): AuthResult {
-    const { apiClient } = useApiClient()
     const [authToken, setAuthToken] = React.useState<AuthToken | undefined>(
         getFromStorage(AUTH_FILE),
     )
 
-    const updateAuthToken = React.useCallback(
-        function updateAuthToken(authToken?: AuthToken) {
-            if (authToken) {
-                saveToStorage(AUTH_FILE, authToken)
-                setAuthToken(authToken)
-            } else {
-                removeFromStorage(AUTH_FILE)
-                setAuthToken(undefined)
-            }
-            apiClient.setAuthToken(authToken)
-        },
-        [apiClient],
-    )
+    const updateAuthToken = React.useCallback(function updateAuthToken(authToken?: AuthToken) {
+        if (authToken) {
+            saveToStorage(AUTH_FILE, authToken)
+            setAuthToken(authToken)
+        } else {
+            removeFromStorage(AUTH_FILE)
+            setAuthToken(undefined)
+        }
+    }, [])
 
     const logOut = React.useCallback(function logOut() {
         localStorage.clear()

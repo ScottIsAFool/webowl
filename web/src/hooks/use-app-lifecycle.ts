@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { actions } from '../reducers/actions'
-import { useAppDispatch } from '../reducers/hooks'
+import { useAppDispatch, useAppSelector } from '../reducers/hooks'
 import { useLeagueManagement, useUserManagement } from '.'
 
 export type AppLifecycleResult = {
@@ -12,9 +12,11 @@ function useAppLifecycle(): AppLifecycleResult {
     const [busy, setBusy] = React.useState(false)
     const { refreshAuthenticatedUser } = useUserManagement()
     const { getLeagues } = useLeagueManagement()
+    const authenticatedUser = useAppSelector((state) => state.authenticatedUser)
     const dispatch = useAppDispatch()
     const startup = React.useCallback(
         async function startup() {
+            if (!authenticatedUser) return
             setBusy(true)
             try {
                 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -27,7 +29,7 @@ function useAppLifecycle(): AppLifecycleResult {
                 setBusy(false)
             }
         },
-        [dispatch, getLeagues, refreshAuthenticatedUser],
+        [authenticatedUser, dispatch, getLeagues, refreshAuthenticatedUser],
     )
 
     return {

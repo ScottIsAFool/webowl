@@ -37,11 +37,12 @@ function useAccountCreation(): AccountCreationResult {
         function postAuth(response: LoginResponse) {
             dispatch(actions.addOrUpdateUser(response.user))
             updateAuthToken(response.authToken)
+            apiClient.setAuthToken(response.authToken)
             getLeagues().catch(() => {
                 // noop
             })
         },
-        [dispatch, getLeagues, updateAuthToken],
+        [apiClient, dispatch, getLeagues, updateAuthToken],
     )
 
     const login = React.useCallback(
