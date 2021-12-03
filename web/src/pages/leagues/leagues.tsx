@@ -46,9 +46,9 @@ function Leagues(): JSX.Element {
         navigate(`/leagues/${id}`)
     }
 
-    // if (leagues.length > 0 && authenticatedUser?.defaultLeagueId) {
-    //     return <Navigate to={`/leagues/${authenticatedUser.defaultLeagueId}`} replace={true} />
-    // }
+    if (leagues.length > 0 && authenticatedUser?.defaultLeagueId) {
+        return <Navigate to={`/leagues/${authenticatedUser.defaultLeagueId}`} replace={true} />
+    }
 
     return (
         <Box width="full" height="full">
