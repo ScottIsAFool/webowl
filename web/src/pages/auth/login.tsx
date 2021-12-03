@@ -20,10 +20,12 @@ import { ReactComponent as RegisterImage } from '../../assets/images/Register.sv
 import styles from './auth.module.css'
 import { SocialAuthButtons } from '../../components'
 import type { Result } from '../../utils/result-utils'
+import { Trans, useTranslation } from 'react-i18next'
 
 type LoginStep = 'initial' | 'password' | 'register'
 
 function Login(): JSX.Element {
+    const { t } = useTranslation()
     const navigate = useNavigate()
     const location = useLocation()
     const { login, checkEmail, register, busy } = useAccountCreation()
@@ -121,15 +123,16 @@ function Login(): JSX.Element {
                 <Box padding="xlarge" id="login-container" style={{ minWidth: '324px' }}>
                     <Stack paddingBottom="large" space="small">
                         <Heading level="1" size="larger">
-                            {loginStep === 'initial'
-                                ? 'Log in or Sign up'
-                                : loginStep === 'password'
-                                ? 'Log into Webowl'
-                                : 'Complete your profile'}
+                            {t(`login.${loginStep}.header`)}
                         </Heading>
                         {loginStep !== 'initial' ? (
                             <Text tone="secondary">
-                                As <strong>{emailAddress}</strong>
+                                <Trans
+                                    i18nKey="login.as"
+                                    values={{
+                                        email: emailAddress,
+                                    }}
+                                />
                             </Text>
                         ) : null}
                     </Stack>
@@ -140,10 +143,10 @@ function Login(): JSX.Element {
                                 <SocialAuthButtons />
                                 <hr />
                                 <TextField
-                                    label="Email address"
+                                    label={t('login.initial.emailLabel')}
                                     value={emailAddress}
                                     onChange={(e) => setEmailAddress(e.target.value)}
-                                    placeholder="Enter your email..."
+                                    placeholder={t('login.initial.emailPlaceholder')}
                                     autoFocus
                                     type="email"
                                     autoComplete="username"
@@ -161,7 +164,7 @@ function Login(): JSX.Element {
                                         loading={busy}
                                         size="large"
                                     >
-                                        Continue with email
+                                        <>{t('login.initial.continue')}</>
                                     </Button>
                                     {errorMessage ? (
                                         <Box paddingTop="medium">
@@ -175,10 +178,10 @@ function Login(): JSX.Element {
                         <form onSubmit={doLogin}>
                             <Stack space="medium">
                                 <PasswordField
-                                    label="Password"
+                                    label={t('login.password.passwordLabel')}
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
-                                    placeholder="Enter your password..."
+                                    placeholder={t('login.password.passwordPlaceholder')}
                                     autoFocus
                                     autoComplete="current-password"
                                 />
@@ -195,7 +198,7 @@ function Login(): JSX.Element {
                                         loading={busy}
                                         size="large"
                                     >
-                                        Log in
+                                        <>{t('login.password.login')}</>
                                     </Button>
                                     {errorMessage ? (
                                         <Box paddingTop="medium">
@@ -209,24 +212,24 @@ function Login(): JSX.Element {
                         <form onSubmit={doRegister}>
                             <Stack space="medium">
                                 <TextField
-                                    label="First name"
+                                    label={t('login.register.firstNameLabel')}
                                     value={firstName}
                                     onChange={(e) => setFirstName(e.target.value)}
-                                    placeholder="Enter your first name..."
+                                    placeholder={t('login.register.firstNamePlaceholder')}
                                     autoFocus
                                 />
                                 <TextField
-                                    label="Last name"
+                                    label={t('login.register.lastNameLabel')}
                                     value={lastName}
                                     onChange={(e) => setLastName(e.target.value)}
-                                    placeholder="Enter your last name..."
+                                    placeholder={t('login.register.lastNameLabel')}
                                 />
                                 <PasswordField
-                                    label="Password"
+                                    label={t('login.register.passwordLabel')}
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
-                                    placeholder="Enter a password..."
-                                    hint="Password must be at least 8 characters long with a number and special character"
+                                    placeholder={t('login.register.passwordPlaceholder')}
+                                    hint={t('login.register.passwordHint')}
                                 />
                                 <Box
                                     width="full"
@@ -241,7 +244,7 @@ function Login(): JSX.Element {
                                         loading={busy}
                                         size="large"
                                     >
-                                        Sign up
+                                        <>{t('login.register.signUp')}</>
                                     </Button>
                                     {errorMessage ? (
                                         <Box paddingTop="medium">

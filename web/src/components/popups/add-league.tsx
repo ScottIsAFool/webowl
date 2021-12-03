@@ -241,14 +241,12 @@ function AddLeague(): JSX.Element | null {
                             type="submit"
                             loading={busy}
                         >
-                            <Text>
-                                {step === 'extras' ? t('addLeague.add') : t('addLeague.next')}
-                            </Text>
+                            <>{step === 'extras' ? t('addLeague.add') : t('addLeague.next')}</>
                         </Button>
                     ) : null}
                     {!buttonData.next && !buttonData.back ? (
                         <Button variant="primary" onClick={close}>
-                            <Text>{t('addLeague.close')}</Text>
+                            <>{t('addLeague.close')}</>
                         </Button>
                     ) : null}
                 </ModalActions>

@@ -20,6 +20,7 @@ import styles from './profile-button.module.css'
 import { useAppDispatch, useAppSelector } from '../reducers/hooks'
 import { actions } from '../reducers/actions'
 import classNames from 'classnames'
+import { useTranslation } from 'react-i18next'
 
 const AsButton = React.forwardRef<HTMLButtonElement, unknown>(function AsButton({ ...props }, ref) {
     const { authenticatedUser } = useUserManagement()
@@ -38,6 +39,7 @@ const AsButton = React.forwardRef<HTMLButtonElement, unknown>(function AsButton(
 })
 
 function ProfileButton(): JSX.Element {
+    const { t } = useTranslation()
     const { logOut } = useAuth()
     const { authenticatedUser } = useUserManagement()
     const leagues = useAppSelector((state) => state.leagues)
@@ -47,9 +49,9 @@ function ProfileButton(): JSX.Element {
     const fullName = `${authenticatedUser.firstName} ${authenticatedUser.lastName}`
     return (
         <Box>
-            <Menu aria-label="profile-menu">
+            <Menu aria-label={t('profileButton.title')}>
                 <MenuButton as={AsButton} />
-                <MenuList aria-label="profile-menu">
+                <MenuList aria-label={t('profileButton.title')}>
                     <MenuItem>
                         <Columns alignY="top" space="small">
                             <Column width="content">
@@ -85,12 +87,12 @@ function ProfileButton(): JSX.Element {
                     ))}
                     <MenuItem onSelect={() => dispatch(actions.addLeaguePopup(true))}>
                         <PlusIcon className={styles.icon} />
-                        Add league
+                        {t('profileButton.addLeague')}
                     </MenuItem>
                     <hr />
                     <MenuItem onSelect={logOut}>
                         <LogoutIcon className={styles.icon} />
-                        Log out
+                        {t('profileButton.logOut')}
                     </MenuItem>
                 </MenuList>
             </Menu>

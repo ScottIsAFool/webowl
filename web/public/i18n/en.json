@@ -41,5 +41,40 @@
             "fours": "Fours",
             "fives": "Fives"
         }
+    },
+    "profileButton": {
+        "title": "Profile menu",
+        "addLeague": "Add league",
+        "logOut": "Log out"
+    },
+    "login": {
+        "socialButtons": {
+            "loginWithGoogle": "Log in with Google",
+            "loginWithMicrosoft": "Log in with Microsoft"
+        },
+        "as": "As <strong>{{email}}</strong>",
+        "initial": {
+            "header": "Log in or Sign up",
+            "emailLabel": "Email address",
+            "emailPlaceholder": "Enter your email...",
+            "continue": "Continue with email"
+        },
+        "password": {
+            "header": "Log into Webowl",
+            "passwordLabel": "Password",
+            "passwordPlaceholder": "Enter your password...",
+            "login": "Log in"
+        },
+        "register": {
+            "header": "Complete your profile",
+            "firstNameLabel": "First name",
+            "firstNamePlaceholder": "Enter your first name...",
+            "lastNameLabel": "Last name",
+            "lastNamePlaceholder": "Enter your last name...",
+            "passwordLabel": "Password",
+            "passwordPlaceholder": "Enter a password...",
+            "passwordHint": "Password must be at least 8 characters long with a number and special character",
+            "signUp": "Sign up"
+        }
     }
 }

@@ -11,10 +11,12 @@ import type { AuthResponse, AuthError } from 'msal'
 import type { User } from '@microsoft/microsoft-graph-types'
 
 import style from './social-auth-buttons.module.css'
+import { useTranslation } from 'react-i18next'
 
 const { googleClientId } = getConfiguration()
 
 function SocialAuthButtons(): JSX.Element {
+    const { t } = useTranslation()
     const { socialLogin } = useAccountCreation()
     const [googleLoading, setGoogleLoading] = React.useState(false)
 
@@ -34,7 +36,7 @@ function SocialAuthButtons(): JSX.Element {
     )
     const { login: microsoftLogin } = useMicrosoftLogin({
         clientId: '47acea2d-684f-4ac5-b473-9ffec5c4f23d',
-        redirectUri: 'http://localhost:3000/',
+        redirectUri: 'http://localhost:3001/',
         authCallback: microsoftCallback,
         withUserData: true,
     })
@@ -71,7 +73,7 @@ function SocialAuthButtons(): JSX.Element {
                 loading={googleLoading}
                 onClick={googleSignIn}
             >
-                Log in with Google
+                <>{t('login.socialButtons.loginWithGoogle')}</>
             </Button>
             {/* <Button variant="secondary" startIcon={<FacebookIcon />} size="large">
                 Log in with Facebook
@@ -82,7 +84,7 @@ function SocialAuthButtons(): JSX.Element {
                 size="large"
                 onClick={microsoftLogin}
             >
-                Log in with Microsoft
+                <>{t('login.socialButtons.loginWithMicrosoft')}</>
             </Button>
             {/* <Button
                 variant="secondary"
