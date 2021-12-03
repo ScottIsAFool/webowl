@@ -1,15 +1,15 @@
-export function playerFormat(value: number): string {
+export function getPlayerFormatKey(value: number): string {
     switch (value) {
         case 1:
-            return 'Singles'
+            return 'singles'
         case 2:
-            return 'Doubles'
+            return 'doubles'
         case 3:
-            return 'Trios'
+            return 'trios'
         case 4:
-            return 'Fours'
+            return 'fours'
         case 5:
-            return 'Fives'
+            return 'fives'
         default:
             throw new Error('Unknown player count')
     }

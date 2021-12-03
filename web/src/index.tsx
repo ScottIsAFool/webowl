@@ -10,19 +10,24 @@ import { ContextProviderComposer } from './components/context-provider-composer'
 import { ApiClientProvider, AuthProvider, UserProvider } from './hooks'
 import { Provider } from 'react-redux'
 import { store } from './reducers/store'
+import { GeneralErrorBoundary } from './components'
+
+import './i18n/config'
 
 const providerTypes = [AuthProvider, ApiClientProvider, UserProvider]
 const providers = providerTypes.map((Provider, i) => <Provider key={i} />)
 
 ReactDOM.render(
     <React.StrictMode>
-        <Provider store={store}>
-            <ContextProviderComposer contextProviders={providers}>
-                <Router>
-                    <App />
-                </Router>
-            </ContextProviderComposer>
-        </Provider>
+        <GeneralErrorBoundary>
+            <Provider store={store}>
+                <ContextProviderComposer contextProviders={providers}>
+                    <Router>
+                        <App />
+                    </Router>
+                </ContextProviderComposer>
+            </Provider>
+        </GeneralErrorBoundary>
     </React.StrictMode>,
     document.getElementById('root'),
 )

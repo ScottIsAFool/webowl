@@ -1,0 +1,45 @@
+{
+    "addLeague": {
+        "title": "Add league",
+        "next": "Next",
+        "back": "Back",
+        "add": "Add league",
+        "close": "Close",
+        "name": {
+            "heading": "First off, let's give this league a name",
+            "nameLabel": "League name",
+            "namePlaceholder": "Enter a name for the league..."
+        },
+        "options": {
+            "heading": "Cool, now to setup how the league is configured",
+            "teamsLabel": "How many teams?",
+            "seriesLabel": "Series consists of...",
+            "playersLabel": "The teams are...",
+            "maxPlayersLabel": "Maximum number of players per team",
+            "finally": "And finally",
+            "handicapped": "Handicapped?",
+            "scratch": "Scratch",
+            "multiTeams": "{{team}} teams",
+            "oneGame": "1 game",
+            "multiGame": "{{game}} games"
+        },
+        "extras": {
+            "heading": "Almost there...",
+            "associationLabel": "Bowling association",
+            "sanctionLabel": "Sanction number",
+            "optional": "optional"
+        },
+        "finished": {
+            "teamAdded": "Team added"
+        }
+    },
+    "league": {
+        "team": {
+            "singles": "Singles",
+            "doubles": "Doubles",
+            "trios": "Trios",
+            "fours": "Fours",
+            "fives": "Fives"
+        }
+    }
+}

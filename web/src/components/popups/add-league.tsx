@@ -20,8 +20,9 @@ import range from 'lodash/range'
 
 import styles from './add-league.module.css'
 import { useLeagueManagement } from '../../hooks'
-import { playerFormat } from '../../utils/league-utils'
+import { getPlayerFormatKey } from '../../utils/league-utils'
 import { ReactComponent as DoneImage } from '../../assets/images/Done.svg'
+import { useTranslation } from 'react-i18next'
 
 const teamNumbers = range(4, 51, 2)
 const gameNumbers = range(1, 5, 1)
@@ -47,6 +48,7 @@ const allButtonData: ButtonsData = {
 type AddLeagueSteps = 'name' | 'options' | 'extras' | 'finished'
 
 function AddLeague(): JSX.Element | null {
+    const { t } = useTranslation()
     const [step, setStep] = React.useState<AddLeagueSteps>('name')
     const [name, setName] = React.useState('')
     const [association, setAssociation] = React.useState('')
@@ -108,72 +110,70 @@ function AddLeague(): JSX.Element | null {
         setStep(buttonData.back)
     }
 
-    function gameFormat(value: number) {
-        return value === 1 ? '1 game' : `${value} games`
-    }
-
     if (!addLeaguesOpen) return null
     return (
         <Modal
             isOpen={true}
             width="large"
             onDismiss={close}
-            aria-label="Add league"
+            aria-label={t('addLeague.title')}
             exceptionallySetClassName={styles.add_league}
         >
             <ModalHeader>
-                <Heading level="1">Add league</Heading>
+                <Heading level="1">{t('addLeague.title')}</Heading>
             </ModalHeader>
             <form onSubmit={nextClicked}>
                 <ModalBody>
                     {step === 'name' ? (
                         <Stack space="medium">
-                            <Text>First off, let&apos;s give this league a name</Text>
+                            <Text>{t('addLeague.name.heading')}</Text>
                             <TextField
-                                label="League name"
+                                label={t('addLeague.name.nameLabel')}
                                 value={name}
                                 onChange={(e) => setName(e.target.value)}
-                                placeholder="Enter a name for the league..."
+                                placeholder={t('addLeague.name.namePlaceholder')}
                             />
                         </Stack>
                     ) : step === 'options' ? (
                         <Stack space="medium">
-                            <Text>Cool, now to setup how the league is configured.</Text>
+                            <Text>{t('addLeague.options.heading')}</Text>
                             <SelectField
-                                label="How many teams?"
+                                label={t('addLeague.options.teamsLabel')}
                                 value={teams}
                                 onChange={(e) => setTeams(parseInt(e.target.value))}
                             >
                                 {teamNumbers.map((x) => (
                                     <option value={x} key={x}>
-                                        {x} teams
+                                        {t('addLeague.options.multiTeams', { team: x })}
                                     </option>
                                 ))}
                             </SelectField>
                             <SelectField
-                                label="Series consists of..."
+                                label={t('addLeague.options.seriesLabel')}
                                 value={series}
                                 onChange={(e) => setSeries(parseInt(e.target.value))}
                             >
                                 {gameNumbers.map((x) => (
                                     <option value={x} key={x}>
-                                        {gameFormat(x)}
+                                        {x === 1
+                                            ? t('addLeague.options.oneGame')
+                                            : t('addLeague.options.multiGame', { game: x })}
                                     </option>
                                 ))}
                             </SelectField>
                             <SelectField
-                                label="The teams are..."
+                                label={t('addLeague.options.playersLabel')}
                                 value={players}
                                 onChange={(e) => setPlayers(parseInt(e.target.value))}
                             >
                                 {playerNumbers.map((x) => (
                                     <option key={x} value={x}>
-                                        {playerFormat(x)}
+                                        {t(`league.team.${getPlayerFormatKey(x)}`)}
                                     </option>
                                 ))}
                             </SelectField>
                             <SelectField
-                                label="Maximum number of players per team"
+                                label={t('addLeague.options.maxPlayersLabel')}
                                 value={maxPlayersPerTeam}
                                 onChange={(e) => setMaxPlayersPerTeam(parseInt(e.target.value))}
                             >
@@ -183,33 +183,33 @@ function AddLeague(): JSX.Element | null {
                                     </option>
                                 ))}
                             </SelectField>
-                            <Text tone="secondary">And finally</Text>
+                            <Text tone="secondary">{t('addLeague.options.finally')}</Text>
                             <Inline space="large">
                                 <CheckboxField
                                     value={String(handicap)}
-                                    label="Handicapped?"
+                                    label={t('addLeague.options.handicapped')}
                                     onChange={(e) => setHandicap(e.target.value === 'true')}
                                 />
 
                                 <CheckboxField
                                     value={String(scratch)}
-                                    label="Scratch?"
+                                    label={t('addLeague.options.scratch')}
                                     onChange={(e) => setScratch(e.target.value === 'true')}
                                 />
                             </Inline>
                         </Stack>
                     ) : step === 'extras' ? (
                         <Stack space="medium">
-                            <Text>Almost there...</Text>
+                            <Text>{t('addLeague.extras.heading')}</Text>
                             <TextField
-                                label="Bowling association"
-                                secondaryLabel="optional"
+                                label={t('addLeague.extras.associationLabel')}
+                                secondaryLabel={t('addLeague.extras.optional')}
                                 value={association}
                                 onChange={(e) => setAssociation(e.target.value)}
                             />
                             <TextField
-                                label="Sanction number"
-                                secondaryLabel="optional"
+                                label={t('addLeague.extras.sanctionLabel')}
+                                secondaryLabel={t('addLeague.extras.optional')}
                                 value={sanction}
                                 onChange={(e) => setSanction(e.target.value)}
                             />
@@ -223,7 +223,7 @@ function AddLeague(): JSX.Element | null {
                             justifyContent="center"
                         >
                             <DoneImage className={styles.image} />
-                            <Text>Team added</Text>
+                            <Text>{t('addLeague.finished.teamAdded')}</Text>
                         </Box>
                     )}
                 </ModalBody>
@@ -231,7 +231,7 @@ function AddLeague(): JSX.Element | null {
                 <ModalActions>
                     {buttonData.back ? (
                         <Button variant="secondary" onClick={backClicked}>
-                            Back
+                            <Text>{t('addLeague.back')}</Text>
                         </Button>
                     ) : null}
                     {buttonData.next ? (
@@ -241,12 +241,14 @@ function AddLeague(): JSX.Element | null {
                             type="submit"
                             loading={busy}
                         >
-                            {step === 'extras' ? 'Add League' : 'Next'}
+                            <Text>
+                                {step === 'extras' ? t('addLeague.add') : t('addLeague.next')}
+                            </Text>
                         </Button>
                     ) : null}
                     {!buttonData.next && !buttonData.back ? (
                         <Button variant="primary" onClick={close}>
-                            Close
+                            <Text>{t('addLeague.close')}</Text>
                         </Button>
                     ) : null}
                 </ModalActions>
