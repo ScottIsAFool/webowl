@@ -47,6 +47,39 @@
         "addLeague": "Add league",
         "logOut": "Log out"
     },
+    "auth": {
+        "header": {
+            "text": "You need to verify your email address.",
+            "action": "Click here to resend verification email."
+        },
+        "verifyEmail": {
+            "mainText": "Thanks for verifying, please continue to enjoy the product.",
+            "goToLeagues": "Go to your leagues"
+        },
+        "resendVerify": {
+            "mainText": "In order to continue using this site, you need to verify your email address, click the button below to resend an email to <strong>{{email}}</strong>.",
+            "resend": "Resend verification",
+            "verificationHint": "Accounts not verified within 30 days of creation will automatically be deleted, along with any leagues created by that account.",
+            "emailSent": "An email has been sent to <strong>{{email}}</strong>. If you still do not see it, please check your junk/spam folder."
+        },
+        "resetPasswordRequest": {
+            "header": "Forgot your password?",
+            "subHeader": "Happens to the best of us",
+            "mainText": "Enter your email address for the account whose password you wish to reset",
+            "emailLabel": "Email address",
+            "emailPlaceholder": "Enter your email...",
+            "resetPassword": "Reset password",
+            "emailSent": "Thanks, if we found an account matching that email, a reset link is on its way"
+        },
+        "passwordReset": {
+            "header": "Reset your password",
+            "subHeader": "For <strong>{{email}}</strong>",
+            "mainText": "Please enter your new password.",
+            "passwordLabel": "New password",
+            "passwordPlaceholder": "Enter your new password...",
+            "changePassword": "Change password"
+        }
+    },
     "login": {
         "socialButtons": {
             "loginWithGoogle": "Log in with Google",
@@ -63,7 +96,8 @@
             "header": "Log into Webowl",
             "passwordLabel": "Password",
             "passwordPlaceholder": "Enter your password...",
-            "login": "Log in"
+            "login": "Log in",
+            "forgotPassword": "Forgot password?"
         },
         "register": {
             "header": "Complete your profile",
@@ -76,5 +110,8 @@
             "passwordHint": "Password must be at least 8 characters long with a number and special character",
             "signUp": "Sign up"
         }
+    },
+    "home": {
+        "openLeagues": "Open leagues"
     }
 }

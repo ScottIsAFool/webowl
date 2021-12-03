@@ -21,6 +21,7 @@ import styles from './auth.module.css'
 import { SocialAuthButtons } from '../../components'
 import type { Result } from '../../utils/result-utils'
 import { Trans, useTranslation } from 'react-i18next'
+import { authNavigate } from '../../routing/routes/auth-routes'
 
 type LoginStep = 'initial' | 'password' | 'register'
 
@@ -184,6 +185,11 @@ function Login(): JSX.Element {
                                     placeholder={t('login.password.passwordPlaceholder')}
                                     autoFocus
                                     autoComplete="current-password"
+                                    auxiliaryLabel={
+                                        <TextLink href={authNavigate('request-password-reset')}>
+                                            {t('login.password.forgotPassword')}
+                                        </TextLink>
+                                    }
                                 />
                                 <Box
                                     width="full"

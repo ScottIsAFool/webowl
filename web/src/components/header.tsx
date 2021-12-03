@@ -7,6 +7,7 @@ import { authNavigate } from '../routing/routes/auth-routes'
 
 import styles from './header.module.css'
 import { ProfileButton } from './profile-button'
+import { useTranslation } from 'react-i18next'
 
 function Header(): JSX.Element {
     const { authenticatedUser } = useUserManagement()
@@ -51,6 +52,7 @@ function Header(): JSX.Element {
 }
 
 function VerificationBox(): JSX.Element {
+    const { t } = useTranslation()
     return (
         <Box
             marginBottom="medium"
@@ -60,14 +62,14 @@ function VerificationBox(): JSX.Element {
             justifyContent="center"
         >
             <Text>
-                You need to verify your email address.{' '}
+                {t('auth.header.text')}{' '}
                 <TextLink
                     href={authNavigate('resend-verification')}
                     style={{
                         color: 'var(--webowl-background)',
                     }}
                 >
-                    Click here to resend verification email.
+                    <>{t('auth.header.action')}</>
                 </TextLink>
             </Text>
         </Box>

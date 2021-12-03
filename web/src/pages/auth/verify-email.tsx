@@ -1,9 +1,11 @@
 import { Stack, Text, TextLink } from '@doist/reactist'
 import * as React from 'react'
+import { useTranslation } from 'react-i18next'
 import { Navigate } from 'react-router-dom'
 import { useQuery, useAccountCreation, useUserManagement } from '../../hooks'
 
 function VerifyEmail(): JSX.Element | null {
+    const { t } = useTranslation()
     const { authenticatedUser } = useUserManagement()
     const query = useQuery()
     const { verifyEmail } = useAccountCreation()
@@ -42,8 +44,8 @@ function VerifyEmail(): JSX.Element | null {
 
     return isVerified ? (
         <Stack space="medium">
-            <Text>Thanks for verifying, please continue to enjoy the product</Text>
-            <TextLink href="/">Go to your leagues</TextLink>
+            <Text>{t('auth.verifyEmail.mainText')}</Text>
+            <TextLink href="/">{t('auth.verifyEmail.goToLeagues')}</TextLink>
         </Stack>
     ) : null
 }

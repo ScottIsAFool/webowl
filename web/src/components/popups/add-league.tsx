@@ -231,7 +231,7 @@ function AddLeague(): JSX.Element | null {
                 <ModalActions>
                     {buttonData.back ? (
                         <Button variant="secondary" onClick={backClicked}>
-                            <Text>{t('addLeague.back')}</Text>
+                            <>{t('addLeague.back')}</>
                         </Button>
                     ) : null}
                     {buttonData.next ? (

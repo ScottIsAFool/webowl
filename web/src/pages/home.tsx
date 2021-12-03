@@ -2,8 +2,10 @@ import * as React from 'react'
 import { Box, Column, Columns, Heading, TextLink } from '@doist/reactist'
 import { ReactComponent as Spreadsheet } from '../assets/images/Spreadsheet.svg'
 import { leagueNavigate } from '../routing/routes/league-routes'
+import { useTranslation } from 'react-i18next'
 
 function Home(): JSX.Element {
+    const { t } = useTranslation()
     return (
         <Box display="flex" flexDirection="column" width="full" height="full">
             <Box id="header" paddingBottom="xlarge">
@@ -18,7 +20,7 @@ function Home(): JSX.Element {
                     <Column width="auto">
                         <Box display="flex" alignItems="flexEnd" justifyContent="flexEnd">
                             <TextLink href={leagueNavigate('')}>
-                                <Heading level="1">Open leagues</Heading>
+                                <Heading level="1">{t('home.openLeagues')}</Heading>
                             </TextLink>
                         </Box>
                     </Column>

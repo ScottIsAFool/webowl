@@ -1,9 +1,11 @@
 import { Box, Button, Stack, Text } from '@doist/reactist'
 import * as React from 'react'
+import { Trans, useTranslation } from 'react-i18next'
 import { Navigate } from 'react-router'
 import { useAccountCreation, useUserManagement } from '../../hooks'
 
 function ResendVerification(): JSX.Element {
+    const { t } = useTranslation()
     const { authenticatedUser } = useUserManagement()
     const { busy, resendVerification } = useAccountCreation()
     const [verificationSent, setVerificationSent] = React.useState(false)
@@ -28,9 +30,12 @@ function ResendVerification(): JSX.Element {
             {!verificationSent ? (
                 <Stack space="medium">
                     <Text>
-                        In order to continue using this site, you need to verify your email address,
-                        click the button below to resend an email to{' '}
-                        <strong>{authenticatedUser.emailAddress}</strong>.
+                        <Trans
+                            i18nKey="auth.resendVerify.mainText"
+                            values={{
+                                email: authenticatedUser.emailAddress,
+                            }}
+                        />
                     </Text>
                     <Button
                         variant="primary"
@@ -38,18 +43,19 @@ function ResendVerification(): JSX.Element {
                         disabled={busy}
                         onClick={() => sendVerification(authenticatedUser.emailAddress)}
                     >
-                        Resend verification
+                        <>{t('auth.resendVerify.resend')}</>
                     </Button>
-                    <Text tone="secondary">
-                        Accounts not verified within 30 days of creation will automatically be
-                        deleted, along with any leagues created by that account.
-                    </Text>
+                    <Text tone="secondary">{t('auth.resendVerify.verificationHint')}</Text>
                 </Stack>
             ) : (
                 <Stack>
                     <Text>
-                        An email has been sent to <strong>{authenticatedUser.emailAddress}</strong>.
-                        If you still do not see it, please check your junk/spam folder.
+                        <Trans
+                            i18nKey="auth.resendVerify.emailSent"
+                            values={{
+                                email: authenticatedUser.emailAddress,
+                            }}
+                        />
                     </Text>
                 </Stack>
             )}

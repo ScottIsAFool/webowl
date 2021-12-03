@@ -6,8 +6,10 @@ import { ReactComponent as ResetPasswordImage } from '../../assets/images/ResetP
 
 import styles from './auth.module.css'
 import { authNavigate } from '../../routing/routes/auth-routes'
+import { Trans, useTranslation } from 'react-i18next'
 
 function PasswordReset(): JSX.Element {
+    const { t } = useTranslation()
     const { passwordReset, busy } = useAccountCreation()
     const navigate = useNavigate()
     const query = useQuery()
@@ -52,20 +54,20 @@ function PasswordReset(): JSX.Element {
                 <Box padding="xlarge" id="password-container" style={{ minWidth: '324px' }}>
                     <Stack paddingBottom="large" space="small">
                         <Heading level="1" size="larger">
-                            Reset your password
+                            {t('auth.passwordReset.header')}
                         </Heading>
                         <Text tone="secondary">
-                            For <strong>{email}</strong>
+                            <Trans i18nKey="auth.passwordReset.subHeader" values={{ email }} />
                         </Text>
                     </Stack>
                     <form onSubmit={resetPassword}>
                         <Stack space="medium">
-                            <Text>Please enter your new password.</Text>
+                            <Text>{t('auth.passwordReset.mainText')}</Text>
                             <PasswordField
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
-                                placeholder="Enter your new password"
-                                label="Password"
+                                placeholder={t('auth.passwordReset.passwordPlaceholder')}
+                                label={t('auth.passwordReset.passwordLabel')}
                                 autoComplete="new-password"
                             />
                             <Box
@@ -81,7 +83,7 @@ function PasswordReset(): JSX.Element {
                                     disabled={!password || busy}
                                     loading={busy}
                                 >
-                                    Change password
+                                    <>{t('auth.passwordReset.changePassword')}</>
                                 </Button>
                             </Box>
                         </Stack>

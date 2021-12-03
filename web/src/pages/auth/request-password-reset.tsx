@@ -4,8 +4,10 @@ import { useQuery, useAccountCreation } from '../../hooks'
 import { ReactComponent as ForgotPasswordImage } from '../../assets/images/ForgotPassword.svg'
 
 import styles from './auth.module.css'
+import { useTranslation } from 'react-i18next'
 
 function RequestPasswordReset(): JSX.Element {
+    const { t } = useTranslation()
     const { requestPasswordReset, busy } = useAccountCreation()
     const query = useQuery()
     const [email, setEmail] = React.useState(query.get('email') ?? '')
@@ -53,22 +55,19 @@ function RequestPasswordReset(): JSX.Element {
                 >
                     <Stack paddingBottom="large" space="small">
                         <Heading level="1" size="larger">
-                            Forgot your password?
+                            {t('auth.resetPasswordRequest.header')}
                         </Heading>
-                        <Text tone="secondary">Happens to the best of us</Text>
+                        <Text tone="secondary">{t('auth.resetPasswordRequest.subHeader')}</Text>
                     </Stack>
                     {!requestSent ? (
                         <form onSubmit={resetPassword}>
                             <Stack space="medium">
-                                <Text>
-                                    Enter your email address for the account whose password you wish
-                                    to reset.
-                                </Text>
+                                <Text>{t('auth.resetPasswordRequest.mainText')}</Text>
                                 <TextField
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
-                                    placeholder="Enter your email address"
-                                    label="Email address"
+                                    placeholder={t('auth.resetPasswordRequest.emailPlaceholder')}
+                                    label={t('auth.resetPasswordRequest.emailLabel')}
                                 />
                                 <Box
                                     width="full"
@@ -83,17 +82,14 @@ function RequestPasswordReset(): JSX.Element {
                                         disabled={!email || busy}
                                         loading={busy}
                                     >
-                                        Reset password
+                                        <>{t('auth.resetPasswordRequest.resetPassword')}</>
                                     </Button>
                                 </Box>
                             </Stack>
                         </form>
                     ) : (
                         <Box>
-                            <Text>
-                                Thanks, if we found an account matching that email, a reset link is
-                                on its way.
-                            </Text>
+                            <Text>{t('auth.resetPasswordRequest.emailSent')}</Text>
                         </Box>
                     )}
                 </Box>
