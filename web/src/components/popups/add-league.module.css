@@ -2,3 +2,15 @@
     background-color: var(--webowl-menu-background-hover);
     color: var(--webowl-foreground);
 }
+
+.add_league .image {
+    max-height: 300px;
+    max-width: 300px;
+}
+
+@media (max-width: 400px) {
+    .add_league .image {
+        max-height: 200px;
+        max-width: 200px;
+    }
+}

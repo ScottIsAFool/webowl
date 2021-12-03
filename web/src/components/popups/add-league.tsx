@@ -1,4 +1,5 @@
 import {
+    Box,
     Button,
     CheckboxField,
     Heading,
@@ -20,6 +21,7 @@ import range from 'lodash/range'
 import styles from './add-league.module.css'
 import { useLeagueManagement } from '../../hooks'
 import { playerFormat } from '../../utils/league-utils'
+import { ReactComponent as DoneImage } from '../../assets/images/Done.svg'
 
 const teamNumbers = range(4, 51, 2)
 const gameNumbers = range(1, 5, 1)
@@ -92,7 +94,6 @@ function AddLeague(): JSX.Element | null {
                 scratch,
                 maxPlayersPerTeam: maxPlayersPerTeam,
             })
-
             if (response.type === 'error') {
                 // Display error message
                 return
@@ -214,7 +215,16 @@ function AddLeague(): JSX.Element | null {
                             />
                         </Stack>
                     ) : (
-                        step
+                        <Box
+                            width="full"
+                            flexDirection="column"
+                            display="flex"
+                            alignItems="center"
+                            justifyContent="center"
+                        >
+                            <DoneImage className={styles.image} />
+                            <Text>Team added</Text>
+                        </Box>
                     )}
                 </ModalBody>
 
