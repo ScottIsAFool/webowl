@@ -11,7 +11,7 @@ import { ApiClientProvider, AuthProvider, UserProvider } from './hooks'
 import { Provider } from 'react-redux'
 import { store } from './reducers/store'
 
-const providerTypes = [ApiClientProvider, AuthProvider, UserProvider]
+const providerTypes = [AuthProvider, ApiClientProvider, UserProvider]
 const providers = providerTypes.map((Provider, i) => <Provider key={i} />)
 
 ReactDOM.render(

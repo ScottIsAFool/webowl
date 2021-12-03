@@ -41,7 +41,7 @@ function ProfileButton(): JSX.Element {
     const { logOut } = useAuth()
     const { authenticatedUser } = useUserManagement()
     const leagues = useAppSelector((state) => state.leagues)
-    console.log({ leagues })
+
     const dispatch = useAppDispatch()
     if (!authenticatedUser) throw new Error()
     const fullName = `${authenticatedUser.firstName} ${authenticatedUser.lastName}`

@@ -7,6 +7,8 @@ function IsHomeAuthenticated({ isAuthenticated, target }: GuardedRouteProps): JS
     const { authenticatedUser } = useUserManagement()
     if (authenticatedUser?.defaultLeagueId) {
         return <Navigate to={`/leagues/${authenticatedUser.defaultLeagueId}`} replace={true} />
+    } else if (authenticatedUser) {
+        return <Navigate to="/leagues" replace={true} />
     }
     return IsAuthenticated({ isAuthenticated, target })
 }

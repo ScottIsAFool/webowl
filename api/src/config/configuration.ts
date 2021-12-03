@@ -4,12 +4,14 @@ import type { EncryptionOptions } from 'typeorm-encrypted'
 export type Configuration = {
     port: number
     baseUrl: string
+    baseWebUrl: string
     corsRestrictions: string[]
     googleAPIKey: string
     jwtToken: string
     sentryDSN?: string
     database: DatabaseConfiguration
     expiryTime: number
+    emailServiceKey: string
 }
 
 type DatabaseConfiguration = {
@@ -34,6 +36,7 @@ export function getConfiguration(): Configuration {
     const {
         PORT,
         BASE_URL,
+        BASE_WEB_URL,
         CORS_RESTRICTIONS,
         GOOGLE_API_KEY,
         JWT_TOKEN,
@@ -44,10 +47,12 @@ export function getConfiguration(): Configuration {
         DB_ENCRYPTION_ALGORITHM,
         DB_ENCRYPTION_IV_LENGTH,
         EXPIRY_TIME,
+        SEND_GRID_KEY,
     } = process.env
 
     const jwtToken = validateEnv(JWT_TOKEN, 'JWT_TOKEN')
     const baseUrl = validateEnv(BASE_URL, 'BASE_URL')
+    const baseWebUrl = validateEnv(BASE_WEB_URL, 'BASE_WEB_URL')
 
     const sentryDSN = SENTRY_DSN
 
@@ -57,6 +62,7 @@ export function getConfiguration(): Configuration {
     const dbUrl = validateEnv(DATABASE_URL, 'DATABASE_URL')
     const ssl = validateEnv(DB_SSL, 'DB_SSL')
     const expiryTime = validateEnv(EXPIRY_TIME, 'EXPIRY_TIME')
+    const emailServiceKey = validateEnv(SEND_GRID_KEY, 'SEND_GRID_KEY')
 
     const googleAPIKey = validateEnv(GOOGLE_API_KEY, 'GOOGLE_API_KEY')
 
@@ -70,11 +76,13 @@ export function getConfiguration(): Configuration {
     return {
         port: PORT ? parseInt(PORT) : 3000,
         baseUrl,
+        baseWebUrl,
         corsRestrictions: CORS_RESTRICTIONS?.split(',') ?? [],
         jwtToken,
         sentryDSN,
         expiryTime: parseInt(expiryTime),
         googleAPIKey,
+        emailServiceKey,
         database: {
             url: dbUrl,
             ssl: tlsOptions,
