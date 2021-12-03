@@ -1,4 +1,22 @@
+.league_container {
+    cursor: pointer;
+}
+
+.league_container:hover {
+    background-color: var(--webowl-background-hover);
+}
+
 .image {
     max-height: 300px;
     max-width: 300px;
+}
+
+.default_tick {
+    height: 20px;
+    width: 20px;
+}
+
+.default_text {
+    color: var(--webowl-accent);
+    margin-left: 3px;
 }

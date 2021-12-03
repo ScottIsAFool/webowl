@@ -40,7 +40,11 @@
             "trios": "Trios",
             "fours": "Fours",
             "fives": "Fives"
-        }
+        },
+        "yourLeagues": "Your leagues",
+        "noLeagues": "You don't appear to have any leagues, why not <tl>add one?</tl>",
+        "makeDefault": "Make default",
+        "default": "default"
     },
     "profileButton": {
         "title": "Profile menu",
