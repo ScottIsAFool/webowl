@@ -1,6 +1,7 @@
 import type {
     AcceptLeagueInviteRequest,
     AddLeagueRequest,
+    DeleteLeagueUserRequest,
     InviteToLeagueRequest,
     LeagueResponse,
     LeaguesResponse,
@@ -12,6 +13,7 @@ import {
     BadRequestException,
     Body,
     Controller,
+    Delete,
     Get,
     HttpCode,
     HttpStatus,
@@ -68,8 +70,7 @@ export class LeagueController {
     @Role('admin')
     @Get(endpoint('/:id/users'))
     async getLeagueUsers(@Param('id') leagueId: number): Promise<LeagueUsersResponse> {
-        const league = await this.leagueService.getLeague(leagueId, { includeUsers: true })
-        const users = league?.leagueRoles.map((x) => ({ user: x.user, role: x.role })) ?? []
+        const users = await this.leagueService.getLeagueUsers(leagueId)
 
         return {
             users: users.map((x) => x.user.toLeagueUserDto(x.role)),
@@ -128,6 +129,25 @@ export class LeagueController {
 
         return {
             user: updatedRole.user.toLeagueUserDto(role),
+        }
+    }
+
+    @UseGuards(JwtGuard, RoleGuard)
+    @Role('admin')
+    @Delete(endpoint('/:id/user/:userId'))
+    async deleteLeagueUser(
+        @Param('id') leagueId: number,
+        @Param('userId') userId: number,
+    ): Promise<void> {
+        const response = await this.leagueService.deleteRole(leagueId, userId)
+        if (response === undefined) {
+            throw new NotFoundException('No user could be found in this league')
+        }
+
+        if (!response) {
+            throw new BadRequestException(
+                'Deleting this user would result in a league having no admins',
+            )
         }
     }
 }

@@ -25,6 +25,7 @@ import type {
     LeagueEndpoints,
     UpdateRoleRequest,
     UpdateRoleResponse,
+    DeleteLeagueUserRequest,
 } from '.'
 import type { UserEndpoints, UserResponse } from './types/user-types'
 import { hasAuthTokenExpired } from './utils/date-utils'
@@ -176,6 +177,13 @@ export class ApiClient {
         return this.post<UpdateRoleResponse>({
             endPoint: this.endpoint('leagues', `${leagueId}/update-role`),
             request,
+            requiresAuth: true,
+        })
+    }
+
+    deleteLeagueUser(leagueId: number, request: DeleteLeagueUserRequest): Promise<void> {
+        return this.delete({
+            endPoint: this.endpoint('leagues', `${leagueId}/user${request.userId}`),
             requiresAuth: true,
         })
     }

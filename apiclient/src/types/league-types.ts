@@ -1,6 +1,12 @@
 import type { User } from '.'
 
-export type LeagueEndpoints = '/' | '/:id' | '/:id/users' | '/accept-invite' | '/:id/update-role'
+export type LeagueEndpoints =
+    | '/'
+    | '/:id'
+    | '/:id/users'
+    | '/accept-invite'
+    | '/:id/update-role'
+    | '/:id/user/:userId'
 
 export type LeagueRole = 'admin' | 'user'
 
@@ -53,4 +59,8 @@ export type UpdateRoleRequest = {
 
 export type UpdateRoleResponse = {
     user: LeagueUser
+}
+
+export type DeleteLeagueUserRequest = {
+    userId: number
 }

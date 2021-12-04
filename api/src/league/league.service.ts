@@ -6,7 +6,7 @@ import { User, UserService } from '../user'
 import { LeagueInvite } from './league-invite.entity'
 import { LeagueRole } from './league-role.entity'
 import { League } from './league.entity'
-import type { LeagueRole as Role } from '@webowl/apiclient'
+import type { LeagueRole as Role, LeagueUser } from '@webowl/apiclient'
 
 type LeagueOptions = {
     includeUsers?: boolean
@@ -123,6 +123,36 @@ export class LeagueService {
         leagueRole.role = role
 
         return await this.roleRepository.save(leagueRole)
+    }
+
+    async getLeagueUsers(leagueId: number): Promise<
+        {
+            user: User
+            role: Role
+        }[]
+    > {
+        const league = await this.getLeague(leagueId, { includeUsers: true })
+        const users = league?.leagueRoles.map((x) => ({ user: x.user, role: x.role })) ?? []
+        return users
+    }
+
+    async deleteRole(leagueId: number, userId: number): Promise<boolean | undefined> {
+        const leagueRole = await this.roleRepository.findOne({
+            where: {
+                league: { id: leagueId },
+                user: { id: userId },
+            },
+        })
+
+        if (!leagueRole) return undefined
+
+        const allUsers = await this.getLeagueUsers(leagueId)
+        const remainingUsers = allUsers.filter((x) => x.user.id !== userId)
+
+        if (!remainingUsers.some((x) => x.role === 'admin')) return false
+
+        await this.roleRepository.remove(leagueRole)
+        return true
     }
 
     private addLeagueOptions(leagueOptions: FindOneOptions<League>, options?: LeagueOptions) {
