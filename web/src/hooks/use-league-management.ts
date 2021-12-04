@@ -24,6 +24,7 @@ type LeagueManagementResult = {
         role: LeagueRole,
         leagueId: number,
     ) => Promise<ResultWith<UpdateRoleResponse>>
+    deleteLeagueUser: (leagueId: number, userId: number) => Promise<Result>
 }
 
 function useLeagueManagement(): LeagueManagementResult {
@@ -121,6 +122,21 @@ function useLeagueManagement(): LeagueManagementResult {
         [apiClient, dispatch],
     )
 
+    const deleteLeagueUser = React.useCallback(
+        async function deleteLeagueUser(leagueId: number, userId: number) {
+            const response = await makeCall(
+                () => apiClient.deleteLeagueUser(leagueId, { userId }),
+                setBusy,
+            )
+            if (response.type === 'success') {
+                dispatch(actions.deleteLeagueUser({ leagueId, userId }))
+            }
+
+            return response
+        },
+        [apiClient, dispatch],
+    )
+
     return {
         busy,
         getLeagues,
@@ -129,6 +145,7 @@ function useLeagueManagement(): LeagueManagementResult {
         sendUserInvite,
         acceptUserInvite,
         updateUserRole,
+        deleteLeagueUser,
     }
 }
 

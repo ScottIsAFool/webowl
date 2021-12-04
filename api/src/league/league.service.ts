@@ -6,7 +6,7 @@ import { User, UserService } from '../user'
 import { LeagueInvite } from './league-invite.entity'
 import { LeagueRole } from './league-role.entity'
 import { League } from './league.entity'
-import type { LeagueRole as Role, LeagueUser } from '@webowl/apiclient'
+import type { LeagueRole as Role } from '@webowl/apiclient'
 
 type LeagueOptions = {
     includeUsers?: boolean
@@ -152,6 +152,17 @@ export class LeagueService {
         if (!remainingUsers.some((x) => x.role === 'admin')) return false
 
         await this.roleRepository.remove(leagueRole)
+
+        // Check to see if that user has any leagues left, if not, remove the default
+        const userLeagues = await this.getUserLeagues(userId)
+        if (userLeagues.length === 0) {
+            const user = await this.userService.getById(userId)
+            if (user) {
+                user.defaultLeagueId = undefined
+                await this.userService.save(user)
+            }
+        }
+
         return true
     }
 

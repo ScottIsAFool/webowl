@@ -36,5 +36,13 @@ export const leagueUsersSlice = createSlice({
             state[leagueId] = users
             return save(state)
         },
+        deleteLeagueUser(state, action: PayloadAction<{ leagueId: number; userId: number }>) {
+            const { leagueId, userId } = action.payload
+            const users = state[leagueId]
+            const updatedList = users.filter((x) => x.id !== userId)
+            state[leagueId] = updatedList
+
+            return save(state)
+        },
     },
 })

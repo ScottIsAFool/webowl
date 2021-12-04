@@ -183,7 +183,7 @@ export class ApiClient {
 
     deleteLeagueUser(leagueId: number, request: DeleteLeagueUserRequest): Promise<void> {
         return this.delete({
-            endPoint: this.endpoint('leagues', `${leagueId}/user${request.userId}`),
+            endPoint: this.endpoint('leagues', `${leagueId}/user/${request.userId}`),
             requiresAuth: true,
         })
     }

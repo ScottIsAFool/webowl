@@ -32,7 +32,7 @@ function LeagueUserItem({
     users: LeagueUser[]
 }): JSX.Element {
     const { t } = useTranslation()
-    const { busy, updateUserRole } = useLeagueManagement()
+    const { busy, updateUserRole, deleteLeagueUser } = useLeagueManagement()
     const { authenticatedUser } = useAppSelector((state) => state)
     const [userRole, setUserRole] = React.useState<LeagueRole>(user.role)
     const [errorMessage, setErrorMessage] = React.useState<string>()
@@ -49,6 +49,14 @@ function LeagueUserItem({
             }
         } else {
             setErrorMessage(t('popups.manageUsers.noAdminsError'))
+        }
+    }
+
+    async function deleteRole(league: League, user: LeagueUser) {
+        setErrorMessage(undefined)
+        const response = await deleteLeagueUser(league.id, user.id)
+        if (response.type === 'error') {
+            setErrorMessage(response.message)
         }
     }
 
@@ -79,6 +87,7 @@ function LeagueUserItem({
                                 style={{ marginBottom: '1px' }}
                                 disabled={busy}
                                 startIcon={<DeleteIcon />}
+                                onClick={() => deleteRole(league, user)}
                             >
                                 <>{t('popups.manageUsers.delete')}</>
                             </Button>
