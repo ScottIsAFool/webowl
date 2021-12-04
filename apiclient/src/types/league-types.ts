@@ -1,6 +1,6 @@
 import type { User } from '.'
 
-export type LeagueEndpoints = '/' | '/:id' | '/:id/users'
+export type LeagueEndpoints = '/' | '/:id' | '/:id/users' | '/accept-invite'
 
 export type LeagueRole = 'admin' | 'user'
 
@@ -36,4 +36,12 @@ export type UpdateLeagueRequest = Partial<League>
 
 export type LeagueUsersResponse = {
     users: LeagueUser[]
+}
+
+export type InviteToLeagueRequest = {
+    emailAddress: string
+}
+
+export type AcceptLeagueInviteRequest = {
+    inviteCode: string
 }

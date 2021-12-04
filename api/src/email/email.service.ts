@@ -4,6 +4,7 @@ import type { EmailVerification } from '../auth/email-verification.entity'
 import type { PasswordReset } from '../auth/password-reset.entity'
 import { getConfiguration } from '../config/configuration'
 import { join } from 'path'
+import type { LeagueInvite } from '../league/league-invite.entity'
 
 @Injectable()
 export class EmailService {
@@ -13,7 +14,7 @@ export class EmailService {
 
     private readonly logger = new Logger(EmailService.name)
 
-    FROM = {
+    private readonly FROM = {
         name: 'Scott @ Webowl',
         email: 'scott@lovegrove.uk',
     }
@@ -62,6 +63,29 @@ export class EmailService {
         }
 
         this.logger.debug(`Sent to ${emailAddress} with code ${code}`)
+        await MailService.send(message)
+    }
+
+    async sendLeagueInvitation(invite: LeagueInvite): Promise<void> {
+        const url = new URL(join('leagues', 'invite'), getConfiguration().baseWebUrl)
+        url.searchParams.append('inviteCode', invite.inviteCode)
+
+        const body = [
+            `<p>${invite.invitee.firstName} ${invite.invitee.lastName} has invited you to join the ${invite.league.name} league on Webowl.</p>`,
+        ]
+        body.push(`<p>Webowl is a league management platform</p>`)
+        body.push(`<p>To accept your invite please click <a href="${url.toString()}>here</a>.</p>`)
+        body.push(
+            `<p>If the link doesn't work, copy this into your browser: ${url.toString()}.</p>`,
+        )
+
+        const message: MailDataRequired = {
+            to: invite.inviteEmail,
+            from: this.FROM,
+            subject: `You have been invite to join the ${invite.league.name} league`,
+            html: body.join(''),
+        }
+
         await MailService.send(message)
     }
 }

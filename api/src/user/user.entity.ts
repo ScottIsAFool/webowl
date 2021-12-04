@@ -13,6 +13,7 @@ import type { User as UserDto } from '@webowl/apiclient'
 import { getEncryptionTransformer } from '../auth/auth.utils'
 import { League } from '../league/league.entity'
 import { LeagueRole } from '../league/league-role.entity'
+import { LeagueInvite } from '../league/league-invite.entity'
 
 @Entity()
 @Unique(['emailAddress'])
@@ -77,6 +78,9 @@ export class User {
 
     @OneToMany(() => League, (league) => league.createdBy)
     leagues!: League[]
+
+    @OneToMany(() => LeagueInvite, (invite) => invite.invitee)
+    invites!: LeagueInvite[]
 
     hashPassword(): void {
         this.password = hashSync(this.password, 8)

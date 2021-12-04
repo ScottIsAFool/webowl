@@ -11,6 +11,7 @@ import { User } from '../user/user.entity'
 import type { League as LeagueDto } from '@webowl/apiclient'
 import { IsDefined, Length, Min } from 'class-validator'
 import { LeagueRole } from './league-role.entity'
+import { LeagueInvite } from './league-invite.entity'
 
 @Entity()
 export class League {
@@ -60,6 +61,9 @@ export class League {
 
     @OneToMany(() => LeagueRole, (role) => role.league)
     leagueRoles!: LeagueRole[]
+
+    @OneToMany(() => LeagueInvite, (invite) => invite.league)
+    invites!: LeagueInvite[]
 
     static create(o: Partial<League>): League {
         const league = new League()

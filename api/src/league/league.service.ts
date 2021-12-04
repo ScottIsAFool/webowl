@@ -1,7 +1,9 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import type { FindOneOptions, Repository } from 'typeorm'
+import { EmailService } from '../email/email.service'
 import { User, UserService } from '../user'
+import { LeagueInvite } from './league-invite.entity'
 import { LeagueRole } from './league-role.entity'
 import { League } from './league.entity'
 
@@ -14,7 +16,9 @@ export class LeagueService {
     constructor(
         @InjectRepository(League) private readonly leagueRepository: Repository<League>,
         @InjectRepository(LeagueRole) private readonly roleRepository: Repository<LeagueRole>,
+        @InjectRepository(LeagueInvite) private readonly inviteRepository: Repository<LeagueInvite>,
         private readonly userService: UserService,
+        private readonly emailService: EmailService,
     ) {}
 
     save(league: Partial<League>): Promise<League> {
@@ -58,6 +62,38 @@ export class LeagueService {
         }
 
         return savedLeague
+    }
+
+    async sendInviteToJoinLeague(user: User, league: League, emailAddress: string): Promise<void> {
+        const invite = LeagueInvite.create({
+            league,
+            invitee: user,
+            inviteEmail: emailAddress,
+        })
+
+        await this.inviteRepository.save(invite)
+        await this.emailService.sendLeagueInvitation(invite)
+    }
+
+    getInvite(inviteCode: string): Promise<LeagueInvite | undefined> {
+        return this.inviteRepository.findOne({ where: { inviteCode } })
+    }
+
+    async acceptInvite(invite: LeagueInvite, user: User): Promise<League> {
+        const role = LeagueRole.create({
+            role: 'user',
+            league: invite.league,
+            user,
+        })
+
+        await this.saveRole(role)
+
+        if (!user.defaultLeagueId) {
+            user.defaultLeagueId = invite.league.id
+            await this.userService.save(user)
+        }
+
+        return invite.league
     }
 
     private addLeagueOptions(leagueOptions: FindOneOptions<League>, options?: LeagueOptions) {

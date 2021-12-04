@@ -20,6 +20,9 @@ import type {
     UpdateLeagueRequest,
     LeaguesResponse,
     LeagueUsersResponse,
+    InviteToLeagueRequest,
+    AcceptLeagueInviteRequest,
+    LeagueEndpoints,
 } from '.'
 import type { UserEndpoints, UserResponse } from './types/user-types'
 import { hasAuthTokenExpired } from './utils/date-utils'
@@ -40,7 +43,7 @@ type ServerError = {
 }
 
 type BasePoints = 'auth' | 'user' | 'leagues'
-type RequestType = AuthEndpoints | UserEndpoints | string
+type RequestType = AuthEndpoints | UserEndpoints | LeagueEndpoints | string | number
 
 export class ApiClient {
     constructor(private readonly baseUrl: string, private authToken?: AuthToken) {}
@@ -151,7 +154,23 @@ export class ApiClient {
         })
     }
 
-    private endpoint(base: BasePoints, request: RequestType | number): string {
+    sendLeagueInvite(id: number, request: InviteToLeagueRequest): Promise<void> {
+        return this.post<void>({
+            endPoint: this.endpoint('leagues', `${id}/invite`),
+            request,
+            requiresAuth: true,
+        })
+    }
+
+    acceptLeagueInvite(request: AcceptLeagueInviteRequest): Promise<LeagueResponse> {
+        return this.post<LeagueResponse>({
+            endPoint: this.endpoint('leagues', 'accept-invite'),
+            request,
+            requiresAuth: true,
+        })
+    }
+
+    private endpoint(base: BasePoints, request: RequestType): string {
         return `${base}/${request}`
     }
 
