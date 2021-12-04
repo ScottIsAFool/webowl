@@ -25,7 +25,6 @@ import { League } from './league.entity'
 import { validate } from 'class-validator'
 import { Role } from './league-role.decorator'
 import { RoleGuard } from './league-role.guard'
-import { LeagueRole } from './league-role.entity'
 
 @Controller('leagues')
 export class LeagueController {

@@ -11,7 +11,7 @@ export type AppLifecycleResult = {
 function useAppLifecycle(): AppLifecycleResult {
     const [busy, setBusy] = React.useState(false)
     const { refreshAuthenticatedUser } = useUserManagement()
-    const { getLeagues } = useLeagueManagement()
+    const { getLeagues, getLeagueUsers } = useLeagueManagement()
     const authenticatedUser = useAppSelector((state) => state.authenticatedUser)
     const dispatch = useAppDispatch()
     const startup = React.useCallback(
@@ -20,16 +20,29 @@ function useAppLifecycle(): AppLifecycleResult {
             setBusy(true)
             try {
                 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                const [_, leagues] = await Promise.all([refreshAuthenticatedUser(), getLeagues()])
+                const [_, leagues, leagueUsers] = await Promise.all([
+                    refreshAuthenticatedUser(),
+                    getLeagues(),
+                    getLeagueUsers(authenticatedUser.defaultLeagueId),
+                ])
 
                 if (leagues.type === 'success') {
                     dispatch(actions.mergeLeagues(leagues.value.leagues))
+                }
+
+                if (leagueUsers.type === 'success' && authenticatedUser.defaultLeagueId) {
+                    dispatch(
+                        actions.addOrUpdateLeagueUsers({
+                            leagueId: authenticatedUser.defaultLeagueId,
+                            users: leagueUsers.value.users,
+                        }),
+                    )
                 }
             } finally {
                 setBusy(false)
             }
         },
-        [authenticatedUser, dispatch, getLeagues, refreshAuthenticatedUser],
+        [authenticatedUser, dispatch, getLeagueUsers, getLeagues, refreshAuthenticatedUser],
     )
 
     return {

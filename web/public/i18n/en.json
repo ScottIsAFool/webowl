@@ -44,7 +44,8 @@
         "yourLeagues": "Your leagues",
         "noLeagues": "You don't appear to have any leagues, why not <tl>add one?</tl>",
         "makeDefault": "Make default",
-        "default": "default"
+        "default": "default",
+        "invite": "Invite"
     },
     "profileButton": {
         "title": "Profile menu",
@@ -117,5 +118,16 @@
     },
     "home": {
         "openLeagues": "Open leagues"
+    },
+    "popups": {
+        "leagueInvite": {
+            "header": "Invite to {{name}}",
+            "mainText": "Enter the email address for the person you would like to invite to this league. If they do not have an account already, they will need to create one.",
+            "emailLabel": "Email address",
+            "emailPlaceholder": "Enter an email address...",
+            "sendInvite": "Send invite",
+            "close": "Close",
+            "inviteSent": "Sorted, an invitation has been sent to <strong>{{email}}</strong>."
+        }
     }
 }
