@@ -68,7 +68,7 @@ export class EmailService {
     }
 
     sendLeagueInvitation(invite: LeagueInvite): Promise<void> {
-        const url = new URL(join('leagues', 'invite'), getConfiguration().baseWebUrl)
+        const url = new URL(join('leagues', 'accept-invite'), getConfiguration().baseWebUrl)
         url.searchParams.append('inviteCode', invite.inviteCode)
 
         const body = [

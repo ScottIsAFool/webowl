@@ -114,7 +114,7 @@ function AddLeague(): JSX.Element | null {
     return (
         <Modal
             isOpen={true}
-            width="large"
+            width="medium"
             onDismiss={close}
             aria-label={t('addLeague.title')}
             exceptionallySetClassName={styles.add_league}

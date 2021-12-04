@@ -45,7 +45,11 @@
         "noLeagues": "You don't appear to have any leagues, why not <tl>add one?</tl>",
         "makeDefault": "Make default",
         "default": "default",
-        "invite": "Invite"
+        "invite": "Invite",
+        "acceptInvite": {
+            "header": "Invitation Accepted",
+            "successMessage": "If you would like to switch to this league now, please <tl>click here</tl>."
+        }
     },
     "profileButton": {
         "title": "Profile menu",

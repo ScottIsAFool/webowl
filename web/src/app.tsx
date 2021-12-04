@@ -9,16 +9,17 @@ import { AddLeague, LeagueInvite } from './components/popups'
 import { useAppSelector } from './reducers/hooks'
 
 function App(): JSX.Element {
+    const [appLoaded, setAppLoaded] = React.useState(false)
     const { isAuthenticated } = useAuth()
-    const { busy, startup } = useAppLifecycle()
+    const { startup } = useAppLifecycle()
     const element = useRoutes(routes(isAuthenticated))
     const { addLeague, inviteToLeague } = useAppSelector((state) => state.popups)
 
     React.useEffect(function onStartup() {
-        startup()
+        startup().then(() => setAppLoaded(true))
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
-    return busy ? (
+    return !appLoaded ? (
         <Box
             height="full"
             display="flex"

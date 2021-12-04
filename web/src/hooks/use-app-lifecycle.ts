@@ -5,7 +5,7 @@ import { useLeagueManagement, useUserManagement } from '.'
 
 export type AppLifecycleResult = {
     busy: boolean
-    startup: () => void
+    startup: () => Promise<void>
 }
 
 function useAppLifecycle(): AppLifecycleResult {

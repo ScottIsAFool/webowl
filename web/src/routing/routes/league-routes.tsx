@@ -1,6 +1,7 @@
 import * as React from 'react'
 import type { RouteObject } from 'react-router-dom'
 import { League, Leagues } from '../../pages/leagues'
+import { AcceptInvite } from '../../pages/leagues/accept-invite'
 import { GuardedRoute } from '../guarded-route'
 
 type LeagueRoute = '' | ':id'
@@ -22,6 +23,12 @@ function leagueRoutes(isAuthenticated: boolean): RouteObject[] {
                     index: true,
                     element: (
                         <GuardedRoute target={<Leagues />} isAuthenticated={isAuthenticated} />
+                    ),
+                },
+                {
+                    path: 'accept-invite',
+                    element: (
+                        <GuardedRoute target={<AcceptInvite />} isAuthenticated={isAuthenticated} />
                     ),
                 },
                 {

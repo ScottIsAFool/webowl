@@ -11,6 +11,8 @@ import {
     Body,
     Controller,
     Get,
+    HttpCode,
+    HttpStatus,
     NotFoundException,
     Param,
     Post,
@@ -40,6 +42,7 @@ export class LeagueController {
     }
 
     @UseGuards(JwtGuard)
+    @HttpCode(HttpStatus.OK)
     @Post(endpoint('/'))
     async addLeague(
         @AuthUser() user: User,
@@ -79,6 +82,7 @@ export class LeagueController {
 
     @UseGuards(JwtGuard, RoleGuard)
     @Role('admin')
+    @HttpCode(HttpStatus.OK)
     @Post('/:id/invite')
     async sendLeagueInvite(
         @AuthUser() user: User,
@@ -93,6 +97,7 @@ export class LeagueController {
     }
 
     @UseGuards(JwtGuard)
+    @HttpCode(HttpStatus.OK)
     @Post('/accept-invite')
     async acceptLeagueInvite(
         @AuthUser() user: User,

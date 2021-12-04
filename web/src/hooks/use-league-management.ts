@@ -16,6 +16,7 @@ type LeagueManagementResult = {
     addLeague: (league: Omit<League, 'id' | 'createdById'>) => Promise<ResultWith<LeagueResponse>>
     getLeagueUsers: (leagueId?: number) => Promise<ResultWith<LeagueUsersResponse>>
     sendUserInvite: (leagueId: number, emailAddress: string) => Promise<Result>
+    acceptUserInvite: (inviteCode: string) => Promise<ResultWith<LeagueResponse>>
 }
 
 function useLeagueManagement(): LeagueManagementResult {
@@ -64,12 +65,38 @@ function useLeagueManagement(): LeagueManagementResult {
         [apiClient],
     )
 
+    const acceptUserInvite = React.useCallback(
+        async function acceptUserInvite(inviteCode: string) {
+            const response = await makeCallWithValue(
+                () => apiClient.acceptLeagueInvite({ inviteCode }),
+                setBusy,
+            )
+
+            if (response.type === 'success') {
+                dispatch(actions.addOrUpdateLeague(response.value.league))
+                const users = await getLeagueUsers(response.value.league.id)
+                if (users.type === 'success') {
+                    dispatch(
+                        actions.addOrUpdateLeagueUsers({
+                            leagueId: response.value.league.id,
+                            users: users.value.users,
+                        }),
+                    )
+                }
+            }
+
+            return response
+        },
+        [apiClient, dispatch, getLeagueUsers],
+    )
+
     return {
         busy,
         getLeagues,
         addLeague,
         getLeagueUsers,
         sendUserInvite,
+        acceptUserInvite,
     }
 }
 
