@@ -29,20 +29,19 @@ type AccountCreationResult = {
 function useAccountCreation(): AccountCreationResult {
     const { updateAuthToken } = useAuth()
     const { apiClient } = useApiClient()
-    const { getLeagues } = useLeagueManagement()
+    const { getLeagues, getDefaultLeagueUsers } = useLeagueManagement()
     const [busy, setBusy] = React.useState(false)
     const dispatch = useAppDispatch()
 
     const postAuth = React.useCallback(
-        function postAuth(response: LoginResponse) {
+        async function postAuth(response: LoginResponse) {
             dispatch(actions.addOrUpdateUser(response.user))
             updateAuthToken(response.authToken)
             apiClient.setAuthToken(response.authToken)
-            getLeagues().catch(() => {
-                // noop
-            })
+            await getLeagues()
+            await getDefaultLeagueUsers()
         },
-        [apiClient, dispatch, getLeagues, updateAuthToken],
+        [apiClient, dispatch, getDefaultLeagueUsers, getLeagues, updateAuthToken],
     )
 
     const login = React.useCallback(
@@ -52,7 +51,7 @@ function useAccountCreation(): AccountCreationResult {
             }
             return makeCall(async () => {
                 const response = await apiClient.login({ emailAddress, password })
-                postAuth(response)
+                await postAuth(response)
             }, setBusy)
         },
         [apiClient, postAuth],
@@ -74,7 +73,7 @@ function useAccountCreation(): AccountCreationResult {
                     lastName,
                     password,
                 })
-                postAuth(response)
+                await postAuth(response)
             }, setBusy)
         },
         [apiClient, postAuth],
@@ -141,7 +140,7 @@ function useAccountCreation(): AccountCreationResult {
         function socialLogin(accessToken: string, socialId: string, provider: SocialProvider) {
             return makeCall(async () => {
                 const response = await apiClient.socialLogin({ accessToken, socialId, provider })
-                postAuth(response)
+                await postAuth(response)
             }, setBusy)
         },
         [apiClient, postAuth],

@@ -17,6 +17,7 @@ type LeagueManagementResult = {
     getLeagues: () => Promise<ResultWith<LeaguesResponse>>
     addLeague: (league: Omit<League, 'id' | 'createdById'>) => Promise<ResultWith<LeagueResponse>>
     getLeagueUsers: (leagueId?: number) => Promise<ResultWith<LeagueUsersResponse>>
+    getDefaultLeagueUsers: () => Promise<ResultWith<LeagueUsersResponse>>
     sendUserInvite: (leagueId: number, emailAddress: string) => Promise<Result>
     acceptUserInvite: (inviteCode: string) => Promise<ResultWith<LeagueResponse>>
     updateUserRole: (
@@ -66,6 +67,25 @@ function useLeagueManagement(): LeagueManagementResult {
         },
         [apiClient, authenticatedUser, dispatch],
     )
+
+    const getDefaultLeagueUsers = React.useCallback(
+        async function getLeagueUsers(): Promise<ResultWith<LeagueUsersResponse>> {
+            if (!authenticatedUser?.defaultLeagueId) return { type: 'idle' }
+            const leagueId = authenticatedUser.defaultLeagueId
+            const response = await makeCallWithValue(() => apiClient.getLeagueUsers(leagueId))
+            if (response.type === 'success') {
+                dispatch(
+                    actions.addOrUpdateLeagueUsers({
+                        leagueId,
+                        users: response.value.users,
+                    }),
+                )
+            }
+            return response
+        },
+        [apiClient, authenticatedUser, dispatch],
+    )
+
     const sendUserInvite = React.useCallback(
         function sendUserInvite(leagueId: number, emailAddress: string) {
             return makeCall(() => apiClient.sendLeagueInvite(leagueId, { emailAddress }), setBusy)
@@ -142,6 +162,7 @@ function useLeagueManagement(): LeagueManagementResult {
         getLeagues,
         addLeague,
         getLeagueUsers,
+        getDefaultLeagueUsers,
         sendUserInvite,
         acceptUserInvite,
         updateUserRole,

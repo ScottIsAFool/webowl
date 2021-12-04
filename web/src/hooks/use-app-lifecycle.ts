@@ -11,7 +11,7 @@ export type AppLifecycleResult = {
 function useAppLifecycle(): AppLifecycleResult {
     const [busy, setBusy] = React.useState(false)
     const { refreshAuthenticatedUser } = useUserManagement()
-    const { getLeagues, getLeagueUsers } = useLeagueManagement()
+    const { getLeagues, getDefaultLeagueUsers } = useLeagueManagement()
     const authenticatedUser = useAppSelector((state) => state.authenticatedUser)
     const dispatch = useAppDispatch()
     const startup = React.useCallback(
@@ -23,7 +23,7 @@ function useAppLifecycle(): AppLifecycleResult {
                 const [_, leagues, leagueUsers] = await Promise.all([
                     refreshAuthenticatedUser(),
                     getLeagues(),
-                    getLeagueUsers(authenticatedUser.defaultLeagueId),
+                    getDefaultLeagueUsers(),
                 ])
 
                 if (leagues.type === 'success') {
@@ -42,7 +42,7 @@ function useAppLifecycle(): AppLifecycleResult {
                 setBusy(false)
             }
         },
-        [authenticatedUser, dispatch, getLeagueUsers, getLeagues, refreshAuthenticatedUser],
+        [authenticatedUser, dispatch, getDefaultLeagueUsers, getLeagues, refreshAuthenticatedUser],
     )
 
     return {
