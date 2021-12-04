@@ -74,7 +74,7 @@ export class EmailService {
             `<p>${invite.invitee.firstName} ${invite.invitee.lastName} has invited you to join the ${invite.league.name} league on Webowl.</p>`,
         ]
         body.push(`<p>Webowl is a league management platform</p>`)
-        body.push(`<p>To accept your invite please click <a href="${url.toString()}>here</a>.</p>`)
+        body.push(`<p>To accept your invite please click <a href="${url.toString()}">here</a>.</p>`)
         body.push(
             `<p>If the link doesn't work, copy this into your browser: ${url.toString()}.</p>`,
         )
@@ -86,6 +86,7 @@ export class EmailService {
             html: body.join(''),
         }
 
+        this.logger.debug(`Sent to ${invite.inviteEmail} with code ${invite.inviteCode}`)
         await MailService.send(message)
     }
 }

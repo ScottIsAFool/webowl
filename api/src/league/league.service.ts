@@ -65,18 +65,25 @@ export class LeagueService {
     }
 
     async sendInviteToJoinLeague(user: User, league: League, emailAddress: string): Promise<void> {
-        const invite = LeagueInvite.create({
-            league,
-            invitee: user,
-            inviteEmail: emailAddress,
-        })
+        let invite = await this.getInviteByEmail(emailAddress)
+        if (!invite) {
+            invite = LeagueInvite.create({
+                league,
+                invitee: user,
+                inviteEmail: emailAddress,
+            })
 
-        await this.inviteRepository.save(invite)
+            await this.inviteRepository.save(invite)
+        }
         await this.emailService.sendLeagueInvitation(invite)
     }
 
     getInvite(inviteCode: string): Promise<LeagueInvite | undefined> {
         return this.inviteRepository.findOne({ where: { inviteCode } })
+    }
+
+    getInviteByEmail(emailAddress: string): Promise<LeagueInvite | undefined> {
+        return this.inviteRepository.findOne({ where: { inviteEmail: emailAddress } })
     }
 
     async acceptInvite(invite: LeagueInvite, user: User): Promise<League> {
@@ -92,6 +99,8 @@ export class LeagueService {
             user.defaultLeagueId = invite.league.id
             await this.userService.save(user)
         }
+
+        await this.inviteRepository.remove(invite)
 
         return invite.league
     }
