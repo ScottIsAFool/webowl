@@ -46,6 +46,7 @@
         "makeDefault": "Make default",
         "default": "default",
         "invite": "Invite",
+        "manage": "Manage",
         "acceptInvite": {
             "header": "Invitation Accepted",
             "successMessage": "If you would like to switch to this league now, please <tl>click here</tl>."
@@ -132,6 +133,16 @@
             "sendInvite": "Send invite",
             "close": "Close",
             "inviteSent": "Sorted, an invitation has been sent to <strong>{{email}}</strong>."
+        },
+        "manageUsers": {
+            "header": "Manage users for {{name}}",
+            "mainText": "Here you can manage what access users have to your league.",
+            "you": "(You)",
+            "roleLabel": "Choose a role",
+            "admin": "Admin",
+            "user": "User",
+            "noAdminsError": "This cannot be done as it would leave the league with no admins",
+            "delete": "Delete"
         }
     }
 }

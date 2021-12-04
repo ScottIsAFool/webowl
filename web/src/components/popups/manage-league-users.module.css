@@ -1,0 +1,4 @@
+.manage_users option {
+    background-color: var(--webowl-menu-background-hover);
+    color: var(--webowl-foreground);
+}

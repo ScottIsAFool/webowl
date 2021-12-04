@@ -19,7 +19,7 @@ function LeagueInvite(): JSX.Element | null {
     const [emailAddress, setEmailAddress] = React.useState('')
     const [errorMessage, setErrorMessage] = React.useState<string>()
     const [inviteSent, setInviteSent] = React.useState(false)
-    const { leagueToInviteTo: league } = useAppSelector((state) => state.popups)
+    const { league } = useAppSelector((state) => state.popups)
     const { t } = useTranslation()
     const dispatch = useAppDispatch()
     const { busy, sendUserInvite } = useLeagueManagement()

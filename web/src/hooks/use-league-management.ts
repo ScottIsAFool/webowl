@@ -2,8 +2,10 @@ import * as React from 'react'
 import type {
     League,
     LeagueResponse,
+    LeagueRole,
     LeaguesResponse,
     LeagueUsersResponse,
+    UpdateRoleResponse,
 } from '@webowl/apiclient'
 import { makeCall, makeCallWithValue, Result, ResultWith } from '../utils/result-utils'
 import { useApiClient } from '.'
@@ -17,6 +19,11 @@ type LeagueManagementResult = {
     getLeagueUsers: (leagueId?: number) => Promise<ResultWith<LeagueUsersResponse>>
     sendUserInvite: (leagueId: number, emailAddress: string) => Promise<Result>
     acceptUserInvite: (inviteCode: string) => Promise<ResultWith<LeagueResponse>>
+    updateUserRole: (
+        userId: number,
+        role: LeagueRole,
+        leagueId: number,
+    ) => Promise<ResultWith<UpdateRoleResponse>>
 }
 
 function useLeagueManagement(): LeagueManagementResult {
@@ -90,6 +97,30 @@ function useLeagueManagement(): LeagueManagementResult {
         [apiClient, dispatch, getLeagueUsers],
     )
 
+    const updateUserRole = React.useCallback(
+        async function updateUserRole(
+            userId: number,
+            role: LeagueRole,
+            leagueId: number,
+        ): Promise<ResultWith<UpdateRoleResponse>> {
+            const response = await makeCallWithValue(
+                () =>
+                    apiClient.updateLeagueRole(leagueId, {
+                        role,
+                        userId,
+                    }),
+                setBusy,
+            )
+
+            if (response.type === 'success') {
+                dispatch(actions.updateLeagueUser({ leagueId, user: response.value.user }))
+            }
+
+            return response
+        },
+        [apiClient, dispatch],
+    )
+
     return {
         busy,
         getLeagues,
@@ -97,6 +128,7 @@ function useLeagueManagement(): LeagueManagementResult {
         getLeagueUsers,
         sendUserInvite,
         acceptUserInvite,
+        updateUserRole,
     }
 }
 

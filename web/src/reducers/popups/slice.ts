@@ -14,12 +14,22 @@ export const popupsSlice = createSlice({
         },
         openLeagueInvitation(state, action: PayloadAction<League>) {
             state.inviteToLeague = true
-            state.leagueToInviteTo = action.payload
+            state.league = action.payload
             return state
         },
         closeLeagueInvitiation(state, _action: PayloadAction) {
             state.inviteToLeague = false
-            state.leagueToInviteTo = undefined
+            state.league = undefined
+            return state
+        },
+        openManageLeague(state, action: PayloadAction<League>) {
+            state.manageLeagueUsers = true
+            state.league = action.payload
+            return state
+        },
+        closeManageLeague(state, _action: PayloadAction) {
+            state.manageLeagueUsers = false
+            state.league = undefined
             return state
         },
     },

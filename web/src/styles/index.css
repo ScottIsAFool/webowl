@@ -22,7 +22,7 @@
     --reactist-content-primary: var(--webowl-foreground);
     --reactist-content-secondary: var(--webowl-foreground-subtle);
     --reactist-chromatic-content-blue: var(--webowl-accent);
-    --reactist-chromatic-content-red: red;
+    --reactist-chromatic-content-red: #ff4848;
 
     --reactist-actionable-primary-idle-fill: var(--webowl-accent);
     --reactist-actionable-primary-hover-fill: var(--webowl-accent-hover);

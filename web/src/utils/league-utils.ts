@@ -1,3 +1,5 @@
+import type { LeagueRole, LeagueUser } from '@webowl/apiclient'
+
 export function getPlayerFormatKey(value: number): string {
     switch (value) {
         case 1:
@@ -13,4 +15,14 @@ export function getPlayerFormatKey(value: number): string {
         default:
             throw new Error('Unknown player count')
     }
+}
+
+export function willHaveAnAdminLeft(
+    user: LeagueUser,
+    role: LeagueRole,
+    users: LeagueUser[],
+): boolean {
+    const otherUsers = users.filter((x) => x.id !== user.id)
+    const potentiallyUpdatedUsers = [...otherUsers, { ...user, role }]
+    return potentiallyUpdatedUsers.some((x) => x.role === 'admin')
 }
