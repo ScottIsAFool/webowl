@@ -16,7 +16,11 @@ function App(): JSX.Element {
     const { addLeague, inviteToLeague } = useAppSelector((state) => state.popups)
 
     React.useEffect(function onStartup() {
-        startup().then(() => setAppLoaded(true))
+        startup()
+            .then(() => setAppLoaded(true))
+            .finally(() => {
+                // noop
+            })
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
     return !appLoaded ? (

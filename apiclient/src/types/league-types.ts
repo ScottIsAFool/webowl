@@ -1,6 +1,6 @@
 import type { User } from '.'
 
-export type LeagueEndpoints = '/' | '/:id' | '/:id/users' | '/accept-invite'
+export type LeagueEndpoints = '/' | '/:id' | '/:id/users' | '/accept-invite' | '/:id/update-role'
 
 export type LeagueRole = 'admin' | 'user'
 
@@ -44,4 +44,13 @@ export type InviteToLeagueRequest = {
 
 export type AcceptLeagueInviteRequest = {
     inviteCode: string
+}
+
+export type UpdateRoleRequest = {
+    role: LeagueRole
+    userId: number
+}
+
+export type UpdateRoleResponse = {
+    user: LeagueUser
 }

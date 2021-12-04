@@ -6,6 +6,7 @@ import { User, UserService } from '../user'
 import { LeagueInvite } from './league-invite.entity'
 import { LeagueRole } from './league-role.entity'
 import { League } from './league.entity'
+import type { LeagueRole as Role } from '@webowl/apiclient'
 
 type LeagueOptions = {
     includeUsers?: boolean
@@ -103,6 +104,25 @@ export class LeagueService {
         await this.inviteRepository.remove(invite)
 
         return invite.league
+    }
+
+    async updateRole(
+        leagueId: number,
+        userId: number,
+        role: Role,
+    ): Promise<LeagueRole | undefined> {
+        const leagueRole = await this.roleRepository.findOne({
+            where: {
+                league: { id: leagueId },
+                user: { id: userId },
+            },
+        })
+
+        if (!leagueRole) return undefined
+
+        leagueRole.role = role
+
+        return await this.roleRepository.save(leagueRole)
     }
 
     private addLeagueOptions(leagueOptions: FindOneOptions<League>, options?: LeagueOptions) {

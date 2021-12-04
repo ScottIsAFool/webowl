@@ -9,7 +9,7 @@ import {
     UpdateDateColumn,
 } from 'typeorm'
 import { hashSync, compareSync } from 'bcryptjs'
-import type { User as UserDto } from '@webowl/apiclient'
+import type { LeagueUser, User as UserDto, LeagueRole as Role } from '@webowl/apiclient'
 import { getEncryptionTransformer } from '../auth/auth.utils'
 import { League } from '../league/league.entity'
 import { LeagueRole } from '../league/league-role.entity'
@@ -107,6 +107,16 @@ export class User {
             isMicrosoftAuth: this.isMicrosoftAuth ?? undefined,
             verified: this.isVerified,
             defaultLeagueId: this.defaultLeagueId,
+        }
+    }
+
+    toLeagueUserDto(role: Role): LeagueUser {
+        return {
+            id: this.id,
+            firstName: this.firstName,
+            lastName: this.lastName,
+            emailAddress: this.emailAddress,
+            role,
         }
     }
 }

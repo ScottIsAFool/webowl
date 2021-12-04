@@ -23,6 +23,8 @@ import type {
     InviteToLeagueRequest,
     AcceptLeagueInviteRequest,
     LeagueEndpoints,
+    UpdateRoleRequest,
+    UpdateRoleResponse,
 } from '.'
 import type { UserEndpoints, UserResponse } from './types/user-types'
 import { hasAuthTokenExpired } from './utils/date-utils'
@@ -165,6 +167,14 @@ export class ApiClient {
     acceptLeagueInvite(request: AcceptLeagueInviteRequest): Promise<LeagueResponse> {
         return this.post<LeagueResponse>({
             endPoint: this.endpoint('leagues', 'accept-invite'),
+            request,
+            requiresAuth: true,
+        })
+    }
+
+    updateLeagueRole(leagueId: number, request: UpdateRoleRequest): Promise<UpdateRoleResponse> {
+        return this.post<UpdateRoleResponse>({
+            endPoint: this.endpoint('leagues', `${leagueId}/update-role`),
             request,
             requiresAuth: true,
         })

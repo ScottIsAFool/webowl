@@ -5,6 +5,8 @@ import type {
     LeagueResponse,
     LeaguesResponse,
     LeagueUsersResponse,
+    UpdateRoleRequest,
+    UpdateRoleResponse,
 } from '@webowl/apiclient'
 import {
     BadRequestException,
@@ -70,13 +72,7 @@ export class LeagueController {
         const users = league?.leagueRoles.map((x) => ({ user: x.user, role: x.role })) ?? []
 
         return {
-            users: users.map((x) => ({
-                id: x.user.id,
-                firstName: x.user.firstName,
-                lastName: x.user.lastName,
-                emailAddress: x.user.emailAddress,
-                role: x.role,
-            })),
+            users: users.map((x) => x.user.toLeagueUserDto(x.role)),
         }
     }
 
@@ -112,6 +108,26 @@ export class LeagueController {
 
         return {
             league: league.toDto(),
+        }
+    }
+
+    @UseGuards(JwtGuard, RoleGuard)
+    @HttpCode(HttpStatus.OK)
+    @Role('admin')
+    @Post(endpoint('/:id/update-role'))
+    async updateLeagueUser(
+        @Param('id') leagueId: number,
+        @Body() request: UpdateRoleRequest,
+    ): Promise<UpdateRoleResponse> {
+        const { userId, role } = request
+
+        const updatedRole = await this.leagueService.updateRole(leagueId, userId, role)
+        if (!updatedRole) {
+            throw new NotFoundException('This user could not be found for this league')
+        }
+
+        return {
+            user: updatedRole.user.toLeagueUserDto(role),
         }
     }
 }
