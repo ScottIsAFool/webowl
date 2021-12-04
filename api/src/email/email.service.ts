@@ -5,6 +5,7 @@ import type { PasswordReset } from '../auth/password-reset.entity'
 import { getConfiguration } from '../config/configuration'
 import { join } from 'path'
 import type { LeagueInvite } from '../league/league-invite.entity'
+import { isProduction } from '../utils/env-utils'
 
 @Injectable()
 export class EmailService {
@@ -19,7 +20,7 @@ export class EmailService {
         email: 'scott@lovegrove.uk',
     }
 
-    async sendEmailVerification(verification: EmailVerification): Promise<void> {
+    sendEmailVerification(verification: EmailVerification): Promise<void> {
         const { emailAddress, verificationCode } = verification
 
         const url = new URL(join('auth', 'verify-email'), getConfiguration().baseWebUrl)
@@ -38,10 +39,10 @@ export class EmailService {
             html: body.join(''),
         }
         this.logger.debug(`Sent to ${emailAddress} with code ${verificationCode}`)
-        await MailService.send(message)
+        return this.send(message)
     }
 
-    async sendPasswordReset(passwordReset: PasswordReset): Promise<void> {
+    sendPasswordReset(passwordReset: PasswordReset): Promise<void> {
         const { emailAddress, code } = passwordReset
 
         const url = new URL(join('auth', 'password-reset'), getConfiguration().baseWebUrl)
@@ -63,10 +64,10 @@ export class EmailService {
         }
 
         this.logger.debug(`Sent to ${emailAddress} with code ${code}`)
-        await MailService.send(message)
+        return this.send(message)
     }
 
-    async sendLeagueInvitation(invite: LeagueInvite): Promise<void> {
+    sendLeagueInvitation(invite: LeagueInvite): Promise<void> {
         const url = new URL(join('leagues', 'invite'), getConfiguration().baseWebUrl)
         url.searchParams.append('inviteCode', invite.inviteCode)
 
@@ -87,6 +88,12 @@ export class EmailService {
         }
 
         this.logger.debug(`Sent to ${invite.inviteEmail} with code ${invite.inviteCode}`)
-        await MailService.send(message)
+        return this.send(message)
+    }
+
+    async send(message: MailDataRequired): Promise<void> {
+        if (isProduction()) {
+            await MailService.send(message)
+        }
     }
 }
