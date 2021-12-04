@@ -41,10 +41,13 @@ export class AuthService {
 
     async generateAccessToken(options: JwtOptions): Promise<AuthToken> {
         const accessToken = await this.jwtService.signAsync(options)
-        const refreshToken = await this.jwtService.signAsync(options, {
-            secret: getConfiguration().jwtToken,
-            expiresIn: '9999 years',
-        })
+        const refreshToken = await this.jwtService.signAsync(
+            { ...options, isRefresh: true },
+            {
+                secret: getConfiguration().jwtToken,
+                expiresIn: '9999 years',
+            },
+        )
 
         const token = AccessToken.create({ accessToken, userId: options.sub, refreshToken })
 

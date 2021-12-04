@@ -14,10 +14,18 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
         })
     }
 
-    async validate({ emailAddress, sub }: { emailAddress: string; sub: number }): Promise<User> {
+    async validate({
+        emailAddress,
+        sub,
+        isRefresh,
+    }: {
+        emailAddress: string
+        sub: number
+        isRefresh?: boolean
+    }): Promise<User> {
         const user = await this.userService.getByEmail(emailAddress)
 
-        if (!user || user.id !== sub) {
+        if (!user || user.id !== sub || isRefresh) {
             throw new UnauthorizedException()
         }
 
