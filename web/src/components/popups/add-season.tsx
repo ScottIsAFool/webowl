@@ -1,6 +1,7 @@
 import {
     Button,
     Heading,
+    Input,
     Modal,
     ModalActions,
     ModalBody,
@@ -43,12 +44,21 @@ const frequencyKeys: FrequencyKeys = {
 
 const frequencies: Frequency[] = [7, 14, 28]
 
-type AddSeasonSteps = 'initial' | 'edit-initial' | 'options'
+type AddSeasonSteps =
+    | 'initial'
+    | 'edit-initial'
+    | 'options'
+    | 'edit-options'
+    | 'dates'
+    | 'edit-dates'
 
 const allButtonData: ButtonsData = {
     initial: { next: 'options' },
-    'edit-initial': { next: 'options', back: 'initial' },
-    options: { back: 'initial' },
+    'edit-initial': { next: 'edit-options', back: 'initial' },
+    options: { back: 'initial', next: 'dates' },
+    'edit-options': { back: 'edit-initial', next: 'edit-dates' },
+    dates: { back: 'options' },
+    'edit-dates': { back: 'edit-options' },
 }
 
 function AddSeason(): JSX.Element {
@@ -129,7 +139,7 @@ function AddSeason(): JSX.Element {
                                 onChange={(e) => setSetupChanged(e.target.checked)}
                             />
                         </Stack>
-                    ) : step === 'options' ? (
+                    ) : step === 'options' || step === 'edit-options' ? (
                         <Stack space="medium">
                             <SelectField
                                 label={t('popups.addSeason.options.roundsLabel')}
@@ -161,6 +171,10 @@ function AddSeason(): JSX.Element {
                                     </option>
                                 ))}
                             </SelectField>
+                        </Stack>
+                    ) : step === 'dates' || step === 'edit-dates' ? (
+                        <Stack space="medium">
+                            <Input type="time" />
                         </Stack>
                     ) : (
                         step
