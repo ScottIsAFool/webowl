@@ -29,19 +29,19 @@ type AccountCreationResult = {
 function useAccountCreation(): AccountCreationResult {
     const { updateAuthToken } = useAuth()
     const { apiClient } = useApiClient()
-    const { getLeagues, getDefaultLeagueUsers } = useLeagueManagement()
+    const { getLeagues, getLeagueUsers } = useLeagueManagement()
     const [busy, setBusy] = React.useState(false)
     const dispatch = useAppDispatch()
 
     const postAuth = React.useCallback(
         async function postAuth(response: LoginResponse) {
             dispatch(actions.addOrUpdateUser(response.user))
-            updateAuthToken(response.authToken)
             apiClient.setAuthToken(response.authToken)
             await getLeagues()
-            await getDefaultLeagueUsers()
+            await getLeagueUsers(response.user.defaultLeagueId)
+            updateAuthToken(response.authToken)
         },
-        [apiClient, dispatch, getDefaultLeagueUsers, getLeagues, updateAuthToken],
+        [apiClient, dispatch, getLeagueUsers, getLeagues, updateAuthToken],
     )
 
     const login = React.useCallback(

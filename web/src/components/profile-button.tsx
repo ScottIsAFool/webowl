@@ -1,7 +1,6 @@
 import {
     Avatar,
     Box,
-    Button,
     Column,
     Columns,
     Menu,
@@ -26,15 +25,15 @@ const AsButton = React.forwardRef<HTMLButtonElement, unknown>(function AsButton(
     const { authenticatedUser } = useUserManagement()
     if (!authenticatedUser) throw new Error()
     return (
-        <Button variant="quaternary" size="large" ref={ref} {...props}>
+        <button ref={ref} {...props} className={styles.avatar_button}>
             <Avatar
-                size="s"
+                size="m"
                 user={{
                     name: `${authenticatedUser.firstName} ${authenticatedUser.lastName}`,
                     email: authenticatedUser.emailAddress,
                 }}
             />
-        </Button>
+        </button>
     )
 })
 

@@ -5,3 +5,12 @@
 .league_avatar {
     margin-left: 3px;
 }
+
+.avatar_button {
+    background-color: transparent;
+    background-repeat: no-repeat;
+    border: none;
+    cursor: pointer;
+    overflow: hidden;
+    outline: none;
+}

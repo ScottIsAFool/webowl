@@ -63,14 +63,14 @@ function useLeagueManagement(): LeagueManagementResult {
 
     const getLeagueUsers = React.useCallback(
         async function getLeagueUsers(leagueId?: number): Promise<ResultWith<LeagueUsersResponse>> {
-            if (!authenticatedUser || !leagueId) return { type: 'idle' }
+            if (!leagueId) return { type: 'idle' }
             const response = await makeCallWithValue(() => apiClient.getLeagueUsers(leagueId))
             if (response.type === 'success') {
                 dispatch(actions.addOrUpdateLeagueUsers({ leagueId, users: response.value.users }))
             }
             return response
         },
-        [apiClient, authenticatedUser, dispatch],
+        [apiClient, dispatch],
     )
 
     const getDefaultLeagueUsers = React.useCallback(

@@ -27,7 +27,7 @@ import { Trans } from 'react-i18next'
 function League(): JSX.Element {
     const { id } = useParams()
     const { leagues, leagueUsers, authenticatedUser, seasons } = useAppSelector((state) => state)
-    const { getSeasons } = useLeagueManagement()
+    const { getSeasons, getLeagueUsers } = useLeagueManagement()
     const dispatch = useAppDispatch()
     const [isLoaded, setIsLoaded] = React.useState(false)
 
@@ -38,7 +38,7 @@ function League(): JSX.Element {
     const idNum = parseInt(id)
 
     React.useEffect(function pageLoad() {
-        Promise.all([getSeasons(idNum)])
+        Promise.all([getSeasons(idNum), getLeagueUsers(idNum)])
             .then(() => {
                 setIsLoaded(true)
             })
