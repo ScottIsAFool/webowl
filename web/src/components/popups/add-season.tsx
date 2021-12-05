@@ -5,16 +5,22 @@ import {
     ModalActions,
     ModalBody,
     ModalHeader,
+    SelectField,
     Stack,
     SwitchField,
     TextField,
 } from '@doist/reactist'
-import type { AddSeasonRequest, League } from '@webowl/apiclient'
+import type { AddSeasonRequest, Frequency, League } from '@webowl/apiclient'
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
 import { useLeagueManagement } from '../../hooks'
 import { actions } from '../../reducers/actions'
 import { useAppDispatch, useAppSelector } from '../../reducers/hooks'
+import range from 'lodash/range'
+
+import styles from './add-season.module.css'
+
+const roundNumbers = range(1, 11, 1)
 
 type Buttons = {
     next?: AddSeasonSteps
@@ -24,6 +30,18 @@ type Buttons = {
 type ButtonsData = {
     [k in AddSeasonSteps]: Buttons
 }
+
+type FrequencyKeys = {
+    [k in Frequency]: string
+}
+
+const frequencyKeys: FrequencyKeys = {
+    '7': 'popups.addSeason.options.weekly',
+    '14': 'popups.addSeason.options.fortnightly',
+    '28': 'popups.addSeason.options.fourWeeks',
+}
+
+const frequencies: Frequency[] = [7, 14, 28]
 
 type AddSeasonSteps = 'initial' | 'edit-initial' | 'options'
 
@@ -38,15 +56,18 @@ function AddSeason(): JSX.Element {
     const { t } = useTranslation()
     const { addSeason, busy } = useLeagueManagement()
     const league = useAppSelector((state) => state.popups.league)
-    const [step, setStep] = React.useState<AddSeasonSteps>('initial')
-    const [setupChanged, setSetupChanged] = React.useState(false)
-    const [name, setName] = React.useState('')
-
     if (!league) {
         throw new Error('Something has gone wrong, how is league empty?')
     }
+    const [step, setStep] = React.useState<AddSeasonSteps>('initial')
+    const [setupChanged, setSetupChanged] = React.useState(false)
+    const [name, setName] = React.useState('')
+    const [rounds, setRounds] = React.useState(2)
+    const [teamNumbers, setTeamNumbers] = React.useState(league.teamNumbers)
+    const [frequency, setFrequency] = React.useState<Frequency>(7)
 
     const buttonData = allButtonData[step]
+    const matches = rounds * teamNumbers
     function close() {
         dispatch(actions.closeAddSeason())
     }
@@ -68,7 +89,7 @@ function AddSeason(): JSX.Element {
 
         if (false) {
             const response = await addSeason({
-                teamNumbers: league.teamNumbers,
+                teamNumbers,
                 leagueId: league.id,
                 name,
             } as AddSeasonRequest)
@@ -92,7 +113,7 @@ function AddSeason(): JSX.Element {
             </ModalHeader>
 
             <form onSubmit={(e) => nextClicked(e, league)}>
-                <ModalBody>
+                <ModalBody exceptionallySetClassName={styles.add_season}>
                     {step === 'initial' ? (
                         <Stack space="large">
                             <Heading level="2">{t('popups.addSeason.initial.mainText')}</Heading>
@@ -107,6 +128,39 @@ function AddSeason(): JSX.Element {
                                 label={t('popups.addSeason.initial.changedLabel')}
                                 onChange={(e) => setSetupChanged(e.target.checked)}
                             />
+                        </Stack>
+                    ) : step === 'options' ? (
+                        <Stack space="medium">
+                            <SelectField
+                                label={t('popups.addSeason.options.roundsLabel')}
+                                value={rounds}
+                                onChange={(e) => setRounds(parseInt(e.target.value))}
+                                hint={t('popups.addSeason.options.matchesCount', {
+                                    matches: matches,
+                                    teams: teamNumbers,
+                                })}
+                            >
+                                {roundNumbers.map((x) => (
+                                    <option key={x} value={x}>
+                                        {t('popups.addSeason.options.rounds', {
+                                            count: x,
+                                        })}
+                                    </option>
+                                ))}
+                            </SelectField>
+                            <SelectField
+                                label={t('popups.addSeason.options.frequencyLabel')}
+                                value={frequency}
+                                onChange={(e) =>
+                                    setFrequency(parseInt(e.target.value) as Frequency)
+                                }
+                            >
+                                {frequencies.map((x) => (
+                                    <option key={x} value={x}>
+                                        {t(frequencyKeys[x])}
+                                    </option>
+                                ))}
+                            </SelectField>
                         </Stack>
                     ) : (
                         step

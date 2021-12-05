@@ -157,6 +157,16 @@
                 "nameLabel": "Season name",
                 "namePlaceholder": "Enter a name for this season",
                 "optional": "optional"
+            },
+            "options": {
+                "roundsLabel": "Rounds",
+                "rounds_one": "1 round",
+                "rounds_other": "{{count}} rounds",
+                "matchesCount": "This will result in {{matches}} matches for {{teams}} teams.",
+                "weekly": "Weekly",
+                "fortnightly": "Fortnightly",
+                "fourWeeks": "Every four weeks",
+                "frequencyLabel": "How often?"
             }
         }
     }
