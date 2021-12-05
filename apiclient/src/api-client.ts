@@ -26,6 +26,11 @@ import type {
     UpdateRoleRequest,
     UpdateRoleResponse,
     DeleteLeagueUserRequest,
+    SeasonEndpoints,
+    GetSeasonsRequest,
+    SeasonsResponse,
+    AddSeasonRequest,
+    SeasonResponse,
 } from '.'
 import type { UserEndpoints, UserResponse } from './types/user-types'
 import { hasAuthTokenExpired } from './utils/date-utils'
@@ -45,8 +50,14 @@ type ServerError = {
     statusCode: number
 }
 
-type BasePoints = 'auth' | 'user' | 'leagues'
-type RequestType = AuthEndpoints | UserEndpoints | LeagueEndpoints | string | number
+type BasePoints = 'auth' | 'user' | 'leagues' | 'seasons'
+type RequestType =
+    | AuthEndpoints
+    | UserEndpoints
+    | LeagueEndpoints
+    | SeasonEndpoints
+    | string
+    | number
 
 export class ApiClient {
     constructor(private readonly baseUrl: string, private authToken?: AuthToken) {}
@@ -184,6 +195,22 @@ export class ApiClient {
     deleteLeagueUser(leagueId: number, request: DeleteLeagueUserRequest): Promise<void> {
         return this.delete({
             endPoint: this.endpoint('leagues', `${leagueId}/user/${request.userId}`),
+            requiresAuth: true,
+        })
+    }
+
+    getSeasons(request: GetSeasonsRequest): Promise<SeasonsResponse> {
+        return this.get<SeasonsResponse>({
+            endPoint: this.endpoint('seasons', '/'),
+            request,
+            requiresAuth: true,
+        })
+    }
+
+    addSeason(request: AddSeasonRequest): Promise<SeasonResponse> {
+        return this.post<SeasonResponse>({
+            endPoint: this.endpoint('seasons', '/'),
+            request,
             requiresAuth: true,
         })
     }

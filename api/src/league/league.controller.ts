@@ -1,7 +1,6 @@
 import type {
     AcceptLeagueInviteRequest,
     AddLeagueRequest,
-    DeleteLeagueUserRequest,
     InviteToLeagueRequest,
     LeagueResponse,
     LeaguesResponse,
@@ -31,6 +30,8 @@ import { League } from './league.entity'
 import { validate } from 'class-validator'
 import { Role } from './league-role.decorator'
 import { RoleGuard } from './league-role.guard'
+import { RequiresLeagueId } from './requires-league-id.decorator'
+import { LeagueRequest } from './league.decorator'
 
 @Controller('leagues')
 export class LeagueController {
@@ -66,10 +67,11 @@ export class LeagueController {
         }
     }
 
+    @RequiresLeagueId()
     @UseGuards(JwtGuard, RoleGuard)
     @Role('admin')
-    @Get(endpoint('/:id/users'))
-    async getLeagueUsers(@Param('id') leagueId: number): Promise<LeagueUsersResponse> {
+    @Get(endpoint('/:leagueId/users'))
+    async getLeagueUsers(@Param('leagueId') leagueId: number): Promise<LeagueUsersResponse> {
         const users = await this.leagueService.getLeagueUsers(leagueId)
 
         return {
@@ -77,19 +79,16 @@ export class LeagueController {
         }
     }
 
+    @RequiresLeagueId()
     @UseGuards(JwtGuard, RoleGuard)
     @Role('admin')
     @HttpCode(HttpStatus.OK)
-    @Post('/:id/invite')
+    @Post('/:leagueId/invite')
     async sendLeagueInvite(
         @AuthUser() user: User,
-        @Param('id') leagueId: number,
+        @LeagueRequest() league: League,
         @Body() request: InviteToLeagueRequest,
     ): Promise<void> {
-        const league = await this.leagueService.getLeague(leagueId)
-        if (!league) {
-            throw new NotFoundException('League not found')
-        }
         await this.leagueService.sendInviteToJoinLeague(user, league, request.emailAddress)
     }
 
@@ -112,12 +111,13 @@ export class LeagueController {
         }
     }
 
+    @RequiresLeagueId()
     @UseGuards(JwtGuard, RoleGuard)
     @HttpCode(HttpStatus.OK)
     @Role('admin')
-    @Post(endpoint('/:id/update-role'))
+    @Post(endpoint('/:leagueId/update-role'))
     async updateLeagueUser(
-        @Param('id') leagueId: number,
+        @Param('leagueId') leagueId: number,
         @Body() request: UpdateRoleRequest,
     ): Promise<UpdateRoleResponse> {
         const { userId, role } = request
@@ -132,11 +132,12 @@ export class LeagueController {
         }
     }
 
+    @RequiresLeagueId()
     @UseGuards(JwtGuard, RoleGuard)
     @Role('admin')
-    @Delete(endpoint('/:id/user/:userId'))
+    @Delete(endpoint('/:leagueId/user/:userId'))
     async deleteLeagueUser(
-        @Param('id') leagueId: number,
+        @Param('leagueId') leagueId: number,
         @Param('userId') userId: number,
     ): Promise<void> {
         const response = await this.leagueService.deleteRole(leagueId, userId)

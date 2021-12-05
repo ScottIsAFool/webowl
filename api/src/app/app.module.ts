@@ -8,6 +8,7 @@ import { SentryInterceptor } from '../interceptors'
 import { AppController } from './app.controller'
 import { AuthModule } from '../auth/auth.module'
 import { LeagueModule } from '../league/league.module'
+import { SeasonModule } from '../season/season.module'
 
 @Module({
     imports: [
@@ -28,6 +29,7 @@ import { LeagueModule } from '../league/league.module'
         }),
         AuthModule,
         LeagueModule,
+        SeasonModule,
         PingModule,
     ],
     controllers: [AppController],

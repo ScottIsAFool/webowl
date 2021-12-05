@@ -2,11 +2,11 @@ import type { User } from '.'
 
 export type LeagueEndpoints =
     | '/'
-    | '/:id'
-    | '/:id/users'
+    | '/:leagueId'
+    | '/:leagueId/users'
     | '/accept-invite'
-    | '/:id/update-role'
-    | '/:id/user/:userId'
+    | '/:leagueId/update-role'
+    | '/:leagueId/user/:userId'
 
 export type LeagueRole = 'admin' | 'user'
 
@@ -22,6 +22,7 @@ export type League = {
     scratch: boolean
     createdById: number
     maxPlayersPerTeam: number
+    activeSeasonId?: number
 }
 
 export type LeagueUser = Pick<User, 'id' | 'firstName' | 'lastName' | 'emailAddress'> & {

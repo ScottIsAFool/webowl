@@ -16,5 +16,6 @@ import { LeagueService } from './league.service'
     ],
     controllers: [LeagueController],
     providers: [LeagueService],
+    exports: [LeagueService],
 })
 export class LeagueModule {}

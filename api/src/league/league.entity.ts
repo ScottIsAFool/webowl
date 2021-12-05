@@ -12,6 +12,7 @@ import type { League as LeagueDto } from '@webowl/apiclient'
 import { IsDefined, Length, Min } from 'class-validator'
 import { LeagueRole } from './league-role.entity'
 import { LeagueInvite } from './league-invite.entity'
+import { Season } from '../season/season.entity'
 
 @Entity()
 export class League {
@@ -56,6 +57,9 @@ export class League {
     @Column({ default: 8 })
     maxPlayersPerTeam!: number
 
+    @Column({ nullable: true })
+    activeSeasonId?: number
+
     @ManyToOne(() => User, (user) => user.leagues, { eager: true })
     createdBy!: User
 
@@ -64,6 +68,9 @@ export class League {
 
     @OneToMany(() => LeagueInvite, (invite) => invite.league)
     invites!: LeagueInvite[]
+
+    @OneToMany(() => Season, (season) => season.league)
+    seasons!: Season[]
 
     static create(o: Partial<League>): League {
         const league = new League()
@@ -84,6 +91,7 @@ export class League {
             scratch: this.scratch,
             createdById: this.createdBy.id,
             maxPlayersPerTeam: this.maxPlayersPerTeam,
+            activeSeasonId: this.activeSeasonId,
         }
     }
 }
