@@ -1,10 +1,13 @@
 import * as React from 'react'
 import type {
+    AddSeasonRequest,
     League,
     LeagueResponse,
     LeagueRole,
     LeaguesResponse,
     LeagueUsersResponse,
+    SeasonResponse,
+    SeasonsResponse,
     UpdateRoleResponse,
 } from '@webowl/apiclient'
 import { makeCall, makeCallWithValue, Result, ResultWith } from '../utils/result-utils'
@@ -26,6 +29,8 @@ type LeagueManagementResult = {
         leagueId: number,
     ) => Promise<ResultWith<UpdateRoleResponse>>
     deleteLeagueUser: (leagueId: number, userId: number) => Promise<Result>
+    getSeasons: (leagueId: number) => Promise<ResultWith<SeasonsResponse>>
+    addSeason: (request: AddSeasonRequest) => Promise<ResultWith<SeasonResponse>>
 }
 
 function useLeagueManagement(): LeagueManagementResult {
@@ -157,6 +162,34 @@ function useLeagueManagement(): LeagueManagementResult {
         [apiClient, dispatch],
     )
 
+    const getSeasons = React.useCallback(
+        async function getSeasons(leagueId: number) {
+            const response = await makeCallWithValue(() => apiClient.getSeasons({ leagueId }))
+
+            if (response.type === 'success') {
+                const { seasons } = response.value
+                dispatch(actions.addOrUpdateSeasons({ leagueId, seasons }))
+            }
+
+            return response
+        },
+        [apiClient, dispatch],
+    )
+
+    const addSeason = React.useCallback(
+        async function addSeason(request: AddSeasonRequest) {
+            const response = await makeCallWithValue(() => apiClient.addSeason(request))
+
+            if (response.type === 'success') {
+                const { season } = response.value
+                dispatch(actions.addSeason(season))
+            }
+
+            return response
+        },
+        [apiClient, dispatch],
+    )
+
     return {
         busy,
         getLeagues,
@@ -167,6 +200,8 @@ function useLeagueManagement(): LeagueManagementResult {
         acceptUserInvite,
         updateUserRole,
         deleteLeagueUser,
+        getSeasons,
+        addSeason,
     }
 }
 

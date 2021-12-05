@@ -1,29 +1,60 @@
 import * as React from 'react'
 import type { League as LeagueEntity } from '@webowl/apiclient'
-import { Box, Button, Column, Columns, Heading, Inline } from '@doist/reactist'
+import {
+    Box,
+    Button,
+    Column,
+    Columns,
+    Heading,
+    Inline,
+    Loading,
+    Text,
+    TextLink,
+} from '@doist/reactist'
 import { useParams } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '../../reducers/hooks'
 import { t } from 'i18next'
 
 import { ReactComponent as InviteIcon } from '../../assets/icons/invite.svg'
 import { ReactComponent as ManageIcon } from '../../assets/icons/manage.svg'
+import { ReactComponent as NotFoundImage } from '../../assets/images/NotFound.svg'
 import { actions } from '../../reducers/actions'
+import { useLeagueManagement } from '../../hooks'
+
+import styles from './league.module.css'
+import { Trans } from 'react-i18next'
 
 function League(): JSX.Element {
     const { id } = useParams()
-    const { leagues, leagueUsers, authenticatedUser } = useAppSelector((state) => state)
+    const { leagues, leagueUsers, authenticatedUser, seasons } = useAppSelector((state) => state)
+    const { getSeasons } = useLeagueManagement()
     const dispatch = useAppDispatch()
+    const [isLoaded, setIsLoaded] = React.useState(false)
 
     if (!id) {
-        return <>No id provided</>
+        throw new Error(t('league.idError'))
     }
+
+    const idNum = parseInt(id)
+
+    React.useEffect(function pageLoad() {
+        Promise.all([getSeasons(idNum)])
+            .then(() => {
+                setIsLoaded(true)
+            })
+            .catch(() => {
+                // Display an error
+            })
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
     const league = leagues.find((x) => x.id === parseInt(id))
     if (!league) {
-        return <>No league found</>
+        throw new Error(t('league.leagueIdError'))
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     const role = leagueUsers[league.id]?.find((x) => x.id === authenticatedUser?.id)?.role
+    const leagueSeasons = seasons[league.id]
 
     function inviteClicked(league: LeagueEntity) {
         dispatch(actions.openLeagueInvitation(league))
@@ -33,8 +64,22 @@ function League(): JSX.Element {
         dispatch(actions.openManageLeague(league))
     }
 
-    return (
-        <Box id="league" display="flex" flexDirection="column">
+    function addSeason(league: LeagueEntity) {
+        dispatch(actions.openAddSeason(league))
+    }
+
+    return !isLoaded ? (
+        <Box
+            height="full"
+            display="flex"
+            flexDirection="column"
+            justifyContent="center"
+            alignItems="center"
+        >
+            <Loading aria-label="League loading..." size="large" />
+        </Box>
+    ) : (
+        <Box id="league" display="flex" flexDirection="column" height="full">
             <Box id="header">
                 <Columns alignY="center">
                     <Column width="content">
@@ -64,6 +109,26 @@ function League(): JSX.Element {
                     ) : null}
                 </Columns>
             </Box>
+
+            {leagueSeasons.length === 0 ? (
+                <Box
+                    height="full"
+                    display="flex"
+                    flexDirection="column"
+                    justifyContent="center"
+                    alignItems="center"
+                >
+                    <NotFoundImage className={styles.image} />
+                    <Text tone="secondary" align="center">
+                        <Trans
+                            i18nKey="league.noSeasons"
+                            components={{ tl: <TextLink onClick={() => addSeason(league)} /> }}
+                        />
+                    </Text>
+                </Box>
+            ) : (
+                <Box>Has seasons</Box>
+            )}
         </Box>
     )
 }

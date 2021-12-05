@@ -5,4 +5,5 @@ export type PopupsState = {
     inviteToLeague?: boolean
     league?: League
     manageLeagueUsers?: boolean
+    addSeason?: boolean
 }

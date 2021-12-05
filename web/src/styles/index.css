@@ -31,6 +31,9 @@
     --reactist-actionable-quaternary-hover-fill: var(--webowl-menu-background-hover);
     --reactist-actionable-quaternary-hover-tint: var(--webowl-foreground);
     --reactist-actionable-quaternary-disabled-fill: var(--webowl-accent-disabled);
+
+    --reactist-spinner-tint: var(--webowl-accent);
+    --reactist-switch-checked: var(--webowl-accent);
 }
 
 option {

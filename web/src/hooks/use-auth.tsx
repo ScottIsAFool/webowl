@@ -3,7 +3,7 @@ import type { AuthToken } from '@webowl/apiclient'
 import type { WithChildren } from '../types'
 import { getFromStorage, removeFromStorage, saveToStorage } from '../utils/storage-utils'
 
-const AUTH_FILE = 't.json'
+const AUTH_FILE = 't'
 
 type AuthResult = {
     isAuthenticated: boolean

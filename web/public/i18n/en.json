@@ -33,24 +33,29 @@
             "teamAdded": "Team added"
         }
     },
-    "league": {
-        "team": {
-            "singles": "Singles",
-            "doubles": "Doubles",
-            "trios": "Trios",
-            "fours": "Fours",
-            "fives": "Fives"
-        },
+    "leagues": {
         "yourLeagues": "Your leagues",
         "noLeagues": "You don't appear to have any leagues, why not <tl>add one?</tl>",
         "makeDefault": "Make default",
-        "default": "default",
+        "default": "default"
+    },
+    "league": {
         "invite": "Invite",
         "manage": "Manage",
-        "acceptInvite": {
-            "header": "Invitation Accepted",
-            "successMessage": "If you would like to switch to this league now, please <tl>click here</tl>."
-        }
+        "noSeasons": "You don't appear to have any seasons for this league, why not <tl>add one?</tl>",
+        "leagueIdError": "No league with this ID found, perhaps you do not have access to it.",
+        "idError": "No league ID provided"
+    },
+    "acceptInvite": {
+        "header": "Invitation Accepted",
+        "successMessage": "If you would like to switch to this league now, please <tl>click here</tl>."
+    },
+    "team": {
+        "singles": "Singles",
+        "doubles": "Doubles",
+        "trios": "Trios",
+        "fours": "Fours",
+        "fives": "Fives"
     },
     "profileButton": {
         "title": "Profile menu",
@@ -143,6 +148,16 @@
             "user": "User",
             "noAdminsError": "This cannot be done as it would leave the league with no admins",
             "delete": "Delete"
+        },
+        "addSeason": {
+            "header": "Add season",
+            "initial": {
+                "mainText": "Ok, let's setup a new season",
+                "changedLabel": "Has anything changed from the main league setup?",
+                "nameLabel": "Season name",
+                "namePlaceholder": "Enter a name for this season",
+                "optional": "optional"
+            }
         }
     }
 }

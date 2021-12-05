@@ -5,7 +5,7 @@ import { routes } from './routing/routes'
 import { Box, Loading } from '@doist/reactist'
 import { Header } from './components'
 import { useAppLifecycle, useAuth } from './hooks'
-import { AddLeague, LeagueInvite, ManageLeagueUsers } from './components/popups'
+import { AddLeague, AddSeason, LeagueInvite, ManageLeagueUsers } from './components/popups'
 import { useAppSelector } from './reducers/hooks'
 
 function App(): JSX.Element {
@@ -13,7 +13,7 @@ function App(): JSX.Element {
     const { isAuthenticated } = useAuth()
     const { startup } = useAppLifecycle()
     const element = useRoutes(routes(isAuthenticated))
-    const { addLeague, inviteToLeague, manageLeagueUsers } = useAppSelector((state) => state.popups)
+    const { popups } = useAppSelector((state) => state)
 
     React.useEffect(function onStartup() {
         startup()
@@ -31,7 +31,7 @@ function App(): JSX.Element {
             justifyContent="center"
             alignItems="center"
         >
-            <Loading aria-label="App loading..." />
+            <Loading aria-label="App loading..." size="large" />
         </Box>
     ) : (
         <Box display="flex" flexDirection="column" id="container" height="full">
@@ -53,9 +53,10 @@ function App(): JSX.Element {
                 {element}
             </Box>
 
-            {addLeague ? <AddLeague /> : null}
-            {inviteToLeague ? <LeagueInvite /> : null}
-            {manageLeagueUsers ? <ManageLeagueUsers /> : null}
+            {popups.addLeague ? <AddLeague /> : null}
+            {popups.inviteToLeague ? <LeagueInvite /> : null}
+            {popups.manageLeagueUsers ? <ManageLeagueUsers /> : null}
+            {popups.addSeason ? <AddSeason /> : null}
         </Box>
     )
 }

@@ -39,7 +39,7 @@ function Leagues(): JSX.Element {
 
     function getPlayerText(league: League) {
         const key = getPlayerFormatKey(league.playersPerTeam)
-        return t(`league.team.${key}`)
+        return t(`team.${key}`)
     }
 
     function leagueClicked(id: number) {
@@ -53,7 +53,7 @@ function Leagues(): JSX.Element {
     return (
         <Box width="full" height="full">
             <Stack space="medium" style={{ height: '100%' }}>
-                <Heading level="1">{t('league.yourLeagues')}</Heading>
+                <Heading level="1">{t('leagues.yourLeagues')}</Heading>
                 {leagues.length === 0 ? (
                     <Box
                         display="flex"
@@ -66,7 +66,7 @@ function Leagues(): JSX.Element {
                             <NotFoundImage className={styles.image} />
                             <Text tone="secondary" align="center">
                                 <Trans
-                                    i18nKey="league.noLeagues"
+                                    i18nKey="leagues.noLeagues"
                                     components={{ tl: <TextLink onClick={addLeague} /> }}
                                 />
                             </Text>
@@ -96,14 +96,14 @@ function Leagues(): JSX.Element {
                                     {authenticatedUser?.defaultLeagueId !== league.id ? (
                                         <Column width="content">
                                             <Button variant="primary">
-                                                <>{t('league.makeDefault')}</>
+                                                <>{t('leagues.makeDefault')}</>
                                             </Button>
                                         </Column>
                                     ) : (
                                         <Box display="flex">
                                             <TickImage className={styles.default_tick} />
                                             <Text exceptionallySetClassName={styles.default_text}>
-                                                {t('league.default')}
+                                                {t('leagues.default')}
                                             </Text>
                                         </Box>
                                     )}

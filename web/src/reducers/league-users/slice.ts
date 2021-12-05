@@ -3,7 +3,7 @@ import type { LeagueUser } from '@webowl/apiclient'
 import { saveToStorage } from '../../utils/storage-utils'
 import type { LeagueUsersState, UsersByLeague } from './types'
 
-const LEAGUE_USERS_FILE = 'lu.json'
+const LEAGUE_USERS_FILE = 'lu'
 
 const initialState: LeagueUsersState = {}
 

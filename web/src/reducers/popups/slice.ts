@@ -32,5 +32,14 @@ export const popupsSlice = createSlice({
             state.league = undefined
             return state
         },
+        openAddSeason(state, action: PayloadAction<League>) {
+            state.addSeason = true
+            state.league = action.payload
+            return state
+        },
+        closeAddSeason(state, _action: PayloadAction) {
+            state.addSeason = false
+            state.league = undefined
+        },
     },
 })

@@ -50,10 +50,10 @@ function AcceptInvite(): JSX.Element {
 
     return success ? (
         <Stack space="xlarge">
-            <Heading level="1">{t('league.acceptInvite.header')}</Heading>
+            <Heading level="1">{t('acceptInvite.header')}</Heading>
             <Text>
                 <Trans
-                    i18nKey="league.acceptInvite.successMessage"
+                    i18nKey="acceptInvite.successMessage"
                     components={{ tl: <TextLink onClick={navigateToLeague} /> }}
                 />
             </Text>

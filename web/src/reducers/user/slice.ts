@@ -3,7 +3,7 @@ import type { User } from '@webowl/apiclient'
 import { getFromStorage, saveToStorage } from '../../utils/storage-utils'
 import type { UserState } from './types'
 
-const USER_FILE = 'u.json'
+const USER_FILE = 'u'
 
 const initialState: UserState = getFromStorage<User>(USER_FILE)
 

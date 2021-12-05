@@ -201,7 +201,7 @@ export class ApiClient {
 
     getSeasons(request: GetSeasonsRequest): Promise<SeasonsResponse> {
         return this.get<SeasonsResponse>({
-            endPoint: this.endpoint('seasons', '/'),
+            endPoint: this.endpoint('seasons', ''),
             request,
             requiresAuth: true,
         })
