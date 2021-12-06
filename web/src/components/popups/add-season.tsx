@@ -46,25 +46,15 @@ const frequencyKeys: FrequencyKeys = {
 
 const frequencies: Frequency[] = [7, 14, 28]
 
-type AddSeasonSteps =
-    | 'initial'
-    | 'edit-initial'
-    | 'options'
-    | 'edit-options'
-    | 'dates'
-    | 'edit-dates'
-    | 'handicap'
-    | 'edit-handicap'
+type AddSeasonSteps = 'initial' | 'edit-initial' | 'options' | 'dates' | 'handicap' | 'finished'
 
 const allButtonData: ButtonsData = {
     initial: { next: 'options' },
-    'edit-initial': { next: 'edit-options', back: 'initial' },
+    'edit-initial': { next: 'options', back: 'initial' },
     options: { back: 'initial', next: 'dates' },
-    'edit-options': { back: 'edit-initial', next: 'edit-dates' },
     dates: { back: 'options', next: 'handicap' },
-    'edit-dates': { back: 'edit-options', next: 'edit-handicap' },
     handicap: { back: 'dates' },
-    'edit-handicap': { back: 'edit-dates' },
+    finished: {},
 }
 
 function AddSeason(): JSX.Element {
@@ -76,6 +66,7 @@ function AddSeason(): JSX.Element {
         throw new Error('Something has gone wrong, how is league empty?')
     }
     const [step, setStep] = React.useState<AddSeasonSteps>('initial')
+    const [stepHistory, setStepHistory] = React.useState<AddSeasonSteps[]>([])
     const [setupChanged, setSetupChanged] = React.useState(false)
     const [name, setName] = React.useState('')
     const [rounds, setRounds] = React.useState(2)
@@ -94,14 +85,20 @@ function AddSeason(): JSX.Element {
     }
 
     function backClicked() {
-        if (!buttonData.back) return
+        if (stepHistory.length === 0) return
 
-        setStep(buttonData.back)
+        const history = stepHistory.slice()
+        const previousStep = history.pop() as AddSeasonSteps
+
+        setStep(previousStep)
+        setStepHistory(history)
     }
 
     async function nextClicked(event: React.FormEvent<HTMLFormElement>, league: League) {
         event.preventDefault()
         if (!buttonData.next) return
+
+        setStepHistory([...stepHistory, step])
 
         if (step === 'initial' && setupChanged) {
             setStep('edit-initial')
@@ -118,9 +115,12 @@ function AddSeason(): JSX.Element {
                 // Display error message
                 return
             }
-        }
 
-        setStep(buttonData.next)
+            setStep('finished')
+            setStepHistory([])
+        } else {
+            setStep(buttonData.next)
+        }
     }
     return (
         <Modal
@@ -150,7 +150,7 @@ function AddSeason(): JSX.Element {
                                 onChange={(e) => setSetupChanged(e.target.checked)}
                             />
                         </Stack>
-                    ) : step === 'options' || step === 'edit-options' ? (
+                    ) : step === 'options' ? (
                         <Stack space="medium">
                             <SelectField
                                 label={t('popups.addSeason.options.roundsLabel')}
@@ -183,7 +183,7 @@ function AddSeason(): JSX.Element {
                                 ))}
                             </SelectField>
                         </Stack>
-                    ) : step === 'dates' || step === 'edit-dates' ? (
+                    ) : step === 'dates' ? (
                         <Stack space="medium">
                             <Stack width="xsmall">
                                 <Text id="timeLabel" weight="bold">
@@ -222,6 +222,8 @@ function AddSeason(): JSX.Element {
                                     type="number"
                                     aria-labelledby="roundsLabel"
                                     value={roundsPerDay}
+                                    min={1}
+                                    max={3}
                                     onChange={(e) => setRoundsPerDay(parseInt(e.target.value))}
                                 />
                             </Stack>
@@ -232,7 +234,7 @@ function AddSeason(): JSX.Element {
                 </ModalBody>
 
                 <ModalActions>
-                    {buttonData.back ? (
+                    {stepHistory.length > 0 ? (
                         <Button variant="secondary" onClick={backClicked}>
                             <>{t('addLeague.back')}</>
                         </Button>
@@ -242,7 +244,7 @@ function AddSeason(): JSX.Element {
                             <>{t('addLeague.next')}</>
                         </Button>
                     ) : null}
-                    {!buttonData.next && !buttonData.back ? (
+                    {!buttonData.next && stepHistory.length > 0 ? (
                         <Button variant="primary" onClick={close}>
                             <>{t('addLeague.close')}</>
                         </Button>
