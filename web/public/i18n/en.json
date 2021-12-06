@@ -151,6 +151,7 @@
         },
         "addSeason": {
             "header": "Add season",
+            "add": "Add season",
             "initial": {
                 "mainText": "Ok, let's setup a new season",
                 "changedLabel": "Has anything changed from the main league setup?",
@@ -173,6 +174,10 @@
                 "dateLabel": "When does the league start?",
                 "estimatedFinishDate": "Estimated finish date is {{date}}",
                 "roundsPerDayLabel": "How many rounds per date?"
+            },
+            "handicap": {
+                "handicapLabel": "What should the handicap be?",
+                "percentOf": "% of"
             }
         }
     }

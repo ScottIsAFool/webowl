@@ -1,6 +1,8 @@
 import {
+    Box,
     Button,
     Heading,
+    Inline,
     Input,
     Modal,
     ModalActions,
@@ -46,7 +48,14 @@ const frequencyKeys: FrequencyKeys = {
 
 const frequencies: Frequency[] = [7, 14, 28]
 
-type AddSeasonSteps = 'initial' | 'edit-initial' | 'options' | 'dates' | 'handicap' | 'finished'
+type AddSeasonSteps =
+    | 'initial'
+    | 'edit-initial'
+    | 'options'
+    | 'dates'
+    | 'handicap'
+    | 'scratch'
+    | 'finished'
 
 const allButtonData: ButtonsData = {
     initial: { next: 'options' },
@@ -54,6 +63,7 @@ const allButtonData: ButtonsData = {
     options: { back: 'initial', next: 'dates' },
     dates: { back: 'options', next: 'handicap' },
     handicap: { back: 'dates' },
+    scratch: {},
     finished: {},
 }
 
@@ -75,10 +85,16 @@ function AddSeason(): JSX.Element {
     const [time, setTime] = React.useState(dayjs().format('HH:mm'))
     const [date, setDate] = React.useState(dayjs().format('YYYY-MM-DD'))
     const [roundsPerDay, setRoundsPerDay] = React.useState(1)
+    const [handicapPercent, setHandicapPercent] = React.useState(75)
+    const [handicapOf, setHandicapOf] = React.useState(200)
+    const [hasMaxHandicap, setHasMaxHandicap] = React.useState(true)
+    const [maxHandicap, setMaxHandicap] = React.useState(100)
 
     const buttonData = allButtonData[step]
     const matches = rounds * (teamNumbers - 1)
     const finishDate = dayjs(date).add((matches * frequency) / roundsPerDay, 'days')
+
+    const isAddSeasonButton = (step === 'handicap' && !league.scratch) || step === 'scratch'
 
     function close() {
         dispatch(actions.closeAddSeason())
@@ -102,6 +118,16 @@ function AddSeason(): JSX.Element {
 
         if (step === 'initial' && setupChanged) {
             setStep('edit-initial')
+            return
+        }
+
+        if (step === 'dates') {
+            setStep(league.handicap ? 'handicap' : 'scratch')
+            return
+        }
+
+        if (step === 'handicap' && league.scratch) {
+            setStep('scratch')
             return
         }
 
@@ -228,6 +254,47 @@ function AddSeason(): JSX.Element {
                                 />
                             </Stack>
                         </Stack>
+                    ) : step === 'handicap' ? (
+                        <Stack space="medium">
+                            <Text>{t('popups.addSeason.handicap.handicapLabel')}</Text>
+                            <Inline space="small">
+                                <Box>
+                                    <Input
+                                        type="number"
+                                        style={{ maxWidth: '75px' }}
+                                        min={1}
+                                        max={100}
+                                        value={handicapPercent}
+                                        onChange={(e) =>
+                                            setHandicapPercent(parseInt(e.target.value))
+                                        }
+                                    />
+                                </Box>
+                                <Text>{t('popups.addSeason.handicap.percentOf')}</Text>
+                                <Box>
+                                    <Input
+                                        type="number"
+                                        style={{ maxWidth: '75px' }}
+                                        value={handicapOf}
+                                        onChange={(e) => setHandicapOf(parseInt(e.target.value))}
+                                    />
+                                </Box>
+                            </Inline>
+                            <SwitchField
+                                label="Is there a maximum handicap?"
+                                checked={hasMaxHandicap}
+                                onChange={(e) => setHasMaxHandicap(e.target.checked)}
+                            />
+                            {hasMaxHandicap ? (
+                                <Input
+                                    type="number"
+                                    style={{ maxWidth: '75px' }}
+                                    min={1}
+                                    value={maxHandicap}
+                                    onChange={(e) => setMaxHandicap(parseInt(e.target.value))}
+                                />
+                            ) : null}
+                        </Stack>
                     ) : (
                         step
                     )}
@@ -239,12 +306,16 @@ function AddSeason(): JSX.Element {
                             <>{t('addLeague.back')}</>
                         </Button>
                     ) : null}
-                    {buttonData.next ? (
+                    {buttonData.next || isAddSeasonButton ? (
                         <Button variant="primary" disabled={busy} type="submit" loading={busy}>
-                            <>{t('addLeague.next')}</>
+                            <>
+                                {isAddSeasonButton
+                                    ? t('popups.addSeason.add')
+                                    : t('addLeague.next')}
+                            </>
                         </Button>
                     ) : null}
-                    {!buttonData.next && stepHistory.length > 0 ? (
+                    {step === 'finished' ? (
                         <Button variant="primary" onClick={close}>
                             <>{t('addLeague.close')}</>
                         </Button>
