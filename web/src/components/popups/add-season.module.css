@@ -2,3 +2,29 @@
     background-color: var(--webowl-menu-background-hover);
     color: var(--webowl-foreground);
 }
+
+.add_season input[type='time'] {
+    background-color: transparent;
+    color: var(--webowl-foreground);
+    border-color: var(--reactist-divider-secondary);
+}
+
+.add_season input[type='date'] {
+    background-color: transparent;
+    color: var(--webowl-foreground);
+    border-color: var(--reactist-divider-secondary);
+}
+
+.add_season input[type='number'] {
+    background-color: transparent;
+    color: var(--webowl-foreground);
+    border-color: var(--reactist-divider-secondary);
+}
+
+.add_season input[type='time']::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+}
+
+.add_season input[type='date']::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+}

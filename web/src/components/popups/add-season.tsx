@@ -1,4 +1,5 @@
 import {
+    Box,
     Button,
     Heading,
     Input,
@@ -9,6 +10,7 @@ import {
     SelectField,
     Stack,
     SwitchField,
+    Text,
     TextField,
 } from '@doist/reactist'
 import type { AddSeasonRequest, Frequency, League } from '@webowl/apiclient'
@@ -20,6 +22,7 @@ import { useAppDispatch, useAppSelector } from '../../reducers/hooks'
 import range from 'lodash/range'
 
 import styles from './add-season.module.css'
+import dayjs from 'dayjs'
 
 const roundNumbers = range(1, 11, 1)
 
@@ -75,9 +78,14 @@ function AddSeason(): JSX.Element {
     const [rounds, setRounds] = React.useState(2)
     const [teamNumbers, setTeamNumbers] = React.useState(league.teamNumbers)
     const [frequency, setFrequency] = React.useState<Frequency>(7)
+    const [time, setTime] = React.useState(dayjs().format('HH:mm'))
+    const [date, setDate] = React.useState(dayjs().format('YYYY-MM-DD'))
+    const [roundsPerDay, setRoundsPerDay] = React.useState(1)
 
     const buttonData = allButtonData[step]
-    const matches = rounds * teamNumbers
+    const matches = rounds * (teamNumbers - 1)
+    const finishDate = dayjs(date).add((matches * frequency) / roundsPerDay, 'days')
+
     function close() {
         dispatch(actions.closeAddSeason())
     }
@@ -174,7 +182,44 @@ function AddSeason(): JSX.Element {
                         </Stack>
                     ) : step === 'dates' || step === 'edit-dates' ? (
                         <Stack space="medium">
-                            <Input type="time" />
+                            <Box display="flex" flexDirection="column" width="xsmall">
+                                <Text id="timeLabel" weight="bold">
+                                    {t('popups.addSeason.dates.timeLabel')}
+                                </Text>
+                                <Input
+                                    type="time"
+                                    aria-labelledby="timeLabel"
+                                    value={time}
+                                    onChange={(e) => setTime(e.target.value)}
+                                />
+                            </Box>
+                            <Box display="flex" flexDirection="column" width="xsmall">
+                                <Text id="dateLabel" weight="bold">
+                                    {t('popups.addSeason.dates.dateLabel')}
+                                </Text>
+                                <Input
+                                    type="date"
+                                    aria-labelledby="dateLabel"
+                                    value={date}
+                                    onChange={(e) => setDate(e.target.value)}
+                                />
+                                <Text tone="secondary">
+                                    {t('popups.addSeason.dates.estimatedFinishDate', {
+                                        date: finishDate.format('MMMM D, YYYY'),
+                                    })}
+                                </Text>
+                            </Box>
+                            <Box display="flex" flexDirection="column" width="xsmall">
+                                <Text id="roundsLabel" weight="bold">
+                                    {t('popups.addSeason.dates.roundsPerDayLabel')}
+                                </Text>
+                                <Input
+                                    type="number"
+                                    aria-labelledby="roundsLabel"
+                                    value={roundsPerDay}
+                                    onChange={(e) => setRoundsPerDay(parseInt(e.target.value))}
+                                />
+                            </Box>
                         </Stack>
                     ) : (
                         step

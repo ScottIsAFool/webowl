@@ -162,11 +162,17 @@
                 "roundsLabel": "Rounds",
                 "rounds_one": "1 round",
                 "rounds_other": "{{count}} rounds",
-                "matchesCount": "This will result in {{matches}} matches for {{teams}} teams.",
+                "matchesCount": "This will result in {{matches}} matches for each of the {{teams}} teams.",
                 "weekly": "Weekly",
                 "fortnightly": "Fortnightly",
                 "fourWeeks": "Every four weeks",
                 "frequencyLabel": "How often?"
+            },
+            "dates": {
+                "timeLabel": "What time does this league start?",
+                "dateLabel": "When does the league start?",
+                "estimatedFinishDate": "Estimated finish date is {{date}}",
+                "roundsPerDayLabel": "How many rounds per date?"
             }
         }
     }
