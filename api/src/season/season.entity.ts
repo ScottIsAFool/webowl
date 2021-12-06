@@ -1,6 +1,7 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm'
+import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm'
 import type { Frequency, Season as SeasonDto } from '@webowl/apiclient'
 import { League } from '../league/league.entity'
+import { Max, Min } from 'class-validator'
 
 @Entity()
 export class Season {
@@ -31,8 +32,31 @@ export class Season {
     @Column()
     startLane!: number
 
-    @Column({ default: false })
+    @Column()
     finished!: boolean
+
+    @Column()
+    handicap!: boolean
+
+    @Column()
+    scratch!: boolean
+
+    @Column({ nullable: true })
+    @Min(1)
+    @Max(100)
+    handicapPercent?: number
+
+    @Column({ nullable: true })
+    handicapOf?: number
+
+    @Column()
+    hasMaxHandicap!: boolean
+
+    @Column({ nullable: true })
+    maxHandicap?: number
+
+    @CreateDateColumn()
+    createdAt!: Date
 
     @ManyToOne(() => League, (league) => league.seasons, { eager: true })
     league!: League
@@ -44,7 +68,8 @@ export class Season {
     }
 
     toDto(): SeasonDto {
-        const { league, ...rest } = this
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { league, createdAt, ...rest } = this
         return {
             ...rest,
             leagueId: league.id,

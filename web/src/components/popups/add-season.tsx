@@ -1,6 +1,7 @@
 import {
     Box,
     Button,
+    CheckboxField,
     Heading,
     Inline,
     Input,
@@ -14,7 +15,7 @@ import {
     Text,
     TextField,
 } from '@doist/reactist'
-import type { AddSeasonRequest, Frequency, League } from '@webowl/apiclient'
+import type { Frequency, League } from '@webowl/apiclient'
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
 import { useLeagueManagement } from '../../hooks'
@@ -26,6 +27,7 @@ import styles from './add-season.module.css'
 import dayjs from 'dayjs'
 
 const roundNumbers = range(1, 11, 1)
+const numberOfTeams = range(4, 51, 2)
 
 type Buttons = {
     next?: AddSeasonSteps
@@ -83,16 +85,19 @@ function AddSeason(): JSX.Element {
     const [teamNumbers, setTeamNumbers] = React.useState(league.teamNumbers)
     const [frequency, setFrequency] = React.useState<Frequency>(7)
     const [time, setTime] = React.useState(dayjs().format('HH:mm'))
-    const [date, setDate] = React.useState(dayjs().format('YYYY-MM-DD'))
-    const [roundsPerDay, setRoundsPerDay] = React.useState(1)
+    const [startDate, setStartDate] = React.useState(dayjs().format('YYYY-MM-DD'))
+    const [roundsPerDate, setRoundsPerDate] = React.useState(1)
     const [handicapPercent, setHandicapPercent] = React.useState(75)
     const [handicapOf, setHandicapOf] = React.useState(200)
     const [hasMaxHandicap, setHasMaxHandicap] = React.useState(true)
     const [maxHandicap, setMaxHandicap] = React.useState(100)
+    const [scratch, setScratch] = React.useState(league.scratch)
+    const [handicap, setHandicap] = React.useState(league.handicap)
+    const [startLane, setStartLane] = React.useState(1)
 
     const buttonData = allButtonData[step]
     const matches = rounds * (teamNumbers - 1)
-    const finishDate = dayjs(date).add((matches * frequency) / roundsPerDay, 'days')
+    const finishDate = dayjs(startDate).add((matches * frequency) / roundsPerDate, 'days')
 
     const isAddSeasonButton = (step === 'handicap' && !league.scratch) || step === 'scratch'
 
@@ -131,12 +136,24 @@ function AddSeason(): JSX.Element {
             return
         }
 
-        if (false) {
+        if (isAddSeasonButton) {
             const response = await addSeason({
                 teamNumbers,
                 leagueId: league.id,
                 name,
-            } as AddSeasonRequest)
+                rounds,
+                roundsPerDate,
+                frequency,
+                time,
+                startDate: dayjs(startDate).toDate(),
+                startLane,
+                scratch,
+                handicap,
+                handicapPercent,
+                handicapOf,
+                hasMaxHandicap,
+                maxHandicap,
+            })
             if (response.type === 'error') {
                 // Display error message
                 return
@@ -173,8 +190,36 @@ function AddSeason(): JSX.Element {
                             />
                             <SwitchField
                                 label={t('popups.addSeason.initial.changedLabel')}
+                                checked={setupChanged}
                                 onChange={(e) => setSetupChanged(e.target.checked)}
                             />
+                        </Stack>
+                    ) : step === 'edit-initial' ? (
+                        <Stack space="medium">
+                            <SelectField
+                                label={t('addLeague.options.teamsLabel')}
+                                value={teamNumbers}
+                                onChange={(e) => setTeamNumbers(parseInt(e.target.value))}
+                            >
+                                {numberOfTeams.map((x) => (
+                                    <option value={x} key={x}>
+                                        {t('addLeague.options.multiTeams', { team: x })}
+                                    </option>
+                                ))}
+                            </SelectField>
+                            <Inline space="large">
+                                <CheckboxField
+                                    checked={handicap}
+                                    label={t('addLeague.options.handicapped')}
+                                    onChange={(e) => setHandicap(e.target.value === 'true')}
+                                />
+
+                                <CheckboxField
+                                    checked={scratch}
+                                    label={t('addLeague.options.scratch')}
+                                    onChange={(e) => setScratch(e.target.value === 'true')}
+                                />
+                            </Inline>
                         </Stack>
                     ) : step === 'options' ? (
                         <Stack space="medium">
@@ -230,8 +275,8 @@ function AddSeason(): JSX.Element {
                                     <Input
                                         type="date"
                                         aria-labelledby="dateLabel"
-                                        value={date}
-                                        onChange={(e) => setDate(e.target.value)}
+                                        value={startDate}
+                                        onChange={(e) => setStartDate(e.target.value)}
                                     />
                                 </Stack>
                                 <Text tone="secondary">
@@ -247,10 +292,10 @@ function AddSeason(): JSX.Element {
                                 <Input
                                     type="number"
                                     aria-labelledby="roundsLabel"
-                                    value={roundsPerDay}
+                                    value={roundsPerDate}
                                     min={1}
                                     max={3}
-                                    onChange={(e) => setRoundsPerDay(parseInt(e.target.value))}
+                                    onChange={(e) => setRoundsPerDate(parseInt(e.target.value))}
                                 />
                             </Stack>
                         </Stack>

@@ -14,6 +14,12 @@ export type Season = {
     startLane: number
     finished: boolean
     leagueId: number
+    scratch: boolean
+    handicap: boolean
+    handicapPercent?: number
+    handicapOf?: number
+    hasMaxHandicap: boolean
+    maxHandicap?: number
 }
 
 type SeasonNoId = Omit<Season, 'id'>
@@ -23,7 +29,7 @@ type WithSeasonId = { seasonId: number }
 
 export type GetSeasonsRequest = WithLeagueId
 
-export type AddSeasonRequest = SeasonNoId
+export type AddSeasonRequest = Omit<SeasonNoId, 'finished'>
 
 export type UpdateSeasonRequest = WithSeasonId & {
     season: Partial<SeasonNoId>
