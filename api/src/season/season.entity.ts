@@ -1,5 +1,10 @@
 import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm'
-import type { Frequency, Season as SeasonDto } from '@webowl/apiclient'
+import {
+    DEFAULT_STANDING_RULES,
+    Frequency,
+    Season as SeasonDto,
+    StandingsTypes,
+} from '@webowl/apiclient'
 import { League } from '../league/league.entity'
 import { Max, Min } from 'class-validator'
 
@@ -55,24 +60,74 @@ export class Season {
     @Column({ nullable: true })
     maxHandicap?: number
 
+    @Column({ default: DEFAULT_STANDING_RULES.rule1 })
+    handicapStandingRule1!: StandingsTypes
+
+    @Column({ default: DEFAULT_STANDING_RULES.rule2 })
+    handicapStandingRule2!: StandingsTypes
+
+    @Column({ default: DEFAULT_STANDING_RULES.rule3 })
+    handicapStandingRule3!: StandingsTypes
+
+    @Column({ default: DEFAULT_STANDING_RULES.rule1 })
+    scratchStandingRule1!: StandingsTypes
+
+    @Column({ default: DEFAULT_STANDING_RULES.rule2 })
+    scratchStandingRule2!: StandingsTypes
+
+    @Column({ default: DEFAULT_STANDING_RULES.rule3 })
+    scratchStandingRule3!: StandingsTypes
+
+    @Column()
+    handicapPointsPerGame!: number
+
+    @Column()
+    scratchPointsPerGame!: number
+
     @CreateDateColumn()
     createdAt!: Date
 
     @ManyToOne(() => League, (league) => league.seasons, { eager: true })
     league!: League
 
-    static create(o: Partial<Season>): Season {
+    static create(o: Partial<SeasonDto>): Season {
         const s = new Season()
         Object.assign(s, o)
+        s.handicapStandingRule1 = o.handicapStandingRules?.rule1 ?? DEFAULT_STANDING_RULES.rule1
+        s.handicapStandingRule2 = o.handicapStandingRules?.rule2 ?? DEFAULT_STANDING_RULES.rule2
+        s.handicapStandingRule3 = o.handicapStandingRules?.rule3 ?? DEFAULT_STANDING_RULES.rule3
+        s.scratchStandingRule1 = o.scratchStandingRules?.rule1 ?? DEFAULT_STANDING_RULES.rule1
+        s.scratchStandingRule2 = o.scratchStandingRules?.rule2 ?? DEFAULT_STANDING_RULES.rule2
+        s.scratchStandingRule3 = o.scratchStandingRules?.rule3 ?? DEFAULT_STANDING_RULES.rule3
         return s
     }
 
     toDto(): SeasonDto {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const { league, createdAt, ...rest } = this
+        const {
+            league,
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            createdAt,
+            handicapStandingRule1,
+            handicapStandingRule2,
+            handicapStandingRule3,
+            scratchStandingRule1,
+            scratchStandingRule2,
+            scratchStandingRule3,
+            ...rest
+        } = this
         return {
             ...rest,
             leagueId: league.id,
+            handicapStandingRules: {
+                rule1: handicapStandingRule1,
+                rule2: handicapStandingRule2,
+                rule3: handicapStandingRule3,
+            },
+            scratchStandingRules: {
+                rule1: scratchStandingRule1,
+                rule2: scratchStandingRule2,
+                rule3: scratchStandingRule3,
+            },
         }
     }
 }

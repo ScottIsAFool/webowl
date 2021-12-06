@@ -15,7 +15,7 @@ import {
     Text,
     TextField,
 } from '@doist/reactist'
-import type { Frequency, League } from '@webowl/apiclient'
+import { DEFAULT_STANDING_RULES, Frequency, League, StandingRules } from '@webowl/apiclient'
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
 import { useLeagueManagement } from '../../hooks'
@@ -31,7 +31,6 @@ const numberOfTeams = range(4, 51, 2)
 
 type Buttons = {
     next?: AddSeasonSteps
-    back?: AddSeasonSteps
 }
 
 type ButtonsData = {
@@ -61,12 +60,22 @@ type AddSeasonSteps =
 
 const allButtonData: ButtonsData = {
     initial: { next: 'options' },
-    'edit-initial': { next: 'options', back: 'initial' },
-    options: { back: 'initial', next: 'dates' },
-    dates: { back: 'options', next: 'handicap' },
-    handicap: { back: 'dates' },
-    scratch: {},
+    'edit-initial': { next: 'options' },
+    options: { next: 'dates' },
+    dates: { next: 'handicap' },
+    handicap: { next: 'scratch' },
+    scratch: { next: 'finished' },
     finished: {},
+}
+
+function StandingsPicker({
+    standings,
+    onChange,
+}: {
+    standings: StandingRules
+    onChange: (standings: StandingRules) => void
+}): JSX.Element {
+    return <Stack space="medium">Picker</Stack>
 }
 
 function AddSeason(): JSX.Element {
@@ -94,12 +103,19 @@ function AddSeason(): JSX.Element {
     const [scratch, setScratch] = React.useState(league.scratch)
     const [handicap, setHandicap] = React.useState(league.handicap)
     const [startLane, setStartLane] = React.useState(1)
+    const [handicapPointsPerGame, setHandicapPointsPerGame] = React.useState(1)
+    const [scratchPointsPerGame, setScratchPointsPerGame] = React.useState(1)
+    const [handicapStandingRules, setHandicapStandingRules] = React.useState(DEFAULT_STANDING_RULES)
+    const [scratchStandingRules, setScratchStandingRules] = React.useState(DEFAULT_STANDING_RULES)
 
     const buttonData = allButtonData[step]
     const matches = rounds * (teamNumbers - 1)
-    const finishDate = dayjs(startDate).add((matches * frequency) / roundsPerDate, 'days')
+    const finishDate = React.useMemo(
+        () => dayjs(startDate).add((matches * frequency) / roundsPerDate, 'days'),
+        [frequency, matches, roundsPerDate, startDate],
+    )
 
-    const isAddSeasonButton = (step === 'handicap' && !league.scratch) || step === 'scratch'
+    const isAddSeasonButton = (step === 'handicap' && !scratch) || step === 'scratch'
 
     function close() {
         dispatch(actions.closeAddSeason())
@@ -127,11 +143,11 @@ function AddSeason(): JSX.Element {
         }
 
         if (step === 'dates') {
-            setStep(league.handicap ? 'handicap' : 'scratch')
+            setStep(handicap ? 'handicap' : 'scratch')
             return
         }
 
-        if (step === 'handicap' && league.scratch) {
+        if (step === 'handicap' && scratch) {
             setStep('scratch')
             return
         }
@@ -153,6 +169,10 @@ function AddSeason(): JSX.Element {
                 handicapOf,
                 hasMaxHandicap,
                 maxHandicap,
+                handicapPointsPerGame,
+                scratchPointsPerGame,
+                handicapStandingRules,
+                scratchStandingRules,
             })
             if (response.type === 'error') {
                 // Display error message
@@ -211,13 +231,13 @@ function AddSeason(): JSX.Element {
                                 <CheckboxField
                                     checked={handicap}
                                     label={t('addLeague.options.handicapped')}
-                                    onChange={(e) => setHandicap(e.target.value === 'true')}
+                                    onChange={(e) => setHandicap(e.target.checked)}
                                 />
 
                                 <CheckboxField
                                     checked={scratch}
                                     label={t('addLeague.options.scratch')}
-                                    onChange={(e) => setScratch(e.target.value === 'true')}
+                                    onChange={(e) => setScratch(e.target.checked)}
                                 />
                             </Inline>
                         </Stack>
@@ -253,6 +273,17 @@ function AddSeason(): JSX.Element {
                                     </option>
                                 ))}
                             </SelectField>
+                            <Text id="laneNumberLabel" weight="bold">
+                                {t('popups.addSeason.options.laneNumberLabel')}
+                            </Text>
+                            <Stack width="xsmall">
+                                <Input
+                                    type="number"
+                                    aria-labelledby="laneNumberLabel"
+                                    value={startLane}
+                                    onChange={(e) => setStartLane(parseInt(e.target.value))}
+                                />
+                            </Stack>
                         </Stack>
                     ) : step === 'dates' ? (
                         <Stack space="medium">
@@ -339,6 +370,18 @@ function AddSeason(): JSX.Element {
                                     onChange={(e) => setMaxHandicap(parseInt(e.target.value))}
                                 />
                             ) : null}
+                            <StandingsPicker
+                                standings={handicapStandingRules}
+                                onChange={setHandicapStandingRules}
+                            />
+                        </Stack>
+                    ) : step === 'scratch' ? (
+                        <Stack space="medium">
+                            <Text>Scratch</Text>
+                            <StandingsPicker
+                                standings={scratchStandingRules}
+                                onChange={setScratchStandingRules}
+                            />
                         </Stack>
                     ) : (
                         step

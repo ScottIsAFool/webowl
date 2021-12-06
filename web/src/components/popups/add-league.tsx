@@ -188,13 +188,13 @@ function AddLeague(): JSX.Element | null {
                                 <CheckboxField
                                     checked={handicap}
                                     label={t('addLeague.options.handicapped')}
-                                    onChange={(e) => setHandicap(e.target.value === 'true')}
+                                    onChange={(e) => setHandicap(e.target.checked)}
                                 />
 
                                 <CheckboxField
                                     checked={scratch}
                                     label={t('addLeague.options.scratch')}
-                                    onChange={(e) => setScratch(e.target.value === 'true')}
+                                    onChange={(e) => setScratch(e.target.checked)}
                                 />
                             </Inline>
                         </Stack>

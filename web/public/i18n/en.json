@@ -167,7 +167,8 @@
                 "weekly": "Weekly",
                 "fortnightly": "Fortnightly",
                 "fourWeeks": "Every four weeks",
-                "frequencyLabel": "How often?"
+                "frequencyLabel": "How often?",
+                "laneNumberLabel": "What lane does the league start on?"
             },
             "dates": {
                 "timeLabel": "What time does this league start?",
