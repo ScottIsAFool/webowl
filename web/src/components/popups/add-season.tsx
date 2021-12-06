@@ -1,5 +1,4 @@
 import {
-    Box,
     Button,
     Heading,
     Input,
@@ -54,14 +53,18 @@ type AddSeasonSteps =
     | 'edit-options'
     | 'dates'
     | 'edit-dates'
+    | 'handicap'
+    | 'edit-handicap'
 
 const allButtonData: ButtonsData = {
     initial: { next: 'options' },
     'edit-initial': { next: 'edit-options', back: 'initial' },
     options: { back: 'initial', next: 'dates' },
     'edit-options': { back: 'edit-initial', next: 'edit-dates' },
-    dates: { back: 'options' },
-    'edit-dates': { back: 'edit-options' },
+    dates: { back: 'options', next: 'handicap' },
+    'edit-dates': { back: 'edit-options', next: 'edit-handicap' },
+    handicap: { back: 'dates' },
+    'edit-handicap': { back: 'edit-dates' },
 }
 
 function AddSeason(): JSX.Element {
@@ -182,7 +185,7 @@ function AddSeason(): JSX.Element {
                         </Stack>
                     ) : step === 'dates' || step === 'edit-dates' ? (
                         <Stack space="medium">
-                            <Box display="flex" flexDirection="column" width="xsmall">
+                            <Stack width="xsmall">
                                 <Text id="timeLabel" weight="bold">
                                     {t('popups.addSeason.dates.timeLabel')}
                                 </Text>
@@ -192,24 +195,26 @@ function AddSeason(): JSX.Element {
                                     value={time}
                                     onChange={(e) => setTime(e.target.value)}
                                 />
-                            </Box>
-                            <Box display="flex" flexDirection="column" width="xsmall">
-                                <Text id="dateLabel" weight="bold">
-                                    {t('popups.addSeason.dates.dateLabel')}
-                                </Text>
-                                <Input
-                                    type="date"
-                                    aria-labelledby="dateLabel"
-                                    value={date}
-                                    onChange={(e) => setDate(e.target.value)}
-                                />
+                            </Stack>
+                            <Stack>
+                                <Stack width="xsmall">
+                                    <Text id="dateLabel" weight="bold">
+                                        {t('popups.addSeason.dates.dateLabel')}
+                                    </Text>
+                                    <Input
+                                        type="date"
+                                        aria-labelledby="dateLabel"
+                                        value={date}
+                                        onChange={(e) => setDate(e.target.value)}
+                                    />
+                                </Stack>
                                 <Text tone="secondary">
                                     {t('popups.addSeason.dates.estimatedFinishDate', {
                                         date: finishDate.format('MMMM D, YYYY'),
                                     })}
                                 </Text>
-                            </Box>
-                            <Box display="flex" flexDirection="column" width="xsmall">
+                            </Stack>
+                            <Stack width="xsmall">
                                 <Text id="roundsLabel" weight="bold">
                                     {t('popups.addSeason.dates.roundsPerDayLabel')}
                                 </Text>
@@ -219,7 +224,7 @@ function AddSeason(): JSX.Element {
                                     value={roundsPerDay}
                                     onChange={(e) => setRoundsPerDay(parseInt(e.target.value))}
                                 />
-                            </Box>
+                            </Stack>
                         </Stack>
                     ) : (
                         step
