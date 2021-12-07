@@ -28,3 +28,7 @@
 .add_season input[type='date']::-webkit-calendar-picker-indicator {
     filter: invert(1);
 }
+
+.small_number_input {
+    max-width: 75px;
+}

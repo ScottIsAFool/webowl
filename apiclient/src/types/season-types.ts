@@ -2,13 +2,16 @@ export type SeasonEndpoints = '/' | '/:seasonId' | '/:seasonId/teams'
 
 export type Frequency = 7 | 14 | 28
 
-export type StandingsTypes =
-    | 'points-scored'
-    | 'percentage-wins'
-    | 'scratch-pinfall'
-    | 'team-average'
-    | 'games-played'
-    | 'handicap-pinfall'
+export const standingTypesArray = [
+    'points-scored',
+    'percentage-wins',
+    'scratch-pinfall',
+    'team-average',
+    'games-played',
+    'handicap-pinfall',
+] as const
+
+export type StandingsTypes = typeof standingTypesArray[number]
 
 export type StandingRules = {
     rule1: StandingsTypes
@@ -32,7 +35,7 @@ export type Season = {
     teamNumbers: number
     roundsPerDate: number
     startLane: number
-    finished: boolean
+    finished?: boolean
     leagueId: number
     scratch: boolean
     handicap: boolean

@@ -15,7 +15,14 @@ import {
     Text,
     TextField,
 } from '@doist/reactist'
-import { DEFAULT_STANDING_RULES, Frequency, League, StandingRules } from '@webowl/apiclient'
+import {
+    DEFAULT_STANDING_RULES,
+    Frequency,
+    League,
+    StandingRules,
+    StandingsTypes,
+    standingTypesArray,
+} from '@webowl/apiclient'
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
 import { useLeagueManagement } from '../../hooks'
@@ -55,6 +62,7 @@ type AddSeasonSteps =
     | 'options'
     | 'dates'
     | 'handicap'
+    | 'handicap-options'
     | 'scratch'
     | 'finished'
 
@@ -63,19 +71,102 @@ const allButtonData: ButtonsData = {
     'edit-initial': { next: 'options' },
     options: { next: 'dates' },
     dates: { next: 'handicap' },
-    handicap: { next: 'scratch' },
+    handicap: { next: 'handicap-options' },
+    'handicap-options': { next: 'scratch' },
     scratch: { next: 'finished' },
     finished: {},
 }
 
 function StandingsPicker({
-    standings,
+    standing,
     onChange,
+    label,
 }: {
-    standings: StandingRules
-    onChange: (standings: StandingRules) => void
+    standing: StandingsTypes
+    label: string
+    onChange: (standing: StandingsTypes) => void
 }): JSX.Element {
-    return <Stack space="medium">Picker</Stack>
+    const { t } = useTranslation()
+    return (
+        <SelectField
+            label={label}
+            value={standing}
+            onChange={(e) => onChange(e.target.value as StandingsTypes)}
+        >
+            {standingTypesArray.map((x) => (
+                <option key={x} value={x}>
+                    {t(`popups.addSeason.options2.${x}`)}
+                </option>
+            ))}
+        </SelectField>
+    )
+}
+
+function ScratchHandicapOptions({
+    rules,
+    isHandicap,
+    points,
+    onRulesChange,
+    onPointsChange,
+}: {
+    rules: StandingRules
+    isHandicap: boolean
+    points: number
+    onRulesChange: (rules: StandingRules) => void
+    onPointsChange: (points: number) => void
+}): JSX.Element {
+    const { t } = useTranslation()
+    const [rule1, setRule1] = React.useState<StandingsTypes>(rules.rule1)
+    const [rule2, setRule2] = React.useState<StandingsTypes>(rules.rule2)
+    const [rule3, setRule3] = React.useState<StandingsTypes>(rules.rule3)
+
+    function rulesChanged(setRule: (rule: StandingsTypes) => void, rule: StandingsTypes) {
+        setRule(rule)
+        onRulesChange({
+            rule1,
+            rule2,
+            rule3,
+        })
+    }
+
+    return (
+        <Stack space="medium">
+            <Heading level="2">
+                {isHandicap
+                    ? t('popups.addSeason.options2.handicapHeader')
+                    : t('popups.addSeason.options2.scratchHeader')}
+            </Heading>
+            <Text weight="bold">{t('popups.addSeason.options2.optionsLabel')}</Text>
+            <StandingsPicker
+                label={t('popups.addSeason.options2.rule1')}
+                standing={rule1}
+                onChange={(r) => rulesChanged(setRule1, r)}
+            />
+            <StandingsPicker
+                label={t('popups.addSeason.options2.rule2')}
+                standing={rule2}
+                onChange={(r) => rulesChanged(setRule2, r)}
+            />
+            <StandingsPicker
+                label={t('popups.addSeason.options2.rule3')}
+                standing={rule3}
+                onChange={(r) => rulesChanged(setRule3, r)}
+            />
+            <Text weight="bold" id="pointsLabel">
+                {t('popups.addSeason.options2.pointsPerGameLabel')}
+            </Text>
+
+            <Stack width="xsmall">
+                <Input
+                    type="number"
+                    aria-labelledby="pointsLabel"
+                    className={styles.small_number_input}
+                    value={points}
+                    onChange={(e) => onPointsChange(parseInt(e.target.value))}
+                />
+            </Stack>
+        </Stack>
+    )
 }
 
 function AddSeason(): JSX.Element {
@@ -115,7 +206,7 @@ function AddSeason(): JSX.Element {
         [frequency, matches, roundsPerDate, startDate],
     )
 
-    const isAddSeasonButton = (step === 'handicap' && !scratch) || step === 'scratch'
+    const isAddSeasonButton = (step === 'handicap-options' && !scratch) || step === 'scratch'
 
     function close() {
         dispatch(actions.closeAddSeason())
@@ -147,7 +238,7 @@ function AddSeason(): JSX.Element {
             return
         }
 
-        if (step === 'handicap' && scratch) {
+        if (step === 'handicap-options' && scratch) {
             setStep('scratch')
             return
         }
@@ -161,7 +252,7 @@ function AddSeason(): JSX.Element {
                 roundsPerDate,
                 frequency,
                 time,
-                startDate: dayjs(startDate).toDate(),
+                startDate: dayjs(`${startDate} ${time}`).toDate(),
                 startLane,
                 scratch,
                 handicap,
@@ -332,12 +423,15 @@ function AddSeason(): JSX.Element {
                         </Stack>
                     ) : step === 'handicap' ? (
                         <Stack space="medium">
+                            <Heading level="2">
+                                {t('popups.addSeason.options2.handicapHeader')}
+                            </Heading>
                             <Text>{t('popups.addSeason.handicap.handicapLabel')}</Text>
                             <Inline space="small">
                                 <Box>
                                     <Input
                                         type="number"
-                                        style={{ maxWidth: '75px' }}
+                                        className={styles.small_number_input}
                                         min={1}
                                         max={100}
                                         value={handicapPercent}
@@ -350,7 +444,7 @@ function AddSeason(): JSX.Element {
                                 <Box>
                                     <Input
                                         type="number"
-                                        style={{ maxWidth: '75px' }}
+                                        className={styles.small_number_input}
                                         value={handicapOf}
                                         onChange={(e) => setHandicapOf(parseInt(e.target.value))}
                                     />
@@ -370,17 +464,25 @@ function AddSeason(): JSX.Element {
                                     onChange={(e) => setMaxHandicap(parseInt(e.target.value))}
                                 />
                             ) : null}
-                            <StandingsPicker
-                                standings={handicapStandingRules}
-                                onChange={setHandicapStandingRules}
+                        </Stack>
+                    ) : step === 'handicap-options' ? (
+                        <Stack space="medium">
+                            <ScratchHandicapOptions
+                                isHandicap={true}
+                                rules={handicapStandingRules}
+                                points={handicapPointsPerGame}
+                                onRulesChange={setHandicapStandingRules}
+                                onPointsChange={setHandicapPointsPerGame}
                             />
                         </Stack>
                     ) : step === 'scratch' ? (
                         <Stack space="medium">
-                            <Text>Scratch</Text>
-                            <StandingsPicker
-                                standings={scratchStandingRules}
-                                onChange={setScratchStandingRules}
+                            <ScratchHandicapOptions
+                                isHandicap={false}
+                                rules={scratchStandingRules}
+                                points={scratchPointsPerGame}
+                                onRulesChange={setScratchStandingRules}
+                                onPointsChange={setScratchPointsPerGame}
                             />
                         </Stack>
                     ) : (

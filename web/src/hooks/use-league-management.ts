@@ -178,7 +178,7 @@ function useLeagueManagement(): LeagueManagementResult {
 
     const addSeason = React.useCallback(
         async function addSeason(request: AddSeasonRequest) {
-            const response = await makeCallWithValue(() => apiClient.addSeason(request))
+            const response = await makeCallWithValue(() => apiClient.addSeason(request), setBusy)
 
             if (response.type === 'success') {
                 const { season } = response.value

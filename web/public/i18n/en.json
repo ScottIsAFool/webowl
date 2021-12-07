@@ -179,6 +179,21 @@
             "handicap": {
                 "handicapLabel": "What should the handicap be?",
                 "percentOf": "% of"
+            },
+            "options2": {
+                "optionsLabel": "In what order should positions be calculated?",
+                "pointsPerGameLabel": "How many points per game and series?",
+                "rule1": "Rule 1",
+                "rule2": "Rule 2",
+                "rule3": "Rule 3",
+                "points-scored": "Points scored",
+                "percentage-wins": "Percentage wins",
+                "scratch-pinfall": "Scratch pinfall",
+                "team-average": "Team average",
+                "games-played": "Games played",
+                "handicap-pinfall": "Handicap pinfall",
+                "handicapHeader": "Handicap",
+                "scratchHeader": "Scratch"
             }
         }
     }

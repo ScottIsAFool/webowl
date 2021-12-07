@@ -37,8 +37,8 @@ export class Season {
     @Column()
     startLane!: number
 
-    @Column()
-    finished!: boolean
+    @Column({ nullable: true })
+    finished?: boolean
 
     @Column()
     handicap!: boolean
