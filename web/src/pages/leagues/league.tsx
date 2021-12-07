@@ -24,7 +24,7 @@ import { useLeagueManagement } from '../../hooks'
 
 import styles from './league.module.css'
 import { Trans } from 'react-i18next'
-import { SeasonInList } from '../../components'
+import { IconButton, SeasonInList } from '../../components'
 
 function League(): JSX.Element {
     const { id } = useParams()
@@ -95,30 +95,30 @@ function League(): JSX.Element {
                         <Column width="auto">
                             <Box display="flex" alignItems="flexEnd" justifyContent="flexEnd">
                                 <Inline space="medium">
-                                    <Button
+                                    <IconButton
                                         variant="secondary"
-                                        startIcon={<PlusIcon />}
+                                        icon={<PlusIcon />}
                                         onClick={() => addSeason(league)}
-                                        tooltip={t('league.addSeason')}
+                                        tooltip={() => t('league.addSeason')}
                                     >
                                         <>{t('league.addSeason')}</>
-                                    </Button>
-                                    <Button
+                                    </IconButton>
+                                    <IconButton
                                         variant="secondary"
-                                        startIcon={<ManageIcon />}
+                                        icon={<ManageIcon />}
                                         onClick={() => manageClicked(league)}
-                                        tooltip={t('league.manage')}
+                                        tooltip={() => t('league.manage')}
                                     >
                                         <>{t('league.manage')}</>
-                                    </Button>
-                                    <Button
+                                    </IconButton>
+                                    <IconButton
                                         variant="secondary"
-                                        startIcon={<InviteIcon />}
+                                        icon={<InviteIcon />}
                                         onClick={() => inviteClicked(league)}
-                                        tooltip={t('league.invite')}
+                                        tooltip={() => t('league.invite')}
                                     >
                                         <>{t('league.invite')}</>
-                                    </Button>
+                                    </IconButton>
                                 </Inline>
                             </Box>
                         </Column>
