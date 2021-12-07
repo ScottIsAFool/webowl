@@ -1,16 +1,6 @@
 import * as React from 'react'
 import type { League as LeagueEntity } from '@webowl/apiclient'
-import {
-    Box,
-    Button,
-    Column,
-    Columns,
-    Heading,
-    Inline,
-    Loading,
-    Text,
-    TextLink,
-} from '@doist/reactist'
+import { Box, Column, Columns, Heading, Inline, Loading, Text, TextLink } from '@doist/reactist'
 import { useParams } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '../../reducers/hooks'
 import { t } from 'i18next'

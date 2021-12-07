@@ -173,7 +173,7 @@ function ScratchHandicapOptions({
 function AddSeason(): JSX.Element {
     const dispatch = useAppDispatch()
     const { t } = useTranslation()
-    const { addSeason, busy } = useLeagueManagement()
+    const { addSeason, busy, getLeagues } = useLeagueManagement()
     const league = useAppSelector((state) => state.popups.league)
     if (!league) {
         throw new Error('Something has gone wrong, how is league empty?')
@@ -270,6 +270,8 @@ function AddSeason(): JSX.Element {
                 // Display error message
                 return
             }
+
+            await getLeagues()
 
             setStep('finished')
             setStepHistory([])
