@@ -32,3 +32,15 @@
 .small_number_input {
     max-width: 75px;
 }
+
+.add_season .image {
+    max-height: 300px;
+    max-width: 300px;
+}
+
+@media (max-width: 400px) {
+    .add_season .image {
+        max-height: 200px;
+        max-width: 200px;
+    }
+}

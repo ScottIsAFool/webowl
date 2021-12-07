@@ -29,6 +29,7 @@ import { useLeagueManagement } from '../../hooks'
 import { actions } from '../../reducers/actions'
 import { useAppDispatch, useAppSelector } from '../../reducers/hooks'
 import range from 'lodash/range'
+import { ReactComponent as DoneImage } from '../../assets/images/Done.svg'
 
 import styles from './add-season.module.css'
 import dayjs from 'dayjs'
@@ -486,7 +487,16 @@ function AddSeason(): JSX.Element {
                             />
                         </Stack>
                     ) : (
-                        step
+                        <Box
+                            width="full"
+                            flexDirection="column"
+                            display="flex"
+                            alignItems="center"
+                            justifyContent="center"
+                        >
+                            <DoneImage className={styles.image} />
+                            <Text>{t('popups.addSeason.seasonAdded')}</Text>
+                        </Box>
                     )}
                 </ModalBody>
 

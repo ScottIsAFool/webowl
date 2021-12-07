@@ -152,6 +152,7 @@
         "addSeason": {
             "header": "Add season",
             "add": "Add season",
+            "seasonAdded": "Season added",
             "initial": {
                 "mainText": "Ok, let's setup a new season",
                 "changedLabel": "Has anything changed from the main league setup?",
