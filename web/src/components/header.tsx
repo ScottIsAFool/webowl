@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Box, Column, Columns, Heading, Text, TextLink } from '@doist/reactist'
+import { Box, Column, Columns, Hidden, Text, TextLink } from '@doist/reactist'
 import type { Space } from '@doist/reactist/lib/new-components/common-types'
 import type { ResponsiveProp } from '@doist/reactist/lib/new-components/responsive-props'
 import { useUserManagement } from '../hooks'
@@ -8,6 +8,9 @@ import { authNavigate } from '../routing/routes/auth-routes'
 import styles from './header.module.css'
 import { ProfileButton } from './profile-button'
 import { useTranslation } from 'react-i18next'
+
+import logoFull from '../assets/logos/logo-full.png'
+import logoPins from '../assets/logos/logo-pins.png'
 
 function Header(): JSX.Element {
     const { authenticatedUser } = useUserManagement()
@@ -36,9 +39,12 @@ function Header(): JSX.Element {
             >
                 <Column width="content">
                     <TextLink href="/">
-                        <Heading level="1" size="largest">
-                            Webowl
-                        </Heading>
+                        <Hidden below="tablet">
+                            <img src={logoFull} className={styles.logo} />
+                        </Hidden>
+                        <Hidden above="mobile">
+                            <img src={logoPins} className={styles.logo} />
+                        </Hidden>
                     </TextLink>
                 </Column>
                 <Column width="auto">

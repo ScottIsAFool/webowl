@@ -18,7 +18,7 @@
             "maxPlayersLabel": "Maximum number of players per team",
             "finally": "And finally",
             "handicapped": "Handicapped?",
-            "scratch": "Scratch",
+            "scratch": "Scratch?",
             "multiTeams": "{{team}} teams",
             "oneGame": "1 game",
             "multiGame": "{{game}} games"

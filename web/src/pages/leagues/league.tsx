@@ -23,19 +23,24 @@ import { useLeagueManagement } from '../../hooks'
 
 import styles from './league.module.css'
 import { Trans } from 'react-i18next'
+import { SeasonInList } from '../../components'
 
 function League(): JSX.Element {
     const { id } = useParams()
-    const { leagues, leagueUsers, authenticatedUser, seasons } = useAppSelector((state) => state)
-    const { getSeasons, getLeagueUsers } = useLeagueManagement()
-    const dispatch = useAppDispatch()
-    const [isLoaded, setIsLoaded] = React.useState(false)
-
     if (!id) {
         throw new Error(t('league.idError'))
     }
 
     const idNum = parseInt(id)
+    const { leagues, leagueUsers, authenticatedUser, seasons } = useAppSelector((state) => state)
+    const { getSeasons, getLeagueUsers } = useLeagueManagement()
+    const dispatch = useAppDispatch()
+    const [isLoaded, setIsLoaded] = React.useState(false)
+
+    const sortedSeasons = React.useMemo(
+        () => seasons[idNum]?.sort((a, _b) => (a.finished ? 1 : -1)) ?? [],
+        [idNum, seasons],
+    )
 
     React.useEffect(function pageLoad() {
         Promise.all([getSeasons(idNum), getLeagueUsers(idNum)])
@@ -54,7 +59,6 @@ function League(): JSX.Element {
 
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     const role = leagueUsers[league.id]?.find((x) => x.id === authenticatedUser?.id)?.role
-    const leagueSeasons = seasons[league.id]
 
     function inviteClicked(league: LeagueEntity) {
         dispatch(actions.openLeagueInvitation(league))
@@ -81,7 +85,7 @@ function League(): JSX.Element {
     ) : (
         <Box id="league" display="flex" flexDirection="column" height="full">
             <Box id="header">
-                <Columns alignY="center">
+                <Columns alignY="top" space="medium">
                     <Column width="content">
                         <Heading level="1">{league.name}</Heading>
                     </Column>
@@ -93,6 +97,7 @@ function League(): JSX.Element {
                                         variant="secondary"
                                         startIcon={<ManageIcon />}
                                         onClick={() => manageClicked(league)}
+                                        tooltip={t('league.manage')}
                                     >
                                         <>{t('league.manage')}</>
                                     </Button>
@@ -100,6 +105,7 @@ function League(): JSX.Element {
                                         variant="secondary"
                                         startIcon={<InviteIcon />}
                                         onClick={() => inviteClicked(league)}
+                                        tooltip={t('league.invite')}
                                     >
                                         <>{t('league.invite')}</>
                                     </Button>
@@ -110,7 +116,7 @@ function League(): JSX.Element {
                 </Columns>
             </Box>
 
-            {leagueSeasons.length === 0 ? (
+            {sortedSeasons.length === 0 ? (
                 <Box
                     height="full"
                     display="flex"
@@ -127,7 +133,11 @@ function League(): JSX.Element {
                     </Text>
                 </Box>
             ) : (
-                <Box>Has seasons</Box>
+                <Box height="full" display="flex" flexDirection="column" paddingTop="large">
+                    {sortedSeasons.map((season) => (
+                        <SeasonInList key={season.id} season={season} />
+                    ))}
+                </Box>
             )}
         </Box>
     )
