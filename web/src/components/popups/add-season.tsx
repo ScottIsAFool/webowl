@@ -24,7 +24,7 @@ import {
     standingTypesArray,
 } from '@webowl/apiclient'
 import * as React from 'react'
-import { useTranslation } from 'react-i18next'
+import { Trans, useTranslation } from 'react-i18next'
 import { useLeagueManagement } from '../../hooks'
 import { actions } from '../../reducers/actions'
 import { useAppDispatch, useAppSelector } from '../../reducers/hooks'
@@ -339,10 +339,12 @@ function AddSeason(): JSX.Element {
                                 label={t('popups.addSeason.options.roundsLabel')}
                                 value={rounds}
                                 onChange={(e) => setRounds(parseInt(e.target.value))}
-                                hint={t('popups.addSeason.options.matchesCount', {
-                                    matches: matches,
-                                    teams: teamNumbers,
-                                })}
+                                hint={
+                                    <Trans
+                                        i18nKey="popups.addSeason.options.matchesCount"
+                                        values={{ matches: matches, teams: teamNumbers }}
+                                    />
+                                }
                             >
                                 {roundNumbers.map((x) => (
                                     <option key={x} value={x}>

@@ -44,7 +44,8 @@
         "manage": "Manage",
         "noSeasons": "You don't appear to have any seasons for this league, why not <tl>add one?</tl>",
         "leagueIdError": "No league with this ID found, perhaps you do not have access to it.",
-        "idError": "No league ID provided"
+        "idError": "No league ID provided",
+        "addSeason": "Add season"
     },
     "acceptInvite": {
         "header": "Invitation Accepted",
@@ -164,7 +165,7 @@
                 "roundsLabel": "Rounds",
                 "rounds_one": "1 round",
                 "rounds_other": "{{count}} rounds",
-                "matchesCount": "This will result in {{matches}} matches for each of the {{teams}} teams.",
+                "matchesCount": "This will result in <strong>{{matches}} matches</strong> for each of the {{teams}} teams.",
                 "weekly": "Weekly",
                 "fortnightly": "Fortnightly",
                 "fourWeeks": "Every four weeks",

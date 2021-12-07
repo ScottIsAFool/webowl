@@ -168,7 +168,7 @@ function AddLeague(): JSX.Element | null {
                             >
                                 {playerNumbers.map((x) => (
                                     <option key={x} value={x}>
-                                        {t(`league.team.${getPlayerFormatKey(x)}`)}
+                                        {t(`team.${getPlayerFormatKey(x)}`)}
                                     </option>
                                 ))}
                             </SelectField>

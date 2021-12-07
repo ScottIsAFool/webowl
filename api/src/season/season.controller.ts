@@ -38,6 +38,11 @@ export class SeasonController {
 
         const savedSeason = await this.seasonService.save(season)
 
+        if (!league.activeSeasonId) {
+            league.activeSeasonId = savedSeason.id
+            await this.leagueService.save(league)
+        }
+
         return {
             season: savedSeason.toDto(),
         }

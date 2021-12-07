@@ -18,6 +18,7 @@ import { t } from 'i18next'
 import { ReactComponent as InviteIcon } from '../../assets/icons/invite.svg'
 import { ReactComponent as ManageIcon } from '../../assets/icons/manage.svg'
 import { ReactComponent as NotFoundImage } from '../../assets/images/NotFound.svg'
+import { ReactComponent as PlusIcon } from '../../assets/icons/plus.svg'
 import { actions } from '../../reducers/actions'
 import { useLeagueManagement } from '../../hooks'
 
@@ -38,6 +39,7 @@ function League(): JSX.Element {
     const [isLoaded, setIsLoaded] = React.useState(false)
 
     const sortedSeasons = React.useMemo(
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         () => seasons[idNum]?.sort((a, _b) => (a.finished ? 1 : -1)) ?? [],
         [idNum, seasons],
     )
@@ -93,6 +95,14 @@ function League(): JSX.Element {
                         <Column width="auto">
                             <Box display="flex" alignItems="flexEnd" justifyContent="flexEnd">
                                 <Inline space="medium">
+                                    <Button
+                                        variant="secondary"
+                                        startIcon={<PlusIcon />}
+                                        onClick={() => addSeason(league)}
+                                        tooltip={t('league.addSeason')}
+                                    >
+                                        <>{t('league.addSeason')}</>
+                                    </Button>
                                     <Button
                                         variant="secondary"
                                         startIcon={<ManageIcon />}
