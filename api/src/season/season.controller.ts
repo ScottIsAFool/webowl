@@ -1,15 +1,18 @@
 import { Body, Controller, Delete, Get, Param, Post, Query, UseGuards } from '@nestjs/common'
-import type { AddSeasonRequest, SeasonResponse, SeasonsResponse } from '@webowl/apiclient'
+
 import { JwtGuard } from '../auth/jwt.guard'
+import { LeagueService } from '../league/league.service'
 import { Role } from '../league/league-role.decorator'
 import { RoleGuard } from '../league/league-role.guard'
-import type { League } from '../league/league.entity'
-import { LeagueService } from '../league/league.service'
 import { RequiresLeagueId } from '../league/requires-league-id.decorator'
 import { TeamService } from '../team/team.service'
 import { endpoint } from '../utils/endpoint-utils'
+
 import { Season } from './season.entity'
 import { SeasonService } from './season.service'
+
+import type { AddSeasonRequest, SeasonResponse, SeasonsResponse } from '@webowl/apiclient'
+import type { League } from '../league/league.entity'
 
 @Controller('seasons')
 @UseGuards(JwtGuard, RoleGuard)

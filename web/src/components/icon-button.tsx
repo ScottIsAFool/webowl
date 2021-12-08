@@ -1,5 +1,6 @@
-import { Button, ButtonProps, Hidden } from '@doist/reactist'
 import * as React from 'react'
+
+import { Button, ButtonProps, Hidden } from '@doist/reactist'
 
 type Props = Pick<Required<ButtonProps>, 'variant' | 'children' | 'icon' | 'onClick' | 'tooltip'> &
     Pick<ButtonProps, 'type' | 'exceptionallySetClassName'>

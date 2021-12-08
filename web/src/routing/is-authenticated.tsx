@@ -1,6 +1,8 @@
 import * as React from 'react'
 import { Navigate } from 'react-router-dom'
+
 import { useUserManagement } from '../hooks'
+
 import type { GuardedRouteProps } from './types'
 
 function IsHomeAuthenticated({ isAuthenticated, target }: GuardedRouteProps): JSX.Element | null {

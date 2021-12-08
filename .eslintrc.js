@@ -8,7 +8,10 @@ module.exports = {
         node: true,
         jest: true,
     },
-    extends: ['@doist/eslint-config/recommended-requiring-type-checking'],
+    extends: [
+        '@doist/eslint-config/recommended-requiring-type-checking',
+        '@doist/eslint-config/simple-import-sort',
+    ],
     root: true,
     ignorePatterns: ['scripts/', '.eslintrc.js', 'global-setup.js', 'jest.config.js'],
     rules: {

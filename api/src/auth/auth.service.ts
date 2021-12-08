@@ -1,14 +1,17 @@
 import { Injectable, Logger } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
 import { InjectRepository } from '@nestjs/typeorm'
-import type { AuthToken } from '@webowl/apiclient'
-import type { Repository } from 'typeorm'
+
 import { getConfiguration } from '../config/configuration'
-import type { User } from '../user/user.entity'
 import { UserService } from '../user/user.service'
+
 import { AccessToken } from './access-token.entity'
 import { EmailVerification } from './email-verification.entity'
 import { PasswordReset } from './password-reset.entity'
+
+import type { AuthToken } from '@webowl/apiclient'
+import type { Repository } from 'typeorm'
+import type { User } from '../user/user.entity'
 
 type JwtOptions = {
     emailAddress: string

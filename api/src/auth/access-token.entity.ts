@@ -1,7 +1,9 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from 'typeorm'
-import { getEncryptionTransformer } from './auth.utils'
 import dayjs from 'dayjs'
+import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from 'typeorm'
+
 import { getConfiguration } from '../config/configuration'
+
+import { getEncryptionTransformer } from './auth.utils'
 
 @Entity()
 export class AccessToken {

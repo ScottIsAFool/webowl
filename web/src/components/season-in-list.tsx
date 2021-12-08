@@ -1,11 +1,15 @@
-import { Box, Heading } from '@doist/reactist'
-import type { League, Season } from '@webowl/apiclient'
-import dayjs from 'dayjs'
-import type { TFunction } from 'i18next'
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
+
+import { Box, Heading } from '@doist/reactist'
+
+import dayjs from 'dayjs'
+
 import { useAppSelector } from '../reducers/hooks'
 import { getPlayerFormatKey } from '../utils/league-utils'
+
+import type { League, Season } from '@webowl/apiclient'
+import type { TFunction } from 'i18next'
 
 function nameToDisplay(season: Season, league: League, t: TFunction) {
     const { name, startDate } = season

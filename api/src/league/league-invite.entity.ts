@@ -1,6 +1,8 @@
 import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm'
-import { User } from '../user/user.entity'
 import { v4 as uuid } from 'uuid'
+
+import { User } from '../user/user.entity'
+
 import { League } from './league.entity'
 
 @Entity()

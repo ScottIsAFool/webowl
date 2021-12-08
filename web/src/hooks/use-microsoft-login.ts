@@ -1,5 +1,7 @@
 import * as React from 'react'
-import { AuthResponse, AuthError, UserAgentApplication } from 'msal'
+
+import { AuthError, AuthResponse, UserAgentApplication } from 'msal'
+
 import type { User } from '@microsoft/microsoft-graph-types'
 
 type MicrosoftLoginPrompt = 'login' | 'select_account' | 'consent' | 'none'

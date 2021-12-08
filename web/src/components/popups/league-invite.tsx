@@ -1,4 +1,6 @@
 import * as React from 'react'
+import { Trans, useTranslation } from 'react-i18next'
+
 import {
     Button,
     Heading,
@@ -10,10 +12,10 @@ import {
     Text,
     TextField,
 } from '@doist/reactist'
-import { Trans, useTranslation } from 'react-i18next'
+
+import { useLeagueManagement } from '../../hooks'
 import { actions } from '../../reducers/actions'
 import { useAppDispatch, useAppSelector } from '../../reducers/hooks'
-import { useLeagueManagement } from '../../hooks'
 
 function LeagueInvite(): JSX.Element | null {
     const [emailAddress, setEmailAddress] = React.useState('')

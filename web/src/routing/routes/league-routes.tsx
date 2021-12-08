@@ -1,8 +1,10 @@
 import * as React from 'react'
-import type { RouteObject } from 'react-router-dom'
+
 import { League, Leagues } from '../../pages/leagues'
 import { AcceptInvite } from '../../pages/leagues/accept-invite'
 import { GuardedRoute } from '../guarded-route'
+
+import type { RouteObject } from 'react-router-dom'
 
 type LeagueRoute = '' | ':id'
 

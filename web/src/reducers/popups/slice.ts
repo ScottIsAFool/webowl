@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+
 import type { League } from '@webowl/apiclient'
 import type { PopupsState } from './types'
 

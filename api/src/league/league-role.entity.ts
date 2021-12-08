@@ -1,7 +1,10 @@
 import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm'
-import type { LeagueRole as Role } from '@webowl/apiclient'
+
 import { User } from '../user/user.entity'
+
 import { League } from './league.entity'
+
+import type { LeagueRole as Role } from '@webowl/apiclient'
 
 @Entity()
 export class LeagueRole {

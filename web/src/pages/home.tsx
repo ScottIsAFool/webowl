@@ -1,8 +1,10 @@
 import * as React from 'react'
+import { useTranslation } from 'react-i18next'
+
 import { Box, Column, Columns, Heading, TextLink } from '@doist/reactist'
+
 import { ReactComponent as Spreadsheet } from '../assets/images/Spreadsheet.svg'
 import { leagueNavigate } from '../routing/routes/league-routes'
-import { useTranslation } from 'react-i18next'
 
 function Home(): JSX.Element {
     const { t } = useTranslation()

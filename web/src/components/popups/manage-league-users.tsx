@@ -1,4 +1,6 @@
 import * as React from 'react'
+import { useTranslation } from 'react-i18next'
+
 import {
     Button,
     Column,
@@ -12,15 +14,16 @@ import {
     Stack,
     Text,
 } from '@doist/reactist'
-import { useTranslation } from 'react-i18next'
+
+import { ReactComponent as DeleteIcon } from '../../assets/icons/delete.svg'
+import { useLeagueManagement } from '../../hooks'
+import { actions } from '../../reducers/actions'
 import { useAppDispatch, useAppSelector } from '../../reducers/hooks'
+import { willHaveAnAdminLeft } from '../../utils/league-utils'
 
 import styles from './manage-league-users.module.css'
+
 import type { League, LeagueRole, LeagueUser } from '@webowl/apiclient'
-import { useLeagueManagement } from '../../hooks'
-import { willHaveAnAdminLeft } from '../../utils/league-utils'
-import { actions } from '../../reducers/actions'
-import { ReactComponent as DeleteIcon } from '../../assets/icons/delete.svg'
 
 function LeagueUserItem({
     user,

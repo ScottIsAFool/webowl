@@ -1,7 +1,9 @@
 import { Module } from '@nestjs/common'
 import { TypeOrmModule } from '@nestjs/typeorm'
+
 import { LeagueModule } from '../league/league.module'
 import { TeamModule } from '../team/team.module'
+
 import { SeasonController } from './season.controller'
 import { Season } from './season.entity'
 import { SeasonService } from './season.service'

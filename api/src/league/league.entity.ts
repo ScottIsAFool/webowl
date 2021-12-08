@@ -1,3 +1,4 @@
+import { IsDefined, Length, Min } from 'class-validator'
 import {
     Column,
     CreateDateColumn,
@@ -7,12 +8,14 @@ import {
     PrimaryGeneratedColumn,
     UpdateDateColumn,
 } from 'typeorm'
-import { User } from '../user/user.entity'
-import type { League as LeagueDto } from '@webowl/apiclient'
-import { IsDefined, Length, Min } from 'class-validator'
-import { LeagueRole } from './league-role.entity'
-import { LeagueInvite } from './league-invite.entity'
+
 import { Season } from '../season/season.entity'
+import { User } from '../user/user.entity'
+
+import { LeagueInvite } from './league-invite.entity'
+import { LeagueRole } from './league-role.entity'
+
+import type { League as LeagueDto } from '@webowl/apiclient'
 
 @Entity()
 export class League {

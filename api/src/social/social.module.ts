@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common'
+
 import { FacebookProvider } from './facebook.provider'
 import { GoogleProvider } from './google.provider'
 import { MicrosoftProvider } from './microsoft.provider'

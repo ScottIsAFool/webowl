@@ -1,10 +1,12 @@
-import { Box, Button, Heading, Hidden, Stack, Text, TextField, TextLink } from '@doist/reactist'
 import * as React from 'react'
-import { useQuery, useAccountCreation } from '../../hooks'
+import { useTranslation } from 'react-i18next'
+
+import { Box, Button, Heading, Hidden, Stack, Text, TextField, TextLink } from '@doist/reactist'
+
 import { ReactComponent as ForgotPasswordImage } from '../../assets/images/ForgotPassword.svg'
+import { useAccountCreation, useQuery } from '../../hooks'
 
 import styles from './auth.module.css'
-import { useTranslation } from 'react-i18next'
 
 function RequestPasswordReset(): JSX.Element {
     const { t } = useTranslation()

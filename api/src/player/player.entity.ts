@@ -1,6 +1,8 @@
-import type { AgeType, Gender } from '@webowl/apiclient'
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm'
+
 import { Team } from '../team/team.entity'
+
+import type { AgeType, Gender } from '@webowl/apiclient'
 
 @Entity()
 export class Player {

@@ -1,5 +1,5 @@
-import { Column, Entity, Unique, PrimaryColumn, CreateDateColumn } from 'typeorm'
 import { IsNotEmpty } from 'class-validator'
+import { Column, CreateDateColumn, Entity, PrimaryColumn, Unique } from 'typeorm'
 import { v4 as uuid } from 'uuid'
 
 @Entity()

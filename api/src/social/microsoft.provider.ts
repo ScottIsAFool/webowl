@@ -1,12 +1,13 @@
-import { Injectable } from '@nestjs/common'
-import type { SocialProvider } from '@webowl/apiclient'
-import type { User } from '../user/user.entity'
-import type { ISocialProvider, SocialUser } from './types'
 import {
     AuthenticationProvider,
     AuthenticationProviderOptions,
     Client,
 } from '@microsoft/microsoft-graph-client'
+import { Injectable } from '@nestjs/common'
+
+import type { SocialProvider } from '@webowl/apiclient'
+import type { User } from '../user/user.entity'
+import type { ISocialProvider, SocialUser } from './types'
 
 type MicrosoftUser = {
     surname: string

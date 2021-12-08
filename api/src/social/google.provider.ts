@@ -1,7 +1,9 @@
 import { Injectable } from '@nestjs/common'
-import type { SocialProvider } from '@webowl/apiclient'
 import { people_v1 } from 'googleapis'
+
 import { getConfiguration } from '../config/configuration'
+
+import type { SocialProvider } from '@webowl/apiclient'
 import type { User } from '../user/user.entity'
 import type { ISocialProvider, SocialUser } from './types'
 

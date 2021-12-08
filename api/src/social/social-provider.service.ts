@@ -1,8 +1,10 @@
 import { Injectable } from '@nestjs/common'
-import type { SocialProvider } from '@webowl/apiclient'
+
 import { FacebookProvider } from './facebook.provider'
 import { GoogleProvider } from './google.provider'
 import { MicrosoftProvider } from './microsoft.provider'
+
+import type { SocialProvider } from '@webowl/apiclient'
 import type { ISocialProvider } from './types'
 
 @Injectable()

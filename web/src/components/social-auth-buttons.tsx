@@ -1,17 +1,20 @@
 import * as React from 'react'
+import { GoogleLoginResponse, GoogleLoginResponseOffline, useGoogleLogin } from 'react-google-login'
+import { useTranslation } from 'react-i18next'
+
 import { Button, Stack } from '@doist/reactist'
-import { getConfiguration } from '../config/configuration'
+
 import { ReactComponent as GoogleIcon } from '../assets/icons/google.svg'
 // import { ReactComponent as FacebookIcon } from '../assets/icons/facebook.svg'
 // import { ReactComponent as AppleIcon } from '../assets/icons/apple.svg'
 import { ReactComponent as MicrosoftIcon } from '../assets/icons/microsoft.svg'
-import { GoogleLoginResponse, GoogleLoginResponseOffline, useGoogleLogin } from 'react-google-login'
+import { getConfiguration } from '../config/configuration'
 import { useAccountCreation, useMicrosoftLogin } from '../hooks'
-import type { AuthResponse, AuthError } from 'msal'
-import type { User } from '@microsoft/microsoft-graph-types'
 
 import style from './social-auth-buttons.module.css'
-import { useTranslation } from 'react-i18next'
+
+import type { User } from '@microsoft/microsoft-graph-types'
+import type { AuthError, AuthResponse } from 'msal'
 
 const { googleClientId } = getConfiguration()
 

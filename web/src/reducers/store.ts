@@ -1,9 +1,10 @@
-import { configureStore, combineReducers } from '@reduxjs/toolkit'
-import { reducer as userReducer } from './user'
-import { reducer as popupsReducer } from './popups'
-import { reducer as leaguesReducer } from './leagues'
+import { combineReducers, configureStore } from '@reduxjs/toolkit'
+
 import { reducer as leagueUsersReducer } from './league-users'
+import { reducer as leaguesReducer } from './leagues'
+import { reducer as popupsReducer } from './popups'
 import { reducer as seasonsReducer } from './seasons'
+import { reducer as userReducer } from './user'
 
 const rootReducer = combineReducers({
     authenticatedUser: userReducer,

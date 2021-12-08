@@ -1,9 +1,12 @@
 import * as React from 'react'
-import { Box, Heading, Stack, Text, TextLink } from '@doist/reactist'
-import type { League } from '@webowl/apiclient'
 import { Trans, useTranslation } from 'react-i18next'
 import { Navigate, useNavigate } from 'react-router-dom'
+
+import { Box, Heading, Stack, Text, TextLink } from '@doist/reactist'
+
 import { useLeagueManagement, useQuery } from '../../hooks'
+
+import type { League } from '@webowl/apiclient'
 
 function AcceptInvite(): JSX.Element {
     const query = useQuery()

@@ -1,10 +1,13 @@
 import * as React from 'react'
+
+import { actions } from '../reducers/actions'
+import { useAppDispatch, useAppSelector } from '../reducers/hooks'
+import { makeCallWithValue, ResultWith } from '../utils/result-utils'
+
+import { useApiClient } from '.'
+
 import type { User, UserResponse } from '@webowl/apiclient'
 import type { WithChildren } from '../types'
-import { makeCallWithValue, ResultWith } from '../utils/result-utils'
-import { useApiClient } from '.'
-import { useAppDispatch, useAppSelector } from '../reducers/hooks'
-import { actions } from '../reducers/actions'
 
 type UserManagementResult = {
     busy: boolean
@@ -73,4 +76,4 @@ function useUserManagement(): UserManagementResult {
     return React.useContext(UserContext)
 }
 
-export { useUserManagement, UserProvider }
+export { UserProvider, useUserManagement }

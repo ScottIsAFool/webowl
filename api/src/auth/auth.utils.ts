@@ -2,6 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import passwordValidator from 'password-validator'
 import { EncryptionTransformer } from 'typeorm-encrypted'
+
 import { getConfiguration } from '../config/configuration'
 
 const passwordSchema = new passwordValidator()

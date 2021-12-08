@@ -1,3 +1,6 @@
+import * as React from 'react'
+import { Trans, useTranslation } from 'react-i18next'
+
 import {
     Box,
     Button,
@@ -15,6 +18,7 @@ import {
     Text,
     TextField,
 } from '@doist/reactist'
+
 import {
     DEFAULT_STANDING_RULES,
     Frequency,
@@ -23,16 +27,15 @@ import {
     StandingsTypes,
     standingTypesArray,
 } from '@webowl/apiclient'
-import * as React from 'react'
-import { Trans, useTranslation } from 'react-i18next'
+import dayjs from 'dayjs'
+import range from 'lodash/range'
+
+import { ReactComponent as DoneImage } from '../../assets/images/Done.svg'
 import { useLeagueManagement } from '../../hooks'
 import { actions } from '../../reducers/actions'
 import { useAppDispatch, useAppSelector } from '../../reducers/hooks'
-import range from 'lodash/range'
-import { ReactComponent as DoneImage } from '../../assets/images/Done.svg'
 
 import styles from './add-season.module.css'
-import dayjs from 'dayjs'
 
 const roundNumbers = range(1, 11, 1)
 const numberOfTeams = range(4, 51, 2)

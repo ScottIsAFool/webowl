@@ -1,22 +1,25 @@
 import { BadRequestException, ConflictException, NotFoundException } from '@nestjs/common'
+import { JwtModule } from '@nestjs/jwt'
 import { Test } from '@nestjs/testing'
+import { getRepositoryToken } from '@nestjs/typeorm'
+
+import { mockConnection } from '../../test/mocks'
+import { EmailService } from '../email/email.service'
+import { SocialModule } from '../social/social.module'
+import { User, UserService } from '../user'
+
+import { AccessToken } from './access-token.entity'
+import { AuthService } from './auth.service'
+import { EmailVerification } from './email-verification.entity'
+import { PasswordReset } from './password-reset.entity'
+import { AuthController } from '.'
+
 import type {
     PasswordResetRequest,
     RegisterRequest,
     SendPasswordResetRequest,
     VerifyRequest,
 } from '@webowl/apiclient'
-import { AuthController } from '.'
-import { getRepositoryToken } from '@nestjs/typeorm'
-import { EmailVerification } from './email-verification.entity'
-import { mockConnection } from '../../test/mocks'
-import { AuthService } from './auth.service'
-import { User, UserService } from '../user'
-import { PasswordReset } from './password-reset.entity'
-import { AccessToken } from './access-token.entity'
-import { JwtModule } from '@nestjs/jwt'
-import { SocialModule } from '../social/social.module'
-import { EmailService } from '../email/email.service'
 
 const HAPPY_REGISTER_REQUEST: RegisterRequest = {
     emailAddress: 's@s.com',

@@ -1,19 +1,23 @@
-import { Box, Button, Column, Columns, Heading, Stack, Text, TextLink } from '@doist/reactist'
 import * as React from 'react'
+import { Trans } from 'react-i18next'
 import { useDispatch } from 'react-redux'
+import { Navigate, useNavigate } from 'react-router-dom'
+
+import { Box, Button, Column, Columns, Heading, Stack, Text, TextLink } from '@doist/reactist'
+
+import { t } from 'i18next'
+
+import { ReactComponent as TickImage } from '../../assets/icons/tick.svg'
+import { ReactComponent as NotFoundImage } from '../../assets/images/NotFound.svg'
 import { actions } from '../../reducers/actions'
 import { useAppSelector } from '../../reducers/hooks'
-import { ReactComponent as NotFoundImage } from '../../assets/images/NotFound.svg'
-import { ReactComponent as TickImage } from '../../assets/icons/tick.svg'
+import { getPlayerFormatKey } from '../../utils/league-utils'
 
 import styles from './leagues.module.css'
-import { Navigate, useNavigate } from 'react-router-dom'
-import { Trans } from 'react-i18next'
-import { t } from 'i18next'
-import { getPlayerFormatKey } from '../../utils/league-utils'
-import type { League } from '@webowl/apiclient'
+
 import type { Space, SpaceWithNegatives } from '@doist/reactist/lib/new-components/common-types'
 import type { ResponsiveProp } from '@doist/reactist/lib/new-components/responsive-props'
+import type { League } from '@webowl/apiclient'
 
 const leagueListMargin: ResponsiveProp<SpaceWithNegatives> = {
     desktop: '-xlarge',

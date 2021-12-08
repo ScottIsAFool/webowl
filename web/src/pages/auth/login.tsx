@@ -1,3 +1,7 @@
+import * as React from 'react'
+import { Trans, useTranslation } from 'react-i18next'
+import { useLocation, useNavigate } from 'react-router-dom'
+
 import {
     Box,
     Button,
@@ -9,19 +13,18 @@ import {
     TextField,
     TextLink,
 } from '@doist/reactist'
-import * as React from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
-import { useAccountCreation } from '../../hooks'
-import type { GuardedRouteState } from '../../routing/types'
-import { ReactComponent as LoginInitialImage } from '../../assets/images/LoginInitial.svg'
+
 import { ReactComponent as LoginImage } from '../../assets/images/Login.svg'
+import { ReactComponent as LoginInitialImage } from '../../assets/images/LoginInitial.svg'
 import { ReactComponent as RegisterImage } from '../../assets/images/Register.svg'
+import { SocialAuthButtons } from '../../components'
+import { useAccountCreation } from '../../hooks'
+import { authNavigate } from '../../routing/routes/auth-routes'
 
 import styles from './auth.module.css'
-import { SocialAuthButtons } from '../../components'
+
+import type { GuardedRouteState } from '../../routing/types'
 import type { Result } from '../../utils/result-utils'
-import { Trans, useTranslation } from 'react-i18next'
-import { authNavigate } from '../../routing/routes/auth-routes'
 
 type LoginStep = 'initial' | 'password' | 'register'
 

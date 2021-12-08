@@ -1,4 +1,11 @@
 import {
+    DEFAULT_STANDING_RULES,
+    Frequency,
+    Season as SeasonDto,
+    StandingsTypes,
+} from '@webowl/apiclient'
+import { Max, Min } from 'class-validator'
+import {
     Column,
     CreateDateColumn,
     Entity,
@@ -6,14 +13,8 @@ import {
     OneToMany,
     PrimaryGeneratedColumn,
 } from 'typeorm'
-import {
-    DEFAULT_STANDING_RULES,
-    Frequency,
-    Season as SeasonDto,
-    StandingsTypes,
-} from '@webowl/apiclient'
+
 import { League } from '../league/league.entity'
-import { Max, Min } from 'class-validator'
 import { Round } from '../round/round.entity'
 import { Team } from '../team/team.entity'
 

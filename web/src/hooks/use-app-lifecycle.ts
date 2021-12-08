@@ -1,6 +1,8 @@
 import * as React from 'react'
+
 import { actions } from '../reducers/actions'
 import { useAppDispatch, useAppSelector } from '../reducers/hooks'
+
 import { useLeagueManagement, useUserManagement } from '.'
 
 export type AppLifecycleResult = {

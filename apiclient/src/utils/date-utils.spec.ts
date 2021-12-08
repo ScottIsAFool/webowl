@@ -1,4 +1,5 @@
 import MockDate from 'mockdate'
+
 import { hasAuthTokenExpired } from './date-utils'
 
 describe('hasAuthTokenExpired', () => {

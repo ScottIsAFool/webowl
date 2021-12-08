@@ -1,13 +1,3 @@
-import type {
-    AcceptLeagueInviteRequest,
-    AddLeagueRequest,
-    InviteToLeagueRequest,
-    LeagueResponse,
-    LeaguesResponse,
-    LeagueUsersResponse,
-    UpdateRoleRequest,
-    UpdateRoleResponse,
-} from '@webowl/apiclient'
 import {
     BadRequestException,
     Body,
@@ -21,17 +11,30 @@ import {
     Post,
     UseGuards,
 } from '@nestjs/common'
+import { validate } from 'class-validator'
+
 import { AuthUser } from '../auth/auth-user.decorator'
 import { JwtGuard } from '../auth/jwt.guard'
-import type { User } from '../user'
 import { endpoint } from '../utils/endpoint-utils'
-import { LeagueService } from './league.service'
+
+import { LeagueRequest } from './league.decorator'
 import { League } from './league.entity'
-import { validate } from 'class-validator'
+import { LeagueService } from './league.service'
 import { Role } from './league-role.decorator'
 import { RoleGuard } from './league-role.guard'
 import { RequiresLeagueId } from './requires-league-id.decorator'
-import { LeagueRequest } from './league.decorator'
+
+import type {
+    AcceptLeagueInviteRequest,
+    AddLeagueRequest,
+    InviteToLeagueRequest,
+    LeagueResponse,
+    LeaguesResponse,
+    LeagueUsersResponse,
+    UpdateRoleRequest,
+    UpdateRoleResponse,
+} from '@webowl/apiclient'
+import type { User } from '../user'
 
 @Controller('leagues')
 export class LeagueController {

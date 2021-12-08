@@ -1,6 +1,7 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common'
-import type { SocialProvider } from '@webowl/apiclient'
 import axios from 'axios'
+
+import type { SocialProvider } from '@webowl/apiclient'
 import type { User } from '../user/user.entity'
 import type { ISocialProvider, SocialUser } from './types'
 

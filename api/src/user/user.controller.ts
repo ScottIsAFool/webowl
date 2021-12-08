@@ -1,8 +1,10 @@
 import { Controller, Get, UseGuards } from '@nestjs/common'
-import type { User } from './user.entity'
+
 import { AuthUser } from '../auth/auth-user.decorator'
 import { JwtGuard } from '../auth/jwt.guard'
+
 import type { UserResponse } from '@webowl/apiclient'
+import type { User } from './user.entity'
 
 @Controller('user')
 export class UserController {

@@ -1,8 +1,10 @@
-import { Stack, Text, TextLink } from '@doist/reactist'
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Navigate } from 'react-router-dom'
-import { useQuery, useAccountCreation, useUserManagement } from '../../hooks'
+
+import { Stack, Text, TextLink } from '@doist/reactist'
+
+import { useAccountCreation, useQuery, useUserManagement } from '../../hooks'
 
 function VerifyEmail(): JSX.Element | null {
     const { t } = useTranslation()

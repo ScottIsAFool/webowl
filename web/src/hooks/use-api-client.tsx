@@ -1,7 +1,11 @@
-import { ApiClient } from '@webowl/apiclient'
 import * as React from 'react'
-import { useAuth } from '.'
+
+import { ApiClient } from '@webowl/apiclient'
+
 import { getConfiguration } from '../config/configuration'
+
+import { useAuth } from '.'
+
 import type { WithChildren } from '../types'
 
 const baseURL = getConfiguration().baseUrl
@@ -33,4 +37,4 @@ function useApiClient(): ApiClientResult {
     return React.useContext(ApiClientContext)
 }
 
-export { useApiClient, ApiClientProvider }
+export { ApiClientProvider, useApiClient }

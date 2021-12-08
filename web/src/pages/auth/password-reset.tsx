@@ -1,12 +1,14 @@
-import { Box, Button, Heading, Hidden, PasswordField, Stack, Text, TextLink } from '@doist/reactist'
 import * as React from 'react'
+import { Trans, useTranslation } from 'react-i18next'
 import { Navigate, useNavigate } from 'react-router-dom'
-import { useQuery, useAccountCreation } from '../../hooks'
+
+import { Box, Button, Heading, Hidden, PasswordField, Stack, Text, TextLink } from '@doist/reactist'
+
 import { ReactComponent as ResetPasswordImage } from '../../assets/images/ResetPassword.svg'
+import { useAccountCreation, useQuery } from '../../hooks'
+import { authNavigate } from '../../routing/routes/auth-routes'
 
 import styles from './auth.module.css'
-import { authNavigate } from '../../routing/routes/auth-routes'
-import { Trans, useTranslation } from 'react-i18next'
 
 function PasswordReset(): JSX.Element {
     const { t } = useTranslation()

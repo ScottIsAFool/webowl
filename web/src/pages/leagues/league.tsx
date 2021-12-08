@@ -1,20 +1,23 @@
 import * as React from 'react'
-import type { League as LeagueEntity } from '@webowl/apiclient'
-import { Box, Column, Columns, Heading, Inline, Loading, Text, TextLink } from '@doist/reactist'
+import { Trans } from 'react-i18next'
 import { useParams } from 'react-router-dom'
-import { useAppDispatch, useAppSelector } from '../../reducers/hooks'
+
+import { Box, Column, Columns, Heading, Inline, Loading, Text, TextLink } from '@doist/reactist'
+
 import { t } from 'i18next'
 
 import { ReactComponent as InviteIcon } from '../../assets/icons/invite.svg'
 import { ReactComponent as ManageIcon } from '../../assets/icons/manage.svg'
-import { ReactComponent as NotFoundImage } from '../../assets/images/NotFound.svg'
 import { ReactComponent as PlusIcon } from '../../assets/icons/plus.svg'
-import { actions } from '../../reducers/actions'
+import { ReactComponent as NotFoundImage } from '../../assets/images/NotFound.svg'
+import { IconButton, SeasonInList } from '../../components'
 import { useLeagueManagement } from '../../hooks'
+import { actions } from '../../reducers/actions'
+import { useAppDispatch, useAppSelector } from '../../reducers/hooks'
 
 import styles from './league.module.css'
-import { Trans } from 'react-i18next'
-import { IconButton, SeasonInList } from '../../components'
+
+import type { League as LeagueEntity } from '@webowl/apiclient'
 
 function League(): JSX.Element {
     const { id } = useParams()
@@ -29,7 +32,6 @@ function League(): JSX.Element {
     const [isLoaded, setIsLoaded] = React.useState(false)
 
     const sortedSeasons = React.useMemo(() => {
-        console.log({ seasons, byId: seasons[idNum] })
         // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         return seasons[idNum]?.sort((a, _b) => (a.finished ? 1 : -1)) ?? []
     }, [idNum, seasons])

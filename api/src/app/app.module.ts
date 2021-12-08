@@ -2,13 +2,15 @@ import { Module } from '@nestjs/common'
 import { ConfigModule } from '@nestjs/config'
 import { APP_INTERCEPTOR } from '@nestjs/core'
 import { TypeOrmModule } from '@nestjs/typeorm'
-import { getConfiguration } from '../config/configuration'
-import { PingModule } from '../ping'
-import { SentryInterceptor } from '../interceptors'
-import { AppController } from './app.controller'
+
 import { AuthModule } from '../auth/auth.module'
+import { getConfiguration } from '../config/configuration'
+import { SentryInterceptor } from '../interceptors'
 import { LeagueModule } from '../league/league.module'
+import { PingModule } from '../ping'
 import { SeasonModule } from '../season/season.module'
+
+import { AppController } from './app.controller'
 
 @Module({
     imports: [

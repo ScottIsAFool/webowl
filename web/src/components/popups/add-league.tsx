@@ -1,3 +1,6 @@
+import * as React from 'react'
+import { useTranslation } from 'react-i18next'
+
 import {
     Box,
     Button,
@@ -13,16 +16,16 @@ import {
     Text,
     TextField,
 } from '@doist/reactist'
-import * as React from 'react'
-import { actions } from '../../reducers/actions'
-import { useAppDispatch, useAppSelector } from '../../reducers/hooks'
+
 import range from 'lodash/range'
 
-import styles from './add-league.module.css'
-import { useLeagueManagement } from '../../hooks'
-import { getPlayerFormatKey } from '../../utils/league-utils'
 import { ReactComponent as DoneImage } from '../../assets/images/Done.svg'
-import { useTranslation } from 'react-i18next'
+import { useLeagueManagement } from '../../hooks'
+import { actions } from '../../reducers/actions'
+import { useAppDispatch, useAppSelector } from '../../reducers/hooks'
+import { getPlayerFormatKey } from '../../utils/league-utils'
+
+import styles from './add-league.module.css'
 
 const teamNumbers = range(4, 51, 2)
 const gameNumbers = range(1, 5, 1)

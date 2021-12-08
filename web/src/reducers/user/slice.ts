@@ -1,6 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import type { User } from '@webowl/apiclient'
+
 import { getFromStorage, saveToStorage } from '../../utils/storage-utils'
+
+import type { User } from '@webowl/apiclient'
 import type { UserState } from './types'
 
 const USER_FILE = 'u'

@@ -1,39 +1,41 @@
 import axios from 'axios'
 import dayjs from 'dayjs'
+
+import { hasAuthTokenExpired } from './utils/date-utils'
+
 import type {
+    AcceptLeagueInviteRequest,
+    AddLeagueRequest,
+    AddSeasonRequest,
     AuthEndpoints,
-    ChangePasswordRequest,
-    LoginRequest,
-    LoginResponse,
-    SendPasswordResetRequest,
-    RegisterRequest,
-    ResendVerificationRequest,
-    VerifyRequest,
-    PasswordResetRequest,
-    RefreshTokenRequest,
     AuthToken,
-    SocialAuthRequest,
+    ChangePasswordRequest,
     CheckEmailRequest,
     CheckEmailResponse,
-    AddLeagueRequest,
+    DeleteLeagueUserRequest,
+    GetSeasonsRequest,
+    InviteToLeagueRequest,
+    LeagueEndpoints,
     LeagueResponse,
-    UpdateLeagueRequest,
     LeaguesResponse,
     LeagueUsersResponse,
-    InviteToLeagueRequest,
-    AcceptLeagueInviteRequest,
-    LeagueEndpoints,
+    LoginRequest,
+    LoginResponse,
+    PasswordResetRequest,
+    RefreshTokenRequest,
+    RegisterRequest,
+    ResendVerificationRequest,
+    SeasonEndpoints,
+    SeasonResponse,
+    SeasonsResponse,
+    SendPasswordResetRequest,
+    SocialAuthRequest,
+    UpdateLeagueRequest,
     UpdateRoleRequest,
     UpdateRoleResponse,
-    DeleteLeagueUserRequest,
-    SeasonEndpoints,
-    GetSeasonsRequest,
-    SeasonsResponse,
-    AddSeasonRequest,
-    SeasonResponse,
+    VerifyRequest,
 } from '.'
 import type { UserEndpoints, UserResponse } from './types/user-types'
-import { hasAuthTokenExpired } from './utils/date-utils'
 
 export class ApiException extends Error {
     constructor(readonly status: number, readonly messageText: string) {

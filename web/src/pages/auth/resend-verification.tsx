@@ -1,7 +1,9 @@
-import { Box, Button, Stack, Text } from '@doist/reactist'
 import * as React from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 import { Navigate } from 'react-router'
+
+import { Box, Button, Stack, Text } from '@doist/reactist'
+
 import { useAccountCreation, useUserManagement } from '../../hooks'
 
 function ResendVerification(): JSX.Element {

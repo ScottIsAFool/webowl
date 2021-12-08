@@ -1,6 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import type { Season } from '@webowl/apiclient'
+
 import { saveToStorage } from '../../utils/storage-utils'
+
+import type { Season } from '@webowl/apiclient'
 import type { SeasonsByLeague, SeasonsState } from './types'
 
 const SEASONS_FILE = 's'

@@ -1,4 +1,5 @@
 import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm'
+
 import { Fixture } from '../fixture/fixture.entity'
 import { Season } from '../season/season.entity'
 

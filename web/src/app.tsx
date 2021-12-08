@@ -1,12 +1,15 @@
 import * as React from 'react'
-import styles from './app.module.css'
 import { useRoutes } from 'react-router-dom'
-import { routes } from './routing/routes'
+
 import { Box, Loading } from '@doist/reactist'
-import { Header } from './components'
-import { useAppLifecycle, useAuth } from './hooks'
+
 import { AddLeague, AddSeason, LeagueInvite, ManageLeagueUsers } from './components/popups'
 import { useAppSelector } from './reducers/hooks'
+import { routes } from './routing/routes'
+import { Header } from './components'
+import { useAppLifecycle, useAuth } from './hooks'
+
+import styles from './app.module.css'
 
 function App(): JSX.Element {
     const [appLoaded, setAppLoaded] = React.useState(false)

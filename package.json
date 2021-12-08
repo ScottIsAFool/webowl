@@ -18,12 +18,14 @@
         "build-server": "npm --prefix api run build",
         "start:web": "npm run start --prefix web",
         "start:server": "npm run start:dev --prefix api",
-        "watch-core": "watch 'npm run build-common' './apiclient/src'"
+        "watch-core": "watch 'npm run build-common' './apiclient/src'",
+        "lint-fix": "eslint \"**/{src,apps,libs,test}/**/*.{ts,tsx}\" --fix",
+        "lint": "eslint \"**/{src,apps,libs,test}/**/*.{ts,tsx}\""
     },
     "keywords": [],
     "author": "Scott Lovegrove",
     "devDependencies": {
-        "@doist/eslint-config": "^6.0.2",
+        "@doist/eslint-config": "^7.1.0",
         "@doist/prettier-config": "^3.0.5",
         "@size-limit/preset-small-lib": "^4.11.0",
         "@types/cross-spawn": "^6.0.2",

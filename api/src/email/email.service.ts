@@ -1,11 +1,14 @@
+import { join } from 'path'
+
 import { Injectable, Logger } from '@nestjs/common'
 import MailService, { MailDataRequired } from '@sendgrid/mail'
+
+import { getConfiguration } from '../config/configuration'
+import { isProduction } from '../utils/env-utils'
+
 import type { EmailVerification } from '../auth/email-verification.entity'
 import type { PasswordReset } from '../auth/password-reset.entity'
-import { getConfiguration } from '../config/configuration'
-import { join } from 'path'
 import type { LeagueInvite } from '../league/league-invite.entity'
-import { isProduction } from '../utils/env-utils'
 
 @Injectable()
 export class EmailService {

@@ -1,12 +1,15 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import type { FindOneOptions, Repository } from 'typeorm'
+
 import { EmailService } from '../email/email.service'
 import { User, UserService } from '../user'
+
+import { League } from './league.entity'
 import { LeagueInvite } from './league-invite.entity'
 import { LeagueRole } from './league-role.entity'
-import { League } from './league.entity'
+
 import type { LeagueRole as Role } from '@webowl/apiclient'
+import type { FindOneOptions, Repository } from 'typeorm'
 
 type LeagueOptions = {
     includeUsers?: boolean

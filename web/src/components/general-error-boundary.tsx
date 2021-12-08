@@ -1,5 +1,6 @@
-import { Box } from '@doist/reactist'
 import React from 'react'
+
+import { Box } from '@doist/reactist'
 
 type State = {
     displayError: boolean

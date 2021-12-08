@@ -6,9 +6,11 @@ import {
     NotFoundException,
 } from '@nestjs/common'
 import { Reflector } from '@nestjs/core'
+
+import { LeagueService } from './league.service'
+
 import type { LeagueRole } from '@webowl/apiclient'
 import type { AuthRequest } from '../auth/types'
-import { LeagueService } from './league.service'
 import type { RequestWithLeague } from './types'
 
 @Injectable()

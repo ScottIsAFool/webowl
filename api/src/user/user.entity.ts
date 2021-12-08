@@ -1,3 +1,4 @@
+import { compareSync, hashSync } from 'bcryptjs'
 import { IsEmail, Length, ValidateIf } from 'class-validator'
 import {
     Column,
@@ -8,12 +9,13 @@ import {
     Unique,
     UpdateDateColumn,
 } from 'typeorm'
-import { hashSync, compareSync } from 'bcryptjs'
-import type { LeagueUser, User as UserDto, LeagueRole as Role } from '@webowl/apiclient'
+
 import { getEncryptionTransformer } from '../auth/auth.utils'
 import { League } from '../league/league.entity'
-import { LeagueRole } from '../league/league-role.entity'
 import { LeagueInvite } from '../league/league-invite.entity'
+import { LeagueRole } from '../league/league-role.entity'
+
+import type { LeagueRole as Role, LeagueUser, User as UserDto } from '@webowl/apiclient'
 
 @Entity()
 @Unique(['emailAddress'])

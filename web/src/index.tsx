@@ -1,18 +1,20 @@
+import './i18n/config'
+
 import 'bootstrap/dist/css/bootstrap.min.css'
+
 import './styles/reactist.css'
 import './styles/index.css'
 
 import * as React from 'react'
 import ReactDOM from 'react-dom'
-import { App } from './app'
-import { BrowserRouter as Router } from 'react-router-dom'
-import { ContextProviderComposer } from './components/context-provider-composer'
-import { ApiClientProvider, AuthProvider, UserProvider } from './hooks'
 import { Provider } from 'react-redux'
-import { store } from './reducers/store'
-import { GeneralErrorBoundary } from './components'
+import { BrowserRouter as Router } from 'react-router-dom'
 
-import './i18n/config'
+import { ContextProviderComposer } from './components/context-provider-composer'
+import { store } from './reducers/store'
+import { App } from './app'
+import { GeneralErrorBoundary } from './components'
+import { ApiClientProvider, AuthProvider, UserProvider } from './hooks'
 
 const providerTypes = [AuthProvider, ApiClientProvider, UserProvider]
 const providers = providerTypes.map((Provider, i) => <Provider key={i} />)

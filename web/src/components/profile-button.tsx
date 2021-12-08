@@ -1,3 +1,6 @@
+import * as React from 'react'
+import { useTranslation } from 'react-i18next'
+
 import {
     Avatar,
     Box,
@@ -10,16 +13,16 @@ import {
     Stack,
     Text,
 } from '@doist/reactist'
-import * as React from 'react'
-import { useAuth, useUserManagement } from '../hooks'
-import { ReactComponent as PlusIcon } from '../assets/icons/plus.svg'
+
+import classNames from 'classnames'
+
 import { ReactComponent as LogoutIcon } from '../assets/icons/logout.svg'
+import { ReactComponent as PlusIcon } from '../assets/icons/plus.svg'
+import { useAuth, useUserManagement } from '../hooks'
+import { actions } from '../reducers/actions'
+import { useAppDispatch, useAppSelector } from '../reducers/hooks'
 
 import styles from './profile-button.module.css'
-import { useAppDispatch, useAppSelector } from '../reducers/hooks'
-import { actions } from '../reducers/actions'
-import classNames from 'classnames'
-import { useTranslation } from 'react-i18next'
 
 const AsButton = React.forwardRef<HTMLButtonElement, unknown>(function AsButton({ ...props }, ref) {
     const { authenticatedUser } = useUserManagement()

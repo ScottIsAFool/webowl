@@ -1,7 +1,8 @@
 import { NestFactory } from '@nestjs/core'
+import * as Sentry from '@sentry/node'
+
 import { AppModule } from './app/app.module'
 import { getConfiguration } from './config/configuration'
-import * as Sentry from '@sentry/node'
 import { isProduction } from './utils/env-utils'
 import { polyfillFetch } from './utils/polyfills'
 

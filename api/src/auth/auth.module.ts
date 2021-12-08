@@ -1,18 +1,20 @@
 import { Module } from '@nestjs/common'
+import { JwtModule } from '@nestjs/jwt'
 import { PassportModule } from '@nestjs/passport'
 import { TypeOrmModule } from '@nestjs/typeorm'
-import { JwtModule } from '@nestjs/jwt'
+
+import { getConfiguration } from '../config/configuration'
+import { EmailModule } from '../email/email.module'
+import { SocialModule } from '../social/social.module'
 import { UserModule } from '../user/user.module'
+
+import { AccessToken } from './access-token.entity'
 import { AuthController } from './auth.controller'
 import { AuthService } from './auth.service'
 import { EmailVerification } from './email-verification.entity'
+import { JwtStrategy } from './jwt.strategy'
 import { LocalStrategy } from './local.stategy'
 import { PasswordReset } from './password-reset.entity'
-import { getConfiguration } from '../config/configuration'
-import { JwtStrategy } from './jwt.strategy'
-import { AccessToken } from './access-token.entity'
-import { SocialModule } from '../social/social.module'
-import { EmailModule } from '../email/email.module'
 
 @Module({
     imports: [

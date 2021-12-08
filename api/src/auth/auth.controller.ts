@@ -13,34 +13,37 @@ import {
     UnauthorizedException,
     UseGuards,
 } from '@nestjs/common'
-import type {
-    LoginResponse,
-    SendPasswordResetRequest,
-    RegisterRequest,
-    VerifyRequest,
-    PasswordResetRequest,
-    ChangePasswordRequest,
-    ResendVerificationRequest,
-    RefreshTokenRequest,
-    AuthToken,
-    SocialAuthRequest,
-    CheckEmailRequest,
-    CheckEmailResponse,
-} from '@webowl/apiclient'
 import { validate } from 'class-validator'
+
+import { EmailService } from '../email/email.service'
+import { SocialAuthProvider } from '../social/social-provider.service'
 import { User, User as UserEntity, UserService } from '../user'
 import { endpoint } from '../utils/endpoint-utils'
+
 import { isValidPassword } from './auth.utils'
-import { EmailVerification } from './email-verification.entity'
-import { PasswordReset } from './password-reset.entity'
-import type { AuthRequest } from './types'
-import { AuthService } from '.'
-import { LocalAuthGuard } from './local-auth.guard'
-import { JwtGuard } from './jwt.guard'
 import { AuthUser } from './auth-user.decorator'
-import { SocialAuthProvider } from '../social/social-provider.service'
+import { EmailVerification } from './email-verification.entity'
+import { JwtGuard } from './jwt.guard'
+import { LocalAuthGuard } from './local-auth.guard'
+import { PasswordReset } from './password-reset.entity'
+import { AuthService } from '.'
+
+import type {
+    AuthToken,
+    ChangePasswordRequest,
+    CheckEmailRequest,
+    CheckEmailResponse,
+    LoginResponse,
+    PasswordResetRequest,
+    RefreshTokenRequest,
+    RegisterRequest,
+    ResendVerificationRequest,
+    SendPasswordResetRequest,
+    SocialAuthRequest,
+    VerifyRequest,
+} from '@webowl/apiclient'
 import type { SocialUser } from '../social/types'
-import { EmailService } from '../email/email.service'
+import type { AuthRequest } from './types'
 
 @Controller('auth/')
 export class AuthController {

@@ -1,12 +1,14 @@
+import { JwtModule } from '@nestjs/jwt'
 import { Test, TestingModule } from '@nestjs/testing'
 import { getRepositoryToken } from '@nestjs/typeorm'
-import { EmailVerification } from './email-verification.entity'
+
 import { mockConnection } from '../../test/mocks'
-import { AuthService } from './auth.service'
 import { User, UserService } from '../user'
-import { PasswordReset } from './password-reset.entity'
+
 import { AccessToken } from './access-token.entity'
-import { JwtModule } from '@nestjs/jwt'
+import { AuthService } from './auth.service'
+import { EmailVerification } from './email-verification.entity'
+import { PasswordReset } from './password-reset.entity'
 
 describe('AuthService', () => {
     let target: AuthService
