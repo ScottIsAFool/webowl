@@ -1,4 +1,11 @@
-import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm'
+import {
+    Column,
+    CreateDateColumn,
+    Entity,
+    ManyToOne,
+    OneToMany,
+    PrimaryGeneratedColumn,
+} from 'typeorm'
 import {
     DEFAULT_STANDING_RULES,
     Frequency,
@@ -7,6 +14,7 @@ import {
 } from '@webowl/apiclient'
 import { League } from '../league/league.entity'
 import { Max, Min } from 'class-validator'
+import { Round } from '../round/round.entity'
 
 @Entity()
 export class Season {
@@ -89,6 +97,9 @@ export class Season {
 
     @ManyToOne(() => League, (league) => league.seasons, { eager: true })
     league!: League
+
+    @OneToMany(() => Round, (round) => round.season)
+    allRounds!: Round[]
 
     static create(o: Partial<SeasonDto>): Season {
         const s = new Season()
