@@ -33,7 +33,7 @@ function League(): JSX.Element {
 
     const sortedSeasons = React.useMemo(() => {
         // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-        return seasons[idNum]?.sort((a, _b) => (a.finished ? 1 : -1)) ?? []
+        return seasons[idNum] /*?.sort((a, _b) => (a.finished ? 1 : -1))*/ ?? []
     }, [idNum, seasons])
 
     React.useEffect(function pageLoad() {
