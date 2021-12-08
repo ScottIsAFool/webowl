@@ -10,7 +10,7 @@ export class Fixture {
     @Column()
     startLane!: number
 
-    @ManyToOne(() => Round, (round) => round.fixtures)
+    @ManyToOne(() => Round, (round) => round.fixtures, { onDelete: 'CASCADE' })
     round!: Round
 
     @ManyToMany(() => Team, (team) => team.fixtures)

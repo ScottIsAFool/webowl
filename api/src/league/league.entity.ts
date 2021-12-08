@@ -63,13 +63,13 @@ export class League {
     @ManyToOne(() => User, (user) => user.leagues, { eager: true })
     createdBy!: User
 
-    @OneToMany(() => LeagueRole, (role) => role.league)
+    @OneToMany(() => LeagueRole, (role) => role.league, { cascade: true })
     leagueRoles!: LeagueRole[]
 
-    @OneToMany(() => LeagueInvite, (invite) => invite.league)
+    @OneToMany(() => LeagueInvite, (invite) => invite.league, { cascade: true })
     invites!: LeagueInvite[]
 
-    @OneToMany(() => Season, (season) => season.league)
+    @OneToMany(() => Season, (season) => season.league, { cascade: true })
     seasons!: Season[]
 
     static create(o: Partial<League>): League {

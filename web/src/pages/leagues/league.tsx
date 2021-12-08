@@ -28,11 +28,11 @@ function League(): JSX.Element {
     const dispatch = useAppDispatch()
     const [isLoaded, setIsLoaded] = React.useState(false)
 
-    const sortedSeasons = React.useMemo(
+    const sortedSeasons = React.useMemo(() => {
+        console.log({ seasons, byId: seasons[idNum] })
         // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-        () => seasons[idNum]?.sort((a, _b) => (a.finished ? 1 : -1)) ?? [],
-        [idNum, seasons],
-    )
+        return seasons[idNum]?.sort((a, _b) => (a.finished ? 1 : -1)) ?? []
+    }, [idNum, seasons])
 
     React.useEffect(function pageLoad() {
         Promise.all([getSeasons(idNum), getLeagueUsers(idNum)])

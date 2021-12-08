@@ -14,4 +14,8 @@ export class SeasonService {
     save(season: Season): Promise<Season> {
         return this.seasonRepository.save(season)
     }
+
+    async remove(seasonId: number): Promise<void> {
+        await this.seasonRepository.delete({ id: seasonId })
+    }
 }

@@ -16,9 +16,9 @@ export class Round {
     @Column({ nullable: true })
     emptyReason?: string
 
-    @OneToMany(() => Fixture, (fixture) => fixture.round)
+    @OneToMany(() => Fixture, (fixture) => fixture.round, { cascade: true })
     fixtures!: Fixture[]
 
-    @ManyToOne(() => Season, (season) => season.allRounds)
+    @ManyToOne(() => Season, (season) => season.allRounds, { onDelete: 'CASCADE' })
     season!: Season
 }

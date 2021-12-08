@@ -1,17 +1,20 @@
 import type { MigrationInterface, QueryRunner } from 'typeorm'
 
-export class TeamsFixturesEtc1638962397317 implements MigrationInterface {
-    name = 'TeamsFixturesEtc1638962397317'
+export class CascadeRelations1638980618528 implements MigrationInterface {
+    name = 'CascadeRelations1638980618528'
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query(
-            `CREATE TABLE "round" ("id" SERIAL NOT NULL, "date" TIMESTAMP WITH TIME ZONE NOT NULL, "isEmpty" boolean NOT NULL, "emptyReason" character varying, "seasonId" integer, CONSTRAINT "PK_34bd959f3f4a90eb86e4ae24d2d" PRIMARY KEY ("id"))`,
+            `ALTER TABLE "season" DROP CONSTRAINT "FK_35d66d938909b5d6a089f03d8d8"`,
         )
         await queryRunner.query(
             `CREATE TABLE "player" ("id" SERIAL NOT NULL, "name" character varying NOT NULL, "isFloatingSub" boolean NOT NULL, "gender" character varying NOT NULL, "ageType" character varying NOT NULL, "dob" TIMESTAMP WITH TIME ZONE, "teamId" integer, CONSTRAINT "PK_65edadc946a7faf4b638d5e8885" PRIMARY KEY ("id"))`,
         )
         await queryRunner.query(
-            `CREATE TABLE "team" ("id" SERIAL NOT NULL, "name" character varying NOT NULL, "isBYETeam" boolean NOT NULL, CONSTRAINT "PK_f57d8293406df4af348402e4b74" PRIMARY KEY ("id"))`,
+            `CREATE TABLE "team" ("id" SERIAL NOT NULL, "name" character varying NOT NULL, "isBYETeam" boolean NOT NULL, "seasonId" integer, CONSTRAINT "PK_f57d8293406df4af348402e4b74" PRIMARY KEY ("id"))`,
+        )
+        await queryRunner.query(
+            `CREATE TABLE "round" ("id" SERIAL NOT NULL, "date" TIMESTAMP WITH TIME ZONE NOT NULL, "isEmpty" boolean NOT NULL, "emptyReason" character varying, "seasonId" integer, CONSTRAINT "PK_34bd959f3f4a90eb86e4ae24d2d" PRIMARY KEY ("id"))`,
         )
         await queryRunner.query(
             `CREATE TABLE "fixture" ("id" SERIAL NOT NULL, "startLane" integer NOT NULL, "roundId" integer, CONSTRAINT "PK_d9634ba06480dc240af97ad548c" PRIMARY KEY ("id"))`,
@@ -26,13 +29,19 @@ export class TeamsFixturesEtc1638962397317 implements MigrationInterface {
             `CREATE INDEX "IDX_c85184de815a892a8be880ed4f" ON "fixture_teams_team" ("teamId") `,
         )
         await queryRunner.query(
-            `ALTER TABLE "round" ADD CONSTRAINT "FK_29f76a05056c99fceb49477724a" FOREIGN KEY ("seasonId") REFERENCES "season"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`,
-        )
-        await queryRunner.query(
             `ALTER TABLE "player" ADD CONSTRAINT "FK_e85150e7e8a80bee7f2be3adab0" FOREIGN KEY ("teamId") REFERENCES "team"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`,
         )
         await queryRunner.query(
-            `ALTER TABLE "fixture" ADD CONSTRAINT "FK_aade9c813b1249e054c636b03d4" FOREIGN KEY ("roundId") REFERENCES "round"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`,
+            `ALTER TABLE "team" ADD CONSTRAINT "FK_20d85cf5a9c2477eae5bb563877" FOREIGN KEY ("seasonId") REFERENCES "season"("id") ON DELETE CASCADE ON UPDATE NO ACTION`,
+        )
+        await queryRunner.query(
+            `ALTER TABLE "season" ADD CONSTRAINT "FK_35d66d938909b5d6a089f03d8d8" FOREIGN KEY ("leagueId") REFERENCES "league"("id") ON DELETE CASCADE ON UPDATE NO ACTION`,
+        )
+        await queryRunner.query(
+            `ALTER TABLE "round" ADD CONSTRAINT "FK_29f76a05056c99fceb49477724a" FOREIGN KEY ("seasonId") REFERENCES "season"("id") ON DELETE CASCADE ON UPDATE NO ACTION`,
+        )
+        await queryRunner.query(
+            `ALTER TABLE "fixture" ADD CONSTRAINT "FK_aade9c813b1249e054c636b03d4" FOREIGN KEY ("roundId") REFERENCES "round"("id") ON DELETE CASCADE ON UPDATE NO ACTION`,
         )
         await queryRunner.query(
             `ALTER TABLE "fixture_teams_team" ADD CONSTRAINT "FK_a1fae14d2deb4d0126d513f4236" FOREIGN KEY ("fixtureId") REFERENCES "fixture"("id") ON DELETE CASCADE ON UPDATE CASCADE`,
@@ -53,17 +62,26 @@ export class TeamsFixturesEtc1638962397317 implements MigrationInterface {
             `ALTER TABLE "fixture" DROP CONSTRAINT "FK_aade9c813b1249e054c636b03d4"`,
         )
         await queryRunner.query(
-            `ALTER TABLE "player" DROP CONSTRAINT "FK_e85150e7e8a80bee7f2be3adab0"`,
+            `ALTER TABLE "round" DROP CONSTRAINT "FK_29f76a05056c99fceb49477724a"`,
         )
         await queryRunner.query(
-            `ALTER TABLE "round" DROP CONSTRAINT "FK_29f76a05056c99fceb49477724a"`,
+            `ALTER TABLE "season" DROP CONSTRAINT "FK_35d66d938909b5d6a089f03d8d8"`,
+        )
+        await queryRunner.query(
+            `ALTER TABLE "team" DROP CONSTRAINT "FK_20d85cf5a9c2477eae5bb563877"`,
+        )
+        await queryRunner.query(
+            `ALTER TABLE "player" DROP CONSTRAINT "FK_e85150e7e8a80bee7f2be3adab0"`,
         )
         await queryRunner.query(`DROP INDEX "public"."IDX_c85184de815a892a8be880ed4f"`)
         await queryRunner.query(`DROP INDEX "public"."IDX_a1fae14d2deb4d0126d513f423"`)
         await queryRunner.query(`DROP TABLE "fixture_teams_team"`)
         await queryRunner.query(`DROP TABLE "fixture"`)
+        await queryRunner.query(`DROP TABLE "round"`)
         await queryRunner.query(`DROP TABLE "team"`)
         await queryRunner.query(`DROP TABLE "player"`)
-        await queryRunner.query(`DROP TABLE "round"`)
+        await queryRunner.query(
+            `ALTER TABLE "season" ADD CONSTRAINT "FK_35d66d938909b5d6a089f03d8d8" FOREIGN KEY ("leagueId") REFERENCES "league"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`,
+        )
     }
 }

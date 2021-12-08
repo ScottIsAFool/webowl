@@ -15,6 +15,7 @@ import {
 import { League } from '../league/league.entity'
 import { Max, Min } from 'class-validator'
 import { Round } from '../round/round.entity'
+import { Team } from '../team/team.entity'
 
 @Entity()
 export class Season {
@@ -95,11 +96,14 @@ export class Season {
     @CreateDateColumn()
     createdAt!: Date
 
-    @ManyToOne(() => League, (league) => league.seasons, { eager: true })
+    @ManyToOne(() => League, (league) => league.seasons, { eager: true, onDelete: 'CASCADE' })
     league!: League
 
-    @OneToMany(() => Round, (round) => round.season)
+    @OneToMany(() => Round, (round) => round.season, { cascade: true })
     allRounds!: Round[]
+
+    @OneToMany(() => Team, (team) => team.season, { cascade: true })
+    teams!: Team[]
 
     static create(o: Partial<SeasonDto>): Season {
         const s = new Season()

@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Query, UseGuards } from '@nestjs/common'
+import { Body, Controller, Delete, Get, Param, Post, Query, UseGuards } from '@nestjs/common'
 import type { AddSeasonRequest, SeasonResponse, SeasonsResponse } from '@webowl/apiclient'
 import { JwtGuard } from '../auth/jwt.guard'
 import { Role } from '../league/league-role.decorator'
@@ -6,19 +6,21 @@ import { RoleGuard } from '../league/league-role.guard'
 import type { League } from '../league/league.entity'
 import { LeagueService } from '../league/league.service'
 import { RequiresLeagueId } from '../league/requires-league-id.decorator'
+import { TeamService } from '../team/team.service'
 import { endpoint } from '../utils/endpoint-utils'
 import { Season } from './season.entity'
 import { SeasonService } from './season.service'
 
-@RequiresLeagueId()
 @Controller('seasons')
 @UseGuards(JwtGuard, RoleGuard)
 export class SeasonController {
     constructor(
         private readonly seasonService: SeasonService,
         private readonly leagueService: LeagueService,
+        private readonly teamsService: TeamService,
     ) {}
 
+    @RequiresLeagueId()
     @Role('admin', 'user')
     @Get(endpoint('/'))
     async getSeasonsForLeague(@Query('leagueId') leagueId: number): Promise<SeasonsResponse> {
@@ -28,6 +30,7 @@ export class SeasonController {
         }
     }
 
+    @RequiresLeagueId()
     @Role('admin')
     @Post(endpoint('/'))
     async addSeasonToLeague(@Body() request: AddSeasonRequest): Promise<SeasonResponse> {
@@ -35,6 +38,9 @@ export class SeasonController {
         const league = (await this.leagueService.getLeague(leagueId)) as League
         const season = Season.create(rest)
         season.league = league
+
+        const baseTeams = this.teamsService.createBaseTeams(season.teamNumbers)
+        season.teams = baseTeams
 
         const savedSeason = await this.seasonService.save(season)
 
@@ -46,5 +52,11 @@ export class SeasonController {
         return {
             season: savedSeason.toDto(),
         }
+    }
+
+    @Role('admin')
+    @Delete(endpoint('/:seasonId'))
+    async deleteSeason(@Param('seasonId') seasonId: number): Promise<void> {
+        await this.seasonService.remove(seasonId)
     }
 }
