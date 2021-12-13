@@ -22,4 +22,10 @@ export class Round {
 
     @ManyToOne(() => Season, (season) => season.allRounds, { onDelete: 'CASCADE' })
     season!: Season
+
+    static create(o: Partial<Round>): Round {
+        const r = new Round()
+        Object.assign(r, o)
+        return r
+    }
 }

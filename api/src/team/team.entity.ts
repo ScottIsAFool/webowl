@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm'
+import { Column, Entity, ManyToMany, OneToMany, PrimaryGeneratedColumn } from 'typeorm'
 
 import { Fixture } from '../fixture/fixture.entity'
 import { Player } from '../player/player.entity'
@@ -21,7 +21,7 @@ export class Team {
     @ManyToMany(() => Fixture, (fixture) => fixture.teams)
     fixtures!: Fixture[]
 
-    @ManyToOne(() => Season, (season) => season.teams, { onDelete: 'CASCADE' })
+    @ManyToMany(() => Season, (season) => season.teams)
     season!: Season
 
     static create(o: Partial<Team>): Team {

@@ -9,6 +9,8 @@ import {
     Column,
     CreateDateColumn,
     Entity,
+    JoinTable,
+    ManyToMany,
     ManyToOne,
     OneToMany,
     PrimaryGeneratedColumn,
@@ -103,7 +105,8 @@ export class Season {
     @OneToMany(() => Round, (round) => round.season, { cascade: true })
     allRounds!: Round[]
 
-    @OneToMany(() => Team, (team) => team.season, { cascade: true })
+    @ManyToMany(() => Team, (team) => team.season)
+    @JoinTable()
     teams!: Team[]
 
     static create(o: Partial<SeasonDto>): Season {
