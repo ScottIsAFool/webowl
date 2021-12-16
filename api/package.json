@@ -52,6 +52,7 @@
         "reflect-metadata": "^0.1.13",
         "rimraf": "^3.0.2",
         "rxjs": "^7.2.0",
+        "sports-schedule-generator": "^0.0.7",
         "typeorm": "^0.2.41",
         "typeorm-encrypted": "^0.6.0",
         "uuid": "^8.3.2"

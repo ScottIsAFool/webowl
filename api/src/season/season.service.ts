@@ -48,12 +48,10 @@ export class SeasonService {
 
         await this.save(season)
 
-        const generatedFixtures = await this.fixtureService.generateAllFixtures(
+        const generatedFixtures = this.fixtureService.generateAllFixtures(
             season.teams,
             season.rounds,
         )
-
-        this.logger.debug({ generatedFixtures })
 
         let startDate = dayjs(season.startDate)
         const rounds = generatedFixtures.map((round, i) => {
@@ -62,10 +60,10 @@ export class SeasonService {
                 date: startDate.toDate(),
                 isEmpty: false,
             })
-            const fixtures = round.matches.map((match) => {
+            const fixtures = round.map((match) => {
                 const fixture = new Fixture()
                 fixture.startLane = 1
-                fixture.teams = [match.teamA, match.teamB]
+                fixture.teams = [match.home, match.away]
                 return fixture
             })
             roundEntity.fixtures = fixtures
@@ -74,7 +72,7 @@ export class SeasonService {
 
         season.allRounds = rounds
 
-        await this.seasonRepository.save(season)
+        await this.save(season)
 
         if (!league.activeSeasonId) {
             league.activeSeasonId = season.id

@@ -1,17 +1,14 @@
 import { Injectable } from '@nestjs/common'
+import { generateSchedule } from 'sports-schedule-generator'
 
-import { generateRandomFixtureFromAllPermutations, MatchDay } from './fixture-generator'
-
+import type Match from 'sports-schedule-generator/lib/match'
 import type { Team } from '../team/team.entity'
+
+type MatchWith<T> = Required<Match<T>>
 
 @Injectable()
 export class FixtureService {
-    async generateAllFixtures(teamIds: Team[], numberOfRounds: number): Promise<MatchDay<Team>[]> {
-        const fixturesArray = await Promise.resolve(
-            generateRandomFixtureFromAllPermutations(teamIds, numberOfRounds),
-        )
-
-        const fixtures = fixturesArray.reduce((fix, round) => [...fix, ...round], [])
-        return fixtures
+    generateAllFixtures(teams: Team[], _numberOfRounds: number): MatchWith<Team>[][] {
+        return generateSchedule(teams, true) as MatchWith<Team>[][]
     }
 }

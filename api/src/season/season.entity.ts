@@ -105,7 +105,7 @@ export class Season {
     @OneToMany(() => Round, (round) => round.season, { cascade: true })
     allRounds!: Round[]
 
-    @ManyToMany(() => Team, (team) => team.season)
+    @ManyToMany(() => Team, (team) => team.season, { cascade: true })
     @JoinTable()
     teams!: Team[]
 
